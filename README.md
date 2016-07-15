@@ -1,4 +1,4 @@
-# MindMetrics [![Build Status][travis-badge]][travis] [![Coverage Status][coveralls-badge]][coveralls]
+# MindMetrics
 > Single page application that takes user data and displays a detailed personality analysis.
 
 ## Install
