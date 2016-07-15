@@ -11,8 +11,8 @@ $ npm install
 
 ## Requirements
 
-node 5+
-MongoDB
+- node 5+
+- MongoDB
 
 **NOTE:** Make sure you both have Mongo installed locally AND have it running, otherwise the project won't start properly.
 
