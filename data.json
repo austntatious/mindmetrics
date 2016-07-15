@@ -1,0 +1,37 @@
+[
+  {
+    "key":"You",
+    "values":[
+      {
+        "reason":"Openness",
+        "device":"iPhone",
+        "value":0.22
+      },
+      {
+        "reason":"Emotional Range",
+        "device":"iPhone",
+        "value":0.28
+      },
+      {
+        "reason":"Conscientiousness",
+        "device":"iPhone",
+        "value":0.29
+      },
+      {
+        "reason":"Agreeableness",
+        "device":"iPhone",
+        "value":0.17
+      },
+      {
+        "reason":"Extraversion",
+        "device":"iPhone",
+        "value":0.22
+      },
+      {
+        "reason":"Extra Trait",
+        "device":"iPhone",
+        "value":0.50
+      }
+    ]
+  }
+]

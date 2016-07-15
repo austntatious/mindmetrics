@@ -1,0 +1,107 @@
+[
+  {
+    "key":"You",
+    "values":[
+      {
+        "reason":"Openness",
+        "device":"iPhone",
+        "value":0.22
+      },
+      {
+        "reason":"Emotional Range",
+        "device":"iPhone",
+        "value":0.28
+      },
+      {
+        "reason":"Conscientiousness",
+        "device":"iPhone",
+        "value":0.29
+      },
+      {
+        "reason":"Agreeableness",
+        "device":"iPhone",
+        "value":0.17
+      },
+      {
+        "reason":"Extraversion",
+        "device":"iPhone",
+        "value":0.22
+      },
+      {
+        "reason":"Extra Trait",
+        "device":"iPhone",
+        "value":0.50
+      }
+    ]
+  },
+  {
+    "key":"Richard Feynman",
+    "values":[
+      {
+        "reason":"Openness",
+        "device":"Samsung",
+        "value":0.27
+      },
+      {
+        "reason":"Emotional Range",
+        "device":"Samsung",
+        "value":0.65
+      },
+      {
+        "reason":"Conscientiousness",
+        "device":"Samsung",
+        "value":0.35
+      },
+      {
+        "reason":"Agreeableness",
+        "device":"Samsung",
+        "value":0.13
+      },
+      {
+        "reason":"Extraversion",
+        "device":"Samsung",
+        "value":0.20
+      },
+      {
+        "reason":"Extra Trait",
+        "device":"Samsung",
+        "value":0.38
+      }
+    ]
+  },
+  {
+    "key":"Bruce Lee",
+    "values":[
+      {
+        "reason":"Battery Life",
+        "device":"Nokia Smartphone",
+        "value":0.26
+      },
+      {
+        "reason":"Brand",
+        "device":"Nokia Smartphone",
+        "value":0.10
+      },
+      {
+        "reason":"Contract Cost",
+        "device":"Nokia Smartphone",
+        "value":0.30
+      },
+      {
+        "reason":"Design And Quality",
+        "device":"Nokia Smartphone",
+        "value":0.14
+      },
+      {
+        "reason":"Have Internet Connectivity",
+        "device":"Nokia Smartphone",
+        "value":0.22
+      },
+      {
+        "reason":"Large Screen",
+        "device":"Nokia Smartphone",
+        "value":0.04
+      }
+    ]
+  }
+]
