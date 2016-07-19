@@ -23,6 +23,7 @@ const watson      = require('watson-developer-cloud');
 const _           = require("lodash");
 const extend      = _.extend;
 const data        = require("./data.json");
+const uuid        = require("node-uuid");
 
 const MONGODB_URI = "mongodb://localhost:27017/personalities";
 
@@ -86,9 +87,19 @@ mongoose.connection.on('disconnected', connect);
 
 /**
 * Routes
-**/ 
-app.get("/results", function(req, res) {
- // add handlers to find user's profile
+**/
+
+// Results route
+app.get("/results/:id", function(req, res) {
+  // add handlers to find user's profile
+  console.log("INSIDE GET ROUTE FOR RESULTS");
+  User.findOne({"uuid" : req.params.id}).then(function(userData) {
+    console.log("userdata:", userData);
+    res.json(userData);
+  }, function(err) {
+    res.json(err);
+    console.log("Error finding user data: ", err);
+  });
 });
 
 // index route
@@ -106,7 +117,7 @@ app.post("/submit", function(req, res, next) {
   console.log("IP with proxy method: ", req.headers["x-forwarded-for"]);
   console.log("req.headers: ", req.headers);
   // first asynchronously sends request to IBM API
-  // if error then display error on client side and async save all input except the textresponse will be empty
+  // if error then display error on client side and async save all input except the text response will be empty
   // if successful, send response to client and async save all input as well as the IBM response
 
   // resolver function for promise converter
@@ -135,13 +146,16 @@ app.post("/submit", function(req, res, next) {
       return toPromise(function(callback) { personality_insights.profile(sanitize(parameters), callback)});
     };
 
+  // add mock data.json as mock API response data
   const user = new User({
     name : req.body.name,
+    uuid: uuid.v1(),
     email : req.body.email,
     birthyear: req.body.birthyear,
     gender : req.body.gender,
     textInput : req.body.textInput,
-    browserInfo: req.headers["user-agent"]
+    browserInfo: req.headers["user-agent"],
+    watsonData: data
   });
 
   // Personality Insights API needs JSON input unless otherwise specified
@@ -149,7 +163,7 @@ app.post("/submit", function(req, res, next) {
   //   res.json(results);
   //   user.watsonData = results;
   user.save().then(function(saved) {
-    res.json(data); // delete this after testing
+    res.json(saved); // delete this after testing
     console.log("Saved new user data:", saved);
   }, function(err) {
     res.json(err);

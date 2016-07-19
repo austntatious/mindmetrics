@@ -29,8 +29,6 @@ class FormContainer extends Component {
     let self = this;
 
     let userData = self.state;
-    console.log("nextPage fx, this.state: ", userData);
-
     const fetchHeaders = new Headers();
     fetchHeaders.append("Content-Type", "application/json");
 
@@ -42,15 +40,14 @@ class FormContainer extends Component {
     };
 
     const fetchReq = new Request("/submit", httpOptions);
-    // while sending fetch request, display loading spinner
     fetch(fetchReq, httpOptions)
       .then(function (response) {
         response.json().then(function (data) {
-          console.log("Fetch Response: ", data);
+          let id = data.uuid;
           self.context.router.push({
-            pathname: "/results",
+            pathname: "/user/" + id,
             query: null,
-            state: {data}
+            state: null
           }, function (err) {
             console.log("error", err);
           });

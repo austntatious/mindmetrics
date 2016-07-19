@@ -179,7 +179,7 @@ class RadarChart extends Component {
     //Remove whatever chart with the same id/class was present before
     //Create a transition animation from first data set. if first time rendering, first data set should start at 0 so
     // the graph seems to emerge from the origin of the circle
-    d3.select(faux).select("svg").transition().duration(1000);
+    d3.select(faux).select("svg").remove();
 
     //Initiate the radar chart SVG
     var svg = d3.select(faux).append("svg")
@@ -385,7 +385,7 @@ class RadarChart extends Component {
     function wrap(text, width) {
       text.each(function() {
         // NOTE: added
-        var text = d3.select(self),
+        var text = d3.select(faux),
           words = text.text().split(/\s+/).reverse(),
           word,
           line = [],

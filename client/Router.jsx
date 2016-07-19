@@ -17,6 +17,6 @@ render(
   <Router history = { browserHistory }>
     <Route path="/" component={App} />
     <Route path="/form" component={FormContainer} />
-    <Route path="/results" component={Results} />
+    <Route path="/user/:id" component={Results} />
   </Router>, document.getElementById("app")
   );
