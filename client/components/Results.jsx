@@ -1,6 +1,7 @@
 import React, {Component} from "react"
 import RadarChart from "./radarChart"
 import d3 from "d3"
+import Layout from './Layout'
 
 let margin = {top: 100, right: 100, bottom: 100, left: 100},
   legendPosition = {x: 25, y: 25},
@@ -43,7 +44,7 @@ class Results extends Component {
     });
   }
 
-  render() {
+  renderBody() {
     if(!this.state) {
       return (
         <div>Loading...</div>
@@ -51,9 +52,17 @@ class Results extends Component {
     }
 
     return(
-        <RadarChart data={this.state.data} margin={margin} legendPosition={legendPosition} width={width} height={height} color={color}
-        maxValue={0.5} wrapWidth={60} levels={5} axisName={"reason"} areaName={"device"} value={"value"} />
-      )
+      <RadarChart data={this.state.data} margin={margin} legendPosition={legendPosition} width={width} height={height} color={color}
+      maxValue={0.5} wrapWidth={60} levels={5} axisName={"reason"} areaName={"device"} value={"value"} />
+    )
+  }
+
+  render() {
+    return (
+      <Layout classnames='Results'>
+        {this.renderBody()}
+      </Layout>
+    )
   }
 }
 

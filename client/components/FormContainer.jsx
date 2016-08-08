@@ -5,6 +5,7 @@ import FormStepper from "./FormStepper";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import getMuiTheme from "material-ui/styles/getMuiTheme";
 import {lightBaseTheme} from 'material-ui/styles/baseThemes/lightBaseTheme';
+import Layout from './Layout'
 
 const lightMuiTheme = getMuiTheme(lightBaseTheme);
 
@@ -56,7 +57,7 @@ class FormContainer extends Component {
         });
       });
   };
-  
+
   formTextUpdate(eventType, val) {
     this.setState({
       [eventType]: val.target.value
@@ -96,14 +97,16 @@ class FormContainer extends Component {
     };
 
     return (
-      <MuiThemeProvider muiTheme={lightMuiTheme}>
-        <Paper style={styles.paperStyle} zDepth={3}>
-          <div style={styles.stepperWrapper}>
-          <FormStepper navFunc={this.nextPage} textUpdate={this.formTextUpdate.bind(this)} formValues={this.state}
-                       stateUpdate={this.stateUpdate.bind(this)} selectUpdate={this.selectUpdate.bind(this)} />
-          </div>
-        </Paper>
-      </MuiThemeProvider>
+      <Layout classnames='Form'>
+        <MuiThemeProvider muiTheme={lightMuiTheme}>
+          <Paper style={styles.paperStyle} zDepth={3}>
+            <div style={styles.stepperWrapper}>
+            <FormStepper navFunc={this.nextPage} textUpdate={this.formTextUpdate.bind(this)} formValues={this.state}
+                         stateUpdate={this.stateUpdate.bind(this)} selectUpdate={this.selectUpdate.bind(this)} />
+            </div>
+          </Paper>
+        </MuiThemeProvider>
+      </Layout>
     );
   }
 }

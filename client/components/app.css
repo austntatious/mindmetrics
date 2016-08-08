@@ -1,14 +1,49 @@
 body {
   background: $white0;
+  padding: 0;
+  margin: 0;
+  font-family: Roboto, sans-serif
 }
 
 
 #header-container {
   .header-links {
     padding-top: 7px;
-    
+
     & * {
-      color: #fff !important;
+      color: $white0 !important;
+    }
+  }
+}
+
+.bgGray{
+  background: $gray0;
+  color: $black0;
+}
+
+.bgBlue {
+  background: $blue0;
+  color: $white0;
+}
+
+.Home {
+  .s-landing{
+    height: 200px;
+    text-align: center;
+    padding-top:50px;
+
+    h1 {
+      text-transform: uppercase;
+      font-size: 36px;
+      letter-spacing: 5px;
+    }
+    button {
+      border: 1px solid $white0 !important;
+
+      & * {
+        text-transform: initial !important;
+        color: $white0;
+      }
     }
   }
 }

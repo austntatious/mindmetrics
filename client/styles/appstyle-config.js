@@ -5,7 +5,10 @@ module.exports = {
 
   $white0: '#fff', //Primary background
 
-  $gray0: '#f7f9fa' //Primary gray backround
+  $gray0: '#f7f9fa', //Primary gray backround
+
+  $black0: '#0d0e0e',
 
 
+  lastprop: ''
 };
