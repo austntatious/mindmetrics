@@ -1,5 +1,5 @@
 import { Router, Route, IndexRoute, browserHistory } from "react-router"
-import App from "./components/App"
+import Home from "./components/Home"
 import { render } from "react-dom"
 import React from "react"
 import FormContainer from "./components/FormContainer"
@@ -15,8 +15,8 @@ injectTapEventPlugin();
 
 render(
   <Router history = { browserHistory }>
-    <Route path="/" component={App} />
-    <Route path="/form" component={FormContainer} />
+    <Route path="/"         component={Home} />
+    <Route path="/form"     component={FormContainer} />
     <Route path="/user/:id" component={Results} />
-  </Router>, document.getElementById("app")
+  </Router>, document.getElementById("app-container")
   );

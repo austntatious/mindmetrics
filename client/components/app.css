@@ -1,3 +1,14 @@
 body {
-  background: $blue0;
+  background: $white0;
+}
+
+
+#header-container {
+  .header-links {
+    padding-top: 7px;
+    
+    & * {
+      color: #fff !important;
+    }
+  }
 }
