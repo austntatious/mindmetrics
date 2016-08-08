@@ -5,6 +5,23 @@ body {
   font-family: Roboto, sans-serif
 }
 
+/*Clearfix hack*/
+
+.row:after, .cf {
+  content: "";
+  display: table;
+  clear: both;
+}
+.column, .columns {
+  /*width: 100%;*/
+  float: left;
+  box-sizing: border-box;
+}
+.container {
+  margin: 0 auto;
+  width: 80%;
+  max-width: 1280px;
+}
 
 #header-container {
   .header-links {
@@ -28,9 +45,9 @@ body {
 
 .Home {
   .s-landing{
-    height: 200px;
+    height: 212px;
     text-align: center;
-    padding-top:50px;
+    padding-top:20px;
 
     h1 {
       text-transform: uppercase;
