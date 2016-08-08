@@ -19,7 +19,7 @@ class Home extends Component {
         <section className='s-1 bgGray '>
           <div className='container row'>
             <div className='columns' style={{width:'60%'}}>
-              <h1>Discover your personality</h1>
+              <h1>Powerful & accurate personality analysis</h1>
               <p>Mindmetrics technology analyzes your personality to give you the understanding you need to perform best in your life.</p>
             </div>
             <div className='columns' style={{width:'40%'}}>
@@ -34,7 +34,7 @@ class Home extends Component {
               image goes here
             </div>
             <div className='columns' style={{width:'60%'}}>
-              <h1>Discover your personality</h1>
+              <h1>Uses </h1>
               <p>Mindmetrics technology analyzes your personality to give you the understanding you need to perform best in your life.</p>
             </div>
           </div>
