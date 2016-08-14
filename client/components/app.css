@@ -50,7 +50,7 @@ body {
     padding-top:20px;
 
     h1 {
-      text-transform: uppercase;
+      text-transform: initial;
       font-size: 36px;
       letter-spacing: 5px;
     }
@@ -60,6 +60,47 @@ body {
       & * {
         text-transform: initial !important;
         color: $white0;
+      }
+    }
+  }
+}
+
+
+#quiz-data{
+  .instructions {
+    margin-bottom: 20px;
+  }
+
+  .data-options{
+    .data-option.complete >div {
+      background: #10c5d2;
+    }
+    .data-option > div{
+      width: 210px;
+      text-align: left !important;
+      cursor: pointer;
+
+      .data-option-status {
+        font-size: 18px;
+        margin: 2px 5px 0;
+
+        background: lightgray;
+        border-radius: 3px;
+
+        .complete{
+          background: #4fb7d2;
+        }
+      }
+
+      .data-option-img {
+        width: 16px;
+        height: 16px;
+        margin: 0px 10px 0;
+        top: 1px;
+        position: relative;
+      }
+      .data-option-txt{
+        width: 200px;
       }
     }
   }

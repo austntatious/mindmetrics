@@ -87,12 +87,36 @@ class FormStepper extends Component {
           </div>
         );
       case 1:
+
+        var buttonStyle = {
+          margin: 10
+        };
+
         return (
-          <div>
-            <p>
-              Input some of your writing, the more writing the better. Using your words and writing, we're going to
-              analyze your personality.
-            </p>
+          <div id='quiz-data'>
+            <div className='instructions'>
+              <p>
+                Connect with one of your social media accounts to determine your personality.
+              </p>
+              <p>
+                Alternatively, you can also enter a block of text. The more writing, the better. At least 100 words are required, and 3500 words are recommended to get an accurate report.
+              </p>
+            </div>
+            <div className='data-options'>
+              <FlatButton className='data-option' style={buttonStyle}>
+                <img className='data-option-img' src='https://s2.twnmm.com/images/en_ca/icon-facebook.png'/>
+                <span className='data-option-txt'>Import from Facebook</span>
+              </FlatButton>
+              <FlatButton className='data-option complete' style={buttonStyle}>
+                <img className='data-option-img' src='https://g.twimg.com/dev/documentation/image/Twitter_logo_blue_48.png'/>
+                <span className='data-option-txt'>Import from Twitter</span>
+              </FlatButton>
+              <FlatButton className='data-option' style={buttonStyle}>
+                <i className='data-option-img fa fa-pencil' style={{fontSize: 20}}/>
+                <span className='data-option-txt'>Enter text</span>
+              </FlatButton>
+            </div>
+
             <TextField onChange={this.props.textUpdate.bind(this, "textInput")} value={this.props.formValues.textInput}
                        multiLine={true} rowsMax={12} rows={8} fullWidth={true} ref="input" />
           </div>
@@ -158,5 +182,5 @@ class FormStepper extends Component {
   }
 
 }
-  
+
 export default FormStepper;
