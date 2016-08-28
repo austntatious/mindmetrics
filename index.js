@@ -179,7 +179,9 @@ app.post("/submit", function(req, res, next) {
 /**
 * Port Configs and start server
 **/
+
 const port = Number(process.env.PORT || 3001);
+
 app.listen(port, function () {
   console.log("server running at localhost:3001, go refresh and see magic");
 });

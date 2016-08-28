@@ -4,6 +4,7 @@ import d3 from "d3"
 import legend from "d3-svg-legend"
 import reactMixin from "react-mixin"
 
+// hooking d3 transitions into faux dom element for react
 // let createHook = (comp,elem,statename) => {
 //   let elems = new Map(),
 //     interval;
