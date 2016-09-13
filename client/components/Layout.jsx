@@ -20,16 +20,23 @@ class Layout extends Component {
   render() {
     return (
       <div id='app' className={this.props.classnames} style={this.props.style}>
-        <section id='header-container'>
-          <AppBar title='MindMetrics'
-            iconElementRight={
-              <div className='header-links'>
-                <FlatButton label="Reports" />
-                <FlatButton label="How it works" />
-                <FlatButton label="Research" />
-              </div>
-            }>
-          </AppBar>
+        <section id='header-container' >
+          <div id='menu-bar-container'>
+            <div className='container'>
+              <AppBar id='menu-bar' title='MindMetrics'
+                iconElementRight={
+                  <div className='header-links'>
+                    <FlatButton label="Home" />
+                    <FlatButton label="Research" />
+                    <FlatButton label="How it works" />
+                    <FlatButton label="Blog" />
+                    <FlatButton label="Contact" />
+                    <FlatButton>FB</FlatButton>
+                  </div>
+                }>
+              </AppBar>
+            </div>
+          </div>
         </section>
         <section id='content-container'>
           {this.props.children}

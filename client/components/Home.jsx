@@ -16,6 +16,12 @@ class Home extends Component {
           </Link>
         </section>
 
+        <section className='s-1 bgOrange' id='understand-yourself'>
+          <div className='container'>
+            Understand yourself
+          </div>
+        </section>
+
         <section className='s-1 bgGray '>
           <div className='container row'>
             <div className='columns' style={{width:'60%'}}>
@@ -27,6 +33,7 @@ class Home extends Component {
             </div>
           </div>
         </section>
+
 
         <section className='s-1 bgGray '>
           <div className='container row'>

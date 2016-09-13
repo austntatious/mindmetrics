@@ -31,6 +31,17 @@ body {
       color: $white0 !important;
     }
   }
+
+  #menu-bar-container{
+    background: $purple0;
+    .container {
+      #menu-bar {
+        background: $purple0 !important;
+        color: $gray1 !important;
+        box-shadow: none !important;
+      }
+    }
+  }
 }
 
 .bgGray{
@@ -40,6 +51,11 @@ body {
 
 .bgBlue {
   background: $blue0;
+  color: $white0;
+}
+
+.bgOrange {
+  background: $orange0;
   color: $white0;
 }
 
@@ -62,6 +78,16 @@ body {
         color: $white0;
       }
     }
+  }
+
+  #understand-yourself {
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 1.3em;
+    font-weight: bold;
+    letter-spacing: 10px;
+    color: #d8b089;
+    padding: 12px;
   }
 }
 
