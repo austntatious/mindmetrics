@@ -1,0 +1,23 @@
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+
+  &:hover {
+    .hamburger__line {
+      background-color: lighten(@orangeDark, 15%);
+    }
+  }
+
+  &__line {
+    margin-top: 4px;
+    width: 27px;
+    height: 5px;
+    border-radius: 5px;
+    background-color: @orangeDark;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+}
