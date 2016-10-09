@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 require('../styles/app.less');
 
 let mobile;
@@ -7,9 +6,9 @@ if (window.matchMedia( '(max-width: 1023px)' ).matches) {
     mobile = true;
 }
 
-const user = { name: 'Your name', ico: '/client/img/user-ico-1.png'};
+const USER = { name: 'Your name', ico: '/client/img/user-ico-1.png'};
 
-const tabs = [
+const TABS = [
     {
         id: 1,
         title: 'Personality',
@@ -27,7 +26,7 @@ const tabs = [
     }
 ];
 
-const arr = [
+const TRAITS = [
     {
         id: 1,
         title: 'Consideration',
@@ -143,14 +142,14 @@ class App extends Component {
                     </div>
                 </header>
                 <main className="main">
-                    <User ico={user.ico} name={user.name}/>
+                    <User ico={USER.ico} name={USER.name}/>
                     <SectionHat title="Trait report"
                                 descr="123123 words analysed. "
                                 span="Very Strong Analysis"/>
-                    <Tabs />
+                    <Tabs tabs={TABS} active={1} />
                     <TabDescr text="This is the graph representation of your personality traits, values, and needs. This is the graph representation of your personality traits, values, and needs. This is the graph representation of your personality traits, values, and needs." />
                 </main>
-                <Items />
+                <Traits list={TRAITS} />
                 <BehaviorReport />
                 <GoPremium />
                 <footer className="footer">
@@ -184,9 +183,10 @@ class App extends Component {
 class Tabs extends Component {
 
     render() {
-        let li = tabs.map(function (t) {
+        let li = this.props.tabs.map((t) => {
             return (
                 <Tab key={t.id}
+                     active={this.props.active === t.id}
                      title={t.title} />
             )
         });
@@ -205,9 +205,13 @@ class Tab extends Component {
 
     render() {
         let title = this.props.title;
+        let cls = 'tabs__el';
+        if (this.props.active) {
+            cls += ' ' + 'is-active';
+        }
 
         return (
-            <li className="tabs__el">
+            <li className={cls}>
                 {title}
             </li>
         );
@@ -231,12 +235,12 @@ class TabDescr extends Component {
 
 
 
-class Items extends Component {
+class Traits extends Component {
 
     render() {
-        let items = arr.map(function (i) {
+        let traits = this.props.list.map(function (i) {
             return (
-                <Item id={i.id}
+                <Trait id={i.id}
                       key={i.id}
                       title={i.title}
                       text={i.text}
@@ -246,76 +250,76 @@ class Items extends Component {
                       det3={i.det3}
                       det4={i.det4}
                       det5={i.det5}/>
-            )
+            );
         });
 
         return (
-            <div className="items">
-                {items}
+            <div className="traits">
+                {traits}
             </div>
         );
     }
 }
 
-class Item extends Component{
+class Trait extends Component{
 
     render() {
 
         return (
-            <div className="item">
-                <div className="item__wrap container">
-                    <div className="item__left">
-                        <span className="item__num">
+            <div className="trait">
+                <div className="trait__wrap container">
+                    <div className="trait__left">
+                        <span className="trait__num">
                             {this.props.id}
                         </span>
                         <Title size="4">
                             {this.props.title}
                         </Title>
 
-                        <p className="item__text">
+                        <p className="trait__text">
                             {this.props.text}
                         </p>
                     </div>
-                    <div className="item__right">
+                    <div className="trait__right">
                         <Progress>
                             {this.props.percent}
                         </Progress>
                     </div>
-                    <div className="item__details">
-                        <div className="item__row">
-                            <span className="item__descr">
+                    <div className="trait__details">
+                        <div className="trait__row">
+                            <span className="trait__descr">
                                 {this.props.det1}
                             </span>
                             <Progress mod="is-small">
                                 {this.props.percent}
                             </Progress>
                         </div>
-                        <div className="item__row">
-                            <span className="item__descr">
+                        <div className="trait__row">
+                            <span className="trait__descr">
                                 {this.props.det2}
                             </span>
                             <Progress mod="is-small">
                                 {this.props.percent}
                             </Progress>
                         </div>
-                        <div className="item__row">
-                            <span className="item__descr">
+                        <div className="trait__row">
+                            <span className="trait__descr">
                                 {this.props.det3}
                             </span>
                             <Progress mod="is-small">
                                 {this.props.percent}
                             </Progress>
                         </div>
-                        <div className="item__row">
-                            <span className="item__descr">
+                        <div className="trait__row">
+                            <span className="trait__descr">
                                 {this.props.det4}
                             </span>
                             <Progress mod="is-small">
                                 {this.props.percent}
                             </Progress>
                         </div>
-                        <div className="item__row">
-                            <span className="item__descr">
+                        <div className="trait__row">
+                            <span className="trait__descr">
                                 {this.props.det5}
                             </span>
                             <Progress mod="is-small">
@@ -336,9 +340,23 @@ class Item extends Component{
 }
 
 class BehaviorReport extends Component {
+    static defaultProps = {
+        text: `This is the graph representation of your
+               personality traits, values,
+               and needs. This is the graph representation
+               of your  personality traits, values,
+               and needs. personality traits, values,
+               and needs. This is the graph representation
+               of your  personality traits, values,
+               and needs. personality traits, values,
+               and needs. This is the graph representation
+               of your  personality traits, values,
+               and needs.`,
+        likelyBehaviorList: ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5', 'Item 6'],
+        unlikelyBehaviorList: ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5']
+    }
 
     render() {
-
         return (
             <div className="beh-report container">
                 <SectionHat title="Behavior report"/>
@@ -346,17 +364,7 @@ class BehaviorReport extends Component {
                 <div className="beh-report__row">
                     <div className="beh-report__col">
                         <span className="beh-report__text">
-                            This is the graph representation of your
-                            personality traits, values,
-                            and needs. This is the graph representation
-                            of your  personality traits, values,
-                            and needs. personality traits, values,
-                            and needs. This is the graph representation
-                            of your  personality traits, values,
-                            and needs. personality traits, values,
-                            and needs. This is the graph representation
-                            of your  personality traits, values,
-                            and needs.
+                            {this.props.text}
                         </span>
                     </div>
                     <div className="beh-report__col">
@@ -365,26 +373,13 @@ class BehaviorReport extends Component {
                                 You are likely to:
                             </Title>
                             <ul className="beh-report__list">
-                                <li className="beh-report__el">
-                                    <span className="beh-report__item">
-                                        Item 1
-                                    </span>
-                                </li>
-                                <li className="beh-report__el">
-                                    <span className="beh-report__item">
-                                        Item 1
-                                    </span>
-                                </li>
-                                <li className="beh-report__el">
-                                    <span className="beh-report__item">
-                                        Item 1
-                                    </span>
-                                </li>
-                                <li className="beh-report__el">
-                                    <span className="beh-report__item">
-                                        Item 1
-                                    </span>
-                                </li>
+                                {this.props.likelyBehaviorList.map((t, i) =>
+                                    <li className="beh-report__el" key={i}>
+                                        <span className="beh-report__item">
+                                            {t}
+                                        </span>
+                                    </li>
+                                 )}
                             </ul>
                         </div>
                     </div>
@@ -394,41 +389,13 @@ class BehaviorReport extends Component {
                                 You are unlikely to:
                             </Title>
                             <ul className="beh-report__list">
-                                <li className="beh-report__el">
-                                    <span className="beh-report__item">
-                                        Item 1
-                                    </span>
-                                </li>
-                                <li className="beh-report__el">
-                                    <span className="beh-report__item">
-                                        Item 1
-                                    </span>
-                                </li>
-                                <li className="beh-report__el">
-                                    <span className="beh-report__item">
-                                        Item 1
-                                    </span>
-                                </li>
-                                <li className="beh-report__el">
-                                    <span className="beh-report__item">
-                                        Item 1
-                                    </span>
-                                </li>
-                                <li className="beh-report__el">
-                                    <span className="beh-report__item">
-                                        Item 1
-                                    </span>
-                                </li>
-                                <li className="beh-report__el">
-                                    <span className="beh-report__item">
-                                        Item 1
-                                    </span>
-                                </li>
-                                <li className="beh-report__el">
-                                    <span className="beh-report__item">
-                                        Item 1
-                                    </span>
-                                </li>
+                                {this.props.unlikelyBehaviorList.map((t, i) =>
+                                    <li className="beh-report__el" key={i}>
+                                        <span className="beh-report__item">
+                                            {t}
+                                        </span>
+                                    </li>
+                                 )}
                             </ul>
                         </div>
                     </div>
