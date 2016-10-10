@@ -14,7 +14,7 @@ export default class Progress extends Component {
 
         return (
             <div className={cls}>
-                <div className="progress__line"></div>
+                <div className="progress__line" style={{width: this.props.width + '%'}}></div>
                 <span className="progress__percent">
                     {this.props.children}%
                 </span>

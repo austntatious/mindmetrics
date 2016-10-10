@@ -5,8 +5,48 @@ import Title from './Title';
 import Progress from './Progress';
 
 class Trait extends Component{
+    static defaultProps = {
+        text: "This is the graph representation of your personality traits, values, and needs."
+    }
+
+    state = {
+        open: false
+    }
+
+    toggleOpen = () => {
+        this.setState({open: !this.state.open});
+    }
+
+    percentage = (p) => {
+        return (parseFloat(p) * 100).toFixed();
+    }
+
+    renderDetails = () => {
+        if (this.state.open) {
+            return (
+                <div className="trait__details">
+                    
+                    {this.props.data.children.map((c) => {
+                         const percentage = this.percentage(c.percentage);
+                         
+                         return (
+                             <div className="trait__row" key={this.props.id + c.name}>
+                                 <span className="trait__descr">
+                                     {c.name}
+                                 </span>
+                                 <Progress mod="is-small" width={percentage}>
+                                     {percentage}
+                                 </Progress>
+                             </div>
+                         );
+                     })}
+                </div>
+            );
+        }
+    }
 
     render() {
+        const percentage = this.percentage(this.props.percentage);
 
         return (
             <div className="trait">
@@ -16,7 +56,7 @@ class Trait extends Component{
                             {this.props.id}
                         </span>
                         <Title size="4">
-                            {this.props.title}
+                            {this.props.name}
                         </Title>
 
                         <p className="trait__text">
@@ -24,57 +64,16 @@ class Trait extends Component{
                         </p>
                     </div>
                     <div className="trait__right">
-                        <Progress>
-                            {this.props.percent}
+                        <Progress width={percentage}>
+                            {percentage}
                         </Progress>
                     </div>
-                    <div className="trait__details">
-                        <div className="trait__row">
-                            <span className="trait__descr">
-                                {this.props.det1}
-                            </span>
-                            <Progress mod="is-small">
-                                {this.props.percent}
-                            </Progress>
-                        </div>
-                        <div className="trait__row">
-                            <span className="trait__descr">
-                                {this.props.det2}
-                            </span>
-                            <Progress mod="is-small">
-                                {this.props.percent}
-                            </Progress>
-                        </div>
-                        <div className="trait__row">
-                            <span className="trait__descr">
-                                {this.props.det3}
-                            </span>
-                            <Progress mod="is-small">
-                                {this.props.percent}
-                            </Progress>
-                        </div>
-                        <div className="trait__row">
-                            <span className="trait__descr">
-                                {this.props.det4}
-                            </span>
-                            <Progress mod="is-small">
-                                {this.props.percent}
-                            </Progress>
-                        </div>
-                        <div className="trait__row">
-                            <span className="trait__descr">
-                                {this.props.det5}
-                            </span>
-                            <Progress mod="is-small">
-                                {this.props.percent}
-                            </Progress>
-                        </div>
-                    </div>
+                    {this.renderDetails()}
                     {
                         this.props.mobile ?
-                        <Btn mod="is-plus"></Btn>
+                        <Btn onClick={this.toggleOpen} mod="is-plus"></Btn>
                         :
-                        <Btn>Details ></Btn>
+                        <Btn onClick={this.toggleOpen}>Details ></Btn>
                     }
                 </div>
             </div>
@@ -85,18 +84,14 @@ class Trait extends Component{
 export default class Traits extends Component {
 
     render() {
-        let traits = this.props.list.map(function (i) {
+        let traits = this.props.list.map(function (t, i) {
             return (
-                <Trait id={i.id}
-                       key={i.id}
-                       title={i.title}
-                       text={i.text}
-                       percent={i.percent}
-                       det1={i.det1}
-                       det2={i.det2}
-                       det3={i.det3}
-                       det4={i.det4}
-                       det5={i.det5}/>
+                <Trait key={i + 1}
+                       id={i + 1}
+                       name={t.name}
+                       text={t.text}
+                       percentage={t.percentage}
+                       data={t} />
             );
         });
 
