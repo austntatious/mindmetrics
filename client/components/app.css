@@ -28,17 +28,28 @@ body {
     padding-top: 7px;
 
     & * {
-      color: $white0 !important;
+      color: $purple0 !important;
     }
   }
 
   #menu-bar-container{
-    background: $purple0;
+    background: $gray2;
     .container {
       #menu-bar {
-        background: $purple0 !important;
-        color: $gray1 !important;
+        background: $gray2 !important;
+        color: $purple0 !important;
         box-shadow: none !important;
+
+        .orange{
+          & > div {
+            background: orange;
+            border-radius: 10px;
+
+            & > span {
+              color: white !important;
+            }
+          }
+        }
       }
     }
   }

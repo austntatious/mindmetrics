@@ -23,15 +23,22 @@ class Layout extends Component {
         <section id='header-container' >
           <div id='menu-bar-container'>
             <div className='container'>
-              <AppBar id='menu-bar' title='MindMetrics'
+              <AppBar id='menu-bar'
+                iconElementLeft={
+                  <div className='header-links'>
+
+                    <FlatButton><img src='/client/img/logo.png' /></FlatButton>
+                  </div>
+                }
                 iconElementRight={
                   <div className='header-links'>
                     <FlatButton label="Home" />
-                    <FlatButton label="Research" />
                     <FlatButton label="How it works" />
                     <FlatButton label="Blog" />
+                    <FlatButton label="Research" />
                     <FlatButton label="Contact" />
-                    <FlatButton>FB</FlatButton>
+                    <FlatButton label="Take test" className='orange takeTest'/>
+                    <FlatButton className='orange facebook' style={{minWidth: 30, minHeight: 30, width: 30, height: 30, borderRadius:30, top: 3, marginLeft:20}}><span>f</span></FlatButton>
                   </div>
                 }>
               </AppBar>
