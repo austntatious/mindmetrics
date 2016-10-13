@@ -3,14 +3,14 @@ import React, { Component } from 'react';
 export class Tab extends Component {
 
     render() {
-        let title = this.props.title;
+        const {title, onClick, onTouchTap} = this.props;
         let cls = 'tabs__el';
         if (this.props.active) {
             cls += ' ' + 'is-active';
         }
 
         return (
-            <li className={cls}>
+            <li className={cls} onClick={onClick} onTouchTap={onTouchTap}>
                 {title}
             </li>
         );
@@ -33,13 +33,23 @@ export class TabDescr extends Component {
 }
 
 export class Tabs extends Component {
+    handleChange = (tabId) => {
+        return () => {
+            this.props.onChange(tabId);
+        };
+    }
 
     render() {
+        const {active} = this.props;
+
         let li = this.props.tabs.map((t) => {
             return (
                 <Tab key={t.id}
-                     active={this.props.active === t.id}
-                     title={t.title} />
+                     active={active === t.id}
+                     title={t.title}
+                     onClick={this.handleChange(t.id)}
+                     onTouchTap={this.handleChange(t.id)}
+                />
             );
         });
 

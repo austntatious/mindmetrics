@@ -319,6 +319,14 @@ const navFoot = [
 
 export default class StaticResults extends Component {
 
+    state = {
+        activeTab: 1
+    }
+
+    setActiveTab = (activeTab) => {
+        this.setState({activeTab});
+    }
+
     render() {
         return (
             <div>
@@ -339,7 +347,7 @@ export default class StaticResults extends Component {
                     <SectionHat title="Trait report"
                                 descr="123123 words analysed. "
                                 span="Very Strong Analysis"/>
-                    <Tabs tabs={TABS} active={1} />
+                    <Tabs tabs={TABS} active={this.state.activeTab} onChange={this.setActiveTab}/>
                     <TabDescr text="This is the graph representation of your personality traits, values, and needs. This is the graph representation of your personality traits, values, and needs. This is the graph representation of your personality traits, values, and needs." />
                 </main>
                 <Traits list={TRAITS} />
