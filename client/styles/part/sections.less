@@ -1,0 +1,165 @@
+.section {
+  border-bottom: 1px solid #e9e9e9;
+
+  &__wrap {
+    display: flex;
+  }
+
+  &.is-info {
+    background: url(/client/img/result.png) center no-repeat;
+    background-size: auto;
+
+    .tablet({
+      background: url(/client/img/curves_bg.png) center no-repeat;
+
+    });
+
+    .section {
+
+      &__wrap {
+        padding: 168px 54px 155px 0;
+
+        .tablet({
+          padding: 110px 0 100px;
+        });
+      }
+
+      &__text {
+        padding: 0 65px;
+      }
+
+      &__info {
+        text-align: center;
+        margin-left: auto;
+        max-width: 460px;
+        font-family: 'light', Helvetica, Arial, serif;
+        font-size: 18px;
+        color: #000;
+
+        .tablet({
+          margin: 0 auto;
+        });
+      }
+
+      &__btn-group {
+        display: flex;
+        justify-content: space-between;
+      }
+    }
+
+    h1 {
+      font-family: 'light', Helvetica, Arial, serif;
+      font-weight: 100;
+      font-size: 35px;
+      line-height: 1.3;
+    }
+
+    p {
+      margin: 20px 0 55px;
+      line-height: 1.2;
+    }
+  }
+
+  &.is-about-you {
+    padding: 235px 0 55px;
+    background: url(/client/img/faces.png) top center no-repeat;
+    text-align: center;
+
+    .tablet({
+      background-size: contain;
+      padding: 110px 0 84px;
+    });
+
+    .section-descr {
+      margin: 0 auto;
+    }
+  }
+
+  &.is-data {
+    background: url(/client/img/scheme.png) top center no-repeat;
+    background-size: auto;
+
+    .tablet({
+      background: url(/client/img/scheme_small.png) top center no-repeat;
+      background-size: 450px;
+      padding: 200px 0 84px;
+    });
+
+    .section__wrap {
+      padding: 70px 630px 79px 62px;
+
+      .tablet({
+        padding: 70px 0 62px;
+      });
+    }
+  }
+
+  &.is-ease-use {
+    padding: 30px 0 10px;
+    background-color: #f7f7f7;
+    background-size: auto;
+
+    .section__wrap {
+      background: url(/client/img/hand.png) 80px center no-repeat;
+      padding: 124px 40px 79px 650px;
+
+      .tablet({
+        background-position: top center;
+        background-size: 155px;
+        padding: 180px 0 79px;
+      });
+    }
+  }
+
+  &.is-personality-reports {
+
+    .section__wrap {
+      padding: 82px 0 95px 62px;
+
+      .tablet({
+        flex-wrap: wrap;
+        flex-direction: column-reverse;
+        padding: 82px 0 95px;
+      });
+    }
+  }
+}
+
+.section-descr {
+  max-width: 785px;
+  font-family: 'light', Helvetica, Arial, serif;
+
+  .tablet({
+    max-width: 420px;
+    margin: 0 auto;
+  });
+
+  &__text {
+    margin-top: 50px;
+    font-size: 16px;
+    line-height: 1.4;
+    color: #5d5d5d;
+    margin-bottom: 47px;
+  }
+
+  &__link {
+    color: #da0480;
+
+    .tablet({
+      font-size: 24px; display: flex; justify-content: center;
+    });
+
+    &.is-orange {
+      color: #ffc35c;
+    }
+  }
+
+  h2 {
+    max-width: 315px;
+    margin: 0 auto;
+    text-transform: uppercase;
+    font-size: 30px;
+    text-align: center;
+    line-height: 1.2;
+  }
+}

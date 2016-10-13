@@ -41,7 +41,7 @@ class LandingHeader extends Component {
   {/** create and separate into header landing page component **/}
         <div className="header-content">
             <div className="header-content-inner">
-                <h1>Powerful & accurate personality analysis</h1>
+                <h1>Powerful accurate personality analysis</h1>
                 <hr/>
                 <p>Mindmetrics technology analyzes your personality to give you the understanding you need to perform best
                 in your life.</p>

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 
 require('../styles/app.less');
 
+import Header from './Header';
+import Footer from './Footer';
 import Nav from './Nav';
 import Social from './Social';
 import SectionHat from './SectionHat';
@@ -241,73 +243,6 @@ const TRAITS = [
             }
         ]
     }
-
-];
-
-const navTop = [
-    {
-        id: 1,
-        text: 'Home',
-        href: '#'
-    },
-    {
-        id: 2,
-        text: 'How it works',
-        href: '#'
-    },
-    {
-        id: 3,
-        text: 'Blog',
-        href: '#'
-    },
-    {
-        id: 4,
-        text: 'Research',
-        href: '#'
-    },
-    {
-        id: 5,
-        text: 'Contact',
-        href: '#'
-    }
-];
-
-const navFoot = [
-    {
-        id: 1,
-        text: 'Home',
-        href: '#'
-    },
-    {
-        id: 2,
-        text: 'How it works',
-        href: '#'
-    },
-    {
-        id: 3,
-        text: 'Premium',
-        href: '#'
-    },
-    {
-        id: 4,
-        text: 'Free Analysis',
-        href: '#'
-    },
-    {
-        id: 5,
-        text: 'Blog',
-        href: '#'
-    },
-    {
-        id: 6,
-        text: 'Research',
-        href: '#'
-    },
-    {
-        id: 7,
-        text: 'Contact',
-        href: '#'
-    }
 ];
 
 export default class StaticResults extends Component {
@@ -327,18 +262,7 @@ export default class StaticResults extends Component {
         console.log("RENDER", this.context.mobile);
         return (
             <div>
-                <header className="header">
-                    <div className="header__wrap container">
-                        <div className="header__left">
-                            {this.context.mobile && <Hamburger />}
-                            <Logo mod="is-head-logo" href="#" src="client/img/logo.png" />
-                        </div>
-                        <div className="header__right">
-                            <Nav mod="is-head-nav" arr={navTop}/>
-                            <Action />
-                        </div>
-                    </div>
-                </header>
+                <Header />
                 <main className="main">
                     <User ico={USER.ico} name={USER.name}/>
                     <SectionHat title="Trait report"
@@ -350,30 +274,8 @@ export default class StaticResults extends Component {
                 <Traits list={TRAITS} />
                 <BehaviorReport />
                 <GoPremium />
-                <footer className="footer">
-                    <div className="container">
-                        <div className="footer__top">
-                            <div className="footer__left">
-                                <Nav arr={navFoot} />
-                            </div>
-                            <div className="footer__right">
-                                <Social />
-                            </div>
-                        </div>
-                        <div className="footer__bottom">
-                            <div className="footer__left">
-                                <Copyright>
-                                    &reg; MindMetrics Technology - All rights reserved.
-                                </Copyright>
-                            </div>
-                            <div className="footer__right">
-                                <Logo href="#" src="client/img/logo_footer.png" />
-                            </div>
-                        </div>
-                    </div>
-                </footer>
+                <Footer />
             </div>
         );
-
     }
 }
