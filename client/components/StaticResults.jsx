@@ -321,15 +321,15 @@ export default class StaticResults extends Component {
 
     render() {
         return (
-            <div className="App">
+            <div>
                 <header className="header">
                     <div className="header__wrap container">
                         <div className="header__left">
-                            <Hamburger />
+                            {!!mobile && <Hamburger />}
                             <Logo mod="is-head-logo" href="#" src="client/img/logo.png" />
                         </div>
                         <div className="header__right">
-                            <Nav mod="is-head-nav" arr={navTop}/>
+                            <Nav mod="is-head-nav" arr={navTop} mobile={mobile}/>
                             <Action />
                         </div>
                     </div>

@@ -7,13 +7,11 @@ export default class Hamburger extends Component {
             src = this.props.src;
 
         return (
-            this.props.mobile ?
             <div className="hamburger">
                 <span className="hamburger__line"></span>
                 <span className="hamburger__line"></span>
                 <span className="hamburger__line"></span>
             </div>
-            : null
         );
     }
 }
