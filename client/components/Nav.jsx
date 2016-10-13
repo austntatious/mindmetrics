@@ -16,6 +16,9 @@ class NavEl extends Component {
 }
 
 export default class Nav extends Component {
+    static contextTypes = {
+        mobile: React.PropTypes.bool
+    }    
 
     render() {
         let cls = 'nav',
@@ -35,7 +38,7 @@ export default class Nav extends Component {
         }
 
         return (
-            this.props.mobile ?
+            this.context.mobile ?
             <nav className={cls + ' ' + 'is-mobile'}>
                 <ul className="nav__list">
                     {arr}

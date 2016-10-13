@@ -4,11 +4,14 @@ import Btn from './Btn';
 import Title from './Title';
 
 export default class GoPremium extends Component {
+    static contextTypes = {
+        mobile: React.PropTypes.bool
+    }
 
     render() {
 
         return (
-            this.props.mobile ?
+            this.context.mobile ?
             <div className="premium">
                 <div className="premium__wrap">
                     <div className="premium__col">

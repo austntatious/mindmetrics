@@ -9,6 +9,10 @@ class Trait extends Component{
         text: "This is the graph representation of your personality traits, values, and needs."
     }
 
+    static contextTypes = {
+        mobile: React.PropTypes.bool
+    }
+
     state = {
         open: false
     }
@@ -25,10 +29,10 @@ class Trait extends Component{
         if (this.state.open) {
             return (
                 <div className="trait__details">
-                    
+
                     {this.props.data.children.map((c) => {
                          const percentage = this.percentage(c.percentage);
-                         
+
                          return (
                              <div className="trait__row" key={this.props.id + c.name}>
                                  <span className="trait__descr">
@@ -70,7 +74,7 @@ class Trait extends Component{
                     </div>
                     {this.renderDetails()}
                     {
-                        this.props.mobile ?
+                        this.context.mobile ?
                         <Btn onClick={this.toggleOpen} mod="is-plus"></Btn>
                         :
                         <Btn onClick={this.toggleOpen}>Details ></Btn>

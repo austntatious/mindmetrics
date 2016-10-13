@@ -16,13 +16,6 @@ import Traits from './Traits';
 
 import {Tabs, TabDescr} from './Tabs';
 
-
-
-let mobile;
-if (window.matchMedia( '(max-width: 1023px)' ).matches) {
-    mobile = true;
-}
-
 const USER = { name: 'Your name', ico: '/client/img/user-ico-1.png'};
 
 const TABS = [
@@ -318,6 +311,9 @@ const navFoot = [
 ];
 
 export default class StaticResults extends Component {
+    static contextTypes = {
+        mobile: React.PropTypes.bool
+    }
 
     state = {
         activeTab: 1
@@ -328,16 +324,17 @@ export default class StaticResults extends Component {
     }
 
     render() {
+        console.log("RENDER", this.context.mobile);
         return (
             <div>
                 <header className="header">
                     <div className="header__wrap container">
                         <div className="header__left">
-                            {!!mobile && <Hamburger />}
+                            {this.context.mobile && <Hamburger />}
                             <Logo mod="is-head-logo" href="#" src="client/img/logo.png" />
                         </div>
                         <div className="header__right">
-                            <Nav mod="is-head-nav" arr={navTop} mobile={mobile}/>
+                            <Nav mod="is-head-nav" arr={navTop}/>
                             <Action />
                         </div>
                     </div>

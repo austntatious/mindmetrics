@@ -3,12 +3,15 @@ import React, { Component } from 'react';
 import Btn from './Btn';
 
 export default class Action extends Component {
+    static contextTypes = {
+        mobile: React.PropTypes.bool
+    }    
 
     render() {
         let href = this.props.href;
 
         return (
-            this.props.mobile ?
+            this.context.mobile ?
             <div className="action">
                 <Btn type="link" href="#" mod="is-orange">
                     Go premium
