@@ -30,13 +30,23 @@
     padding: 14px 0 16px;
     border: 3px solid #f39208;
     border-radius: 10px;
-    font-family: 'light', Helvetica, Arial, serif;
     color: @orange;
     text-transform: uppercase;
     font-size: 20px;
     letter-spacing: -1px;
     background-color: transparent;
 
+    &:hover {
+      color: #fff;
+      background-color: @orange;
+    }
+  }
+
+  &.is-small {
+    &:extend(.btn.is-big);
+    padding: 14px 0 9px;
+    width: 223px;
+    font-size: 14px;
     &:hover {
       color: #fff;
       background-color: @orange;
