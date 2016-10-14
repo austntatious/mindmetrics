@@ -23,7 +23,7 @@ class Home extends Component {
                   accurate personality report.
                 </p>
               </div>
-              <div className="section__btn-group">
+              <div className="btn-group">
                 <Btn mod="is-small is-violet" type="link" href="#">
                   Take a test now
                 </Btn>
@@ -67,6 +67,16 @@ class Home extends Component {
             <ProgressGroup />
           </div>
         </section>
+        <div className="section is-promo">
+          <div className="btn-group">
+            <Btn mod="is-big is-violet" type="link" href="#">
+              Get free analysis
+            </Btn>
+            <Btn mod="is-big" type="link" href="#">
+              Go premium
+            </Btn>
+          </div>
+        </div>
       </Layout>
     );
   }
