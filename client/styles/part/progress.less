@@ -1,0 +1,55 @@
+@import "../core/mixins.less";
+
+
+@keyframes progressWidth {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+.progress {
+  position: relative;
+  height: 26px;
+  width: 100%;
+  background-color: #F2F2F2;
+  border-radius: 10px;
+
+  &__line {
+    position: relative;
+    height: 100%;
+    width: 63%;
+    background-color: transparent;
+    border-radius: 10px;
+    &::after {
+      position: absolute;
+      content: '';
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 100%;
+      background-color: @blue;
+      border-radius: 10px;
+      animation: progressWidth 3s forwards;
+    }
+  }
+
+  &__percent {
+    position: absolute;
+    top: 0;
+    right: -40px;
+  }
+
+  &.is-small {
+    height: 17px;
+
+    .progress__percent {
+
+      .tablet({
+        font-size: 10px;
+      });
+    }
+  }
+}

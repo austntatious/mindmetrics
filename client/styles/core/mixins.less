@@ -1,0 +1,144 @@
+// floats
+.to-left {
+  float: left;
+}
+
+.to-right {
+  float: right;
+}
+
+.clearfix {
+  *zoom: 1;
+  &:before,
+  &:after {
+    display: table;
+    content: "";
+  }
+  &:after {
+    clear: both;
+  }
+}
+
+// text-align
+.text-right {
+  text-align: right;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.href(@color: @linkColor,
+      @colorHover: @linkColorHover,
+      @colorActive: @linkColorActive,
+      @colorVisited: @linkColorVisited){
+  &:visited{
+    color: @colorVisited;
+  }
+  &:link{
+    color: @color;
+  }
+  &:hover{
+    color: @colorHover;
+  }
+  &:active{
+    color: @colorActive;
+  }
+}
+// media
+@mini: 479px;
+@mobile: 767px;
+@tablet: 1023px;
+@laptop: 1279px;
+@desktop: 1439px;
+
+.mini(@rules) {
+  @media screen and (max-width: @mini) {
+    @rules();
+  };
+};
+
+.mobile(@rules) {
+  @media screen and (max-width: @mobile) {
+    @rules();
+  };
+};
+
+.tablet(@rules) {
+  @media screen and (max-width: @tablet) {
+    @rules();
+  };
+};
+
+.laptop(@rules) {
+  @media screen and (max-width: @laptop) {
+    @rules();
+  };
+};
+
+//usage
+//.header {
+//  height: 50px;
+//
+//    .small({ height: 100px; });
+//    .medium({ height: 200px; });
+//    .large({ height: 300px; });
+//    .x-large({ height: 400px; });
+//}
+
+// transition
+//tr(@what) {
+//  transition: @what;
+//}
+
+// rotate
+.rotate(@var) {
+  transform: rotate(@var * 1deg)
+}
+
+// translate
+.translate(@a,@b) {
+  transform: translate(@a * 1px, @b * 1px)
+}
+
+// horizontal gradient
+.g(@color1, @color2){
+  background-color: @color1;
+  background-image: linear-gradient(@color1, @color2);
+}
+
+// vertical gradient
+.gh(@color1, @color2) {
+  background-color: @color1;
+  background-image: linear-gradient(to right, @color1, @color2);
+}
+
+// easy vertical-align at center
+.vcenter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}
+
+// @font-face
+.font-face(@family, @filepath: @family, @weight: normal, @style: normal){
+  @font-face{
+    font-family: "@{family}";
+    src: url('fonts/@{filepath}.woff') format('woff');
+    font-weight: @weight;
+    font-style: @style;
+  }
+}
+// USAGE
+// ================================================
+//
+//  .font-face(Roboto Slab, RobotoSlab-Bold, bold);
+//
+//  h1 {
+//    font-family: 'Roboto Slab', serif;
+//    font-weight: bold;
+//  }
+//=================================================
+
+

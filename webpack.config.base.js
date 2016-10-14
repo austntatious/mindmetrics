@@ -37,7 +37,7 @@ module.exports = {
       'node_modules',
       'client'
     ],
-    extensions: ['', '.webpack.js', '.web.js', '.js', '.jsx', '.css', '.woff', '.svg', '.woff2', '.tff', '.eot']
+    extensions: ['', '.webpack.js', '.web.js', '.js', '.jsx', '.css', '.woff', '.svg', '.woff2', '.tff', '.eot', '.less']
   },
 
   plugins: [
@@ -57,6 +57,7 @@ module.exports = {
         test: /\.css$/,
         loader: "style-loader!css-loader"
       },
+      { test: /\.less$/,   loader: "style!css!less" },        
       { test: /\.(eot|woff|woff2|ttf|svg|png|jpe?g|gif)(\?\S*)?$/, 
       loader: "url?limit=100000&name=[name].[ext]"
       },
