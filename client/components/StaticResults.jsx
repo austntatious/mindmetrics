@@ -259,7 +259,6 @@ export default class StaticResults extends Component {
     }
 
     render() {
-        console.log("RENDER", this.context.mobile);
         return (
             <div>
                 <Header />
