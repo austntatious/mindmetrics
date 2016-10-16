@@ -5,7 +5,6 @@ import { render } from "react-dom"
 import React from "react"
 import FormContainer from "./components/FormContainer"
 import LandingHeader from "./components/LandingHeader"
-import Results from "./components/Results"
 import StaticResults from "./components/StaticResults"
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
@@ -13,6 +12,8 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 // Can go away when react 1.0 release
 // Check this repo:
 // https://github.com/zilverline/react-tap-event-plugin
+
+// TO DO: add uuid to new results page so that users can save the page itself(?)
 injectTapEventPlugin();
 
 render(
@@ -20,7 +21,6 @@ render(
         <Route                      component={App}>
             <Route path="/"         component={Home} />
             <Route path="/form"     component={FormContainer} />
-            <Route path="/user/:id" component={Results} />
             <Route path="/results"  component={StaticResults} />
         </Route>
     </Router>, document.getElementById("app-container")
