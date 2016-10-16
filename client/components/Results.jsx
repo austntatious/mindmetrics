@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
+import d3 from "d3";
 
 require('../styles/app.less');
 
+import Layout from './Layout';
 import Header from './Header';
 import Footer from './Footer';
 import Nav from './Nav';
@@ -245,6 +247,13 @@ const TRAITS = [
     }
 ];
 
+let color = d3.scale.ordinal()
+              .range(["#EDC951","#CC333F","#00A0B0"]);
+
+// this component will render differently when called by the webapp formcontainer or by a direct URL link.
+// when called by formcontainer, it should push the route with the UUID that we send back from server as the pathname
+// when called from direct URL link, we should pull the ID parameter and query the database in componentWillMount
+
 export default class StaticResults extends Component {
     static contextTypes = {
         mobile: React.PropTypes.bool
@@ -258,10 +267,37 @@ export default class StaticResults extends Component {
         this.setState({activeTab});
     }
 
+    componentDidMount() {
+        let self = this;
+        const id = this.props.params.id;
+
+        const fetchHeaders = new Headers();
+
+        fetchHeaders.append("Content-Type", "application/json");
+
+        const httpOptions = {
+            method: "GET",
+            headers: fetchHeaders,
+            mode: "cors"
+        };
+
+        const fetchReq = new Request("/results/" + id, httpOptions);
+
+        fetch(fetchReq, httpOptions)
+            .then(function (response) {
+                response.json().then(function (data) {
+                    self.setState({data: data.watsonData});
+                }, function (err) {
+                    console.log("error", err);
+                });
+            }).catch(function (err) {
+                console.log("FETCH ERROR", err);
+            });
+    }
+
     render() {
         return (
-            <div>
-                <Header />
+            <Layout classnames='Results'>
                 <main className="main">
                     <User ico={USER.ico} name={USER.name}/>
                     <SectionHat title="Trait report"
@@ -273,8 +309,7 @@ export default class StaticResults extends Component {
                 <Traits list={TRAITS} />
                 <BehaviorReport />
                 <GoPremium />
-                <Footer />
-            </div>
+            </Layout>
         );
     }
 }

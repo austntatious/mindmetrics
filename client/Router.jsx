@@ -1,11 +1,11 @@
-import { Router, Route, IndexRoute, browserHistory } from "react-router"
-import Home from "./components/Home"
-import App from "./App"
-import { render } from "react-dom"
-import React from "react"
-import FormContainer from "./components/FormContainer"
-import LandingHeader from "./components/LandingHeader"
-import StaticResults from "./components/StaticResults"
+import { Router, Route, IndexRoute, browserHistory } from "react-router";
+import Home from "./components/Home";
+import App from "./App";
+import { render } from "react-dom";
+import React from "react";
+import FormContainer from "./components/FormContainer";
+import LandingHeader from "./components/LandingHeader";
+import Results from "./components/Results";
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
 // Needed for onTouchTap
@@ -21,7 +21,7 @@ render(
         <Route                      component={App}>
             <Route path="/"         component={Home} />
             <Route path="/form"     component={FormContainer} />
-            <Route path="/results"  component={StaticResults} />
+            <Route path="/results"  component={Results} />
         </Route>
     </Router>, document.getElementById("app-container")
 );
