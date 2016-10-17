@@ -28,9 +28,9 @@ export default class GoPremium extends Component {
                          </p>
                      </div>
                     }
-                <div className="premium__col">
-                    <Btn type="link" href="#" mod="is-big">Go premium</Btn>
-                </div>
+                    <div className="premium__col">
+                        <Btn type="link" href="#" mod="is-big">Go premium</Btn>
+                    </div>
                 </div>
             </div>
         );
