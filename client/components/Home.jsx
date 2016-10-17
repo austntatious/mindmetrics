@@ -4,6 +4,7 @@ import SectionDescription from './SectionDescription';
 import ProgressGroup from './ProgressGroup';
 import Title from './Title';
 import Btn from './Btn';
+import GoPremium from './GoPremium';
 import { Link } from "react-router";
 
 class Home extends Component {
@@ -66,6 +67,7 @@ class Home extends Component {
               />
             <ProgressGroup />
           </div>
+          <GoPremium mobile />
         </section>
         <div className="section is-promo">
           <div className="btn-group">

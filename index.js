@@ -110,6 +110,7 @@ app.get("/*", function(req, res) {
 });
 
 // User post submission
+// TODO: nginx causes IP from user to be rewritten to the local address. fix ip forwarding problem
 app.post("/submit", function(req, res, next) {
   console.log("post submission received, req.body = ", req.body);
   console.log("User-Agent: " + req.headers["user-agent"]);
@@ -189,7 +190,7 @@ app.listen(port, function () {
 /**
 * Webpack configs
 **/
-if (env.production === false) {
+if (!env.production) {
   new WebpackDevServer(webpack(webpackDevConfig), {
     publicPath: "/client/",
     contentBase: "./client/",
