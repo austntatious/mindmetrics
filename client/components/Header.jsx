@@ -45,7 +45,7 @@ export default class Header extends Component {
         <div className="header__wrap container">
           <div className="header__left">
             {this.context.mobile && <Hamburger />}
-            <Logo mod="is-head-logo" href="#" src="client/img/logo.png" />
+            <Logo mod="is-head-logo" href="#" src="/client/img/logo.png" />
           </div>
           <div className="header__right">
             <Nav mod="is-head-nav" arr={navTop}/>

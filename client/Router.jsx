@@ -7,6 +7,7 @@ import FormContainer from "./components/FormContainer"
 import LandingHeader from "./components/LandingHeader"
 import Results from "./components/Results"
 import StaticResults from "./components/StaticResults"
+import FormUserTextInput from "./components/FormUserTextInput"
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
 // Needed for onTouchTap
@@ -22,6 +23,7 @@ render(
             <Route path="/form"     component={FormContainer} />
             <Route path="/user/:id" component={Results} />
             <Route path="/results"  component={StaticResults} />
+            <Route path="/form/input"  component={FormUserTextInput} />
         </Route>
     </Router>, document.getElementById("app-container")
 );

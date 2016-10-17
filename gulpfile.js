@@ -30,3 +30,5 @@ gulp.task('css:build', function () {
 gulp.task('css:watch', ['css:build'], function() {
   gulp.watch(config_css.src, ['css:build'])
 })
+
+gulp.task('default', ['css:watch']);

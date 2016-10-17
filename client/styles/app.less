@@ -184,3 +184,55 @@ a {
 }
 
 
+
+#info{
+  text-align: center;
+
+  .infoheader{
+    margin: 2em auto 3em;
+
+    .header-primary{
+      font-size: 2em;
+    }
+    .header-secondary {
+      font-size: .8em;
+    }
+  }
+
+  .integrations-sm{
+    margin: 1em auto 3em;
+
+    .integration-sm {
+      padding: .8em .6em;
+      border-radius: 7px;
+      float: left;
+      display: inline-block;
+      width: 200px;
+      font-size: 0.7em;
+      font-weight: bold;
+      color: #fff;
+
+      & +.integrated{
+        visibility: hidden;
+      }
+      & .integration-sm-integrated  +.integrated {
+          visibility: visible;
+      }
+
+      //TODO: stack on mobile
+      & +.integration-sm {
+        margin-left: 2em;
+      }
+
+      //TODO: get actual color for btns
+      &.integration-sm-fb{
+        background: #295bb7;
+      }
+
+      &.integration-sm-tw{
+        background: #04d1e6;
+      }
+    }
+
+  }
+}
