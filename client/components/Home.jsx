@@ -69,16 +69,6 @@ class Home extends Component {
           </div>
           <GoPremium mobile />
         </section>
-        <div className="section is-promo">
-          <div className="btn-group">
-            <Btn mod="is-big is-violet" type="link" href="#">
-              Get free analysis
-            </Btn>
-            <Btn mod="is-big" type="link" href="#">
-              Go premium
-            </Btn>
-          </div>
-        </div>
       </Layout>
     );
   }

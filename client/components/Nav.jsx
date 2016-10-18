@@ -38,13 +38,6 @@ export default class Nav extends Component {
         }
 
         return (
-            this.context.mobile ?
-            <nav className={cls + ' ' + 'is-mobile'}>
-                <ul className="nav__list">
-                    {arr}
-                </ul>
-            </nav>
-            :
             <nav className={cls}>
                 <ul className="nav__list">
                     {arr}

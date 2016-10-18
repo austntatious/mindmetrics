@@ -18,8 +18,25 @@
 
   &__col {
 
+    &:first-child {
+      margin-left: auto;
+    }
+    &:last-child {
+      margin-right: auto;
+      margin-left: 31px;
+    }
+
     .tablet({
       margin-bottom: 27px;
+
+      &:first-child {
+        margin-left: 0;
+      }
+
+      &:last-child {
+        margin-right: 0;
+        margin-left: 0;
+      }
     });
   }
 
