@@ -16,9 +16,11 @@ class NavEl extends Component {
 }
 
 export default class Nav extends Component {
-    static contextTypes = {
-        mobile: React.PropTypes.bool
-    }    
+    /**
+     * static contextTypes = {
+     * mobile: React.PropTypes.bool
+     * }
+     * **/
 
     render() {
         let cls = 'nav',

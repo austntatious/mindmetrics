@@ -1,26 +1,40 @@
 import React, { Component } from 'react';
+import Nav from './Nav';
+
+const mobileMenuNav = [
+  {
+    id: 1,
+    text: 'Home',
+    href: '#'
+  },
+  {
+    id: 2,
+    text: 'How it works',
+    href: '#'
+  },
+  {
+    id: 3,
+    text: 'Blog',
+    href: '#'
+  },
+  {
+    id: 4,
+    text: 'Research',
+    href: '#'
+  },
+  {
+    id: 5,
+    text: 'Contact',
+    href: '#'
+  }
+];
 
 export default class MobileMenu extends Component {
 
   render() {
-    let cls = 'nav',
-      mod = this.props.mod,
-      arr = this.props.arr.map(function (n) {
-        return (
-          <NavEl key={n.id} href={n.href}>
-            {n.text}
-          </NavEl>
-        )
-      });
-
     return (
-      this.context.mobile &&
         <div className="mobile-menu">
-          <nav className={cls}>
-            <ul className="nav__list">
-              {arr}
-            </ul>
-          </nav>
+          <Nav arr={mobileMenuNav}/>
         </div>
     );
   }

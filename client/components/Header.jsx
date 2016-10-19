@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import Hamburger from './Hamburger';
 import Nav from './Nav';
+import MobileMenu from './MobileMenu';
 import Logo from './Logo';
 import Action from './Action';
 
@@ -48,7 +49,7 @@ export default class Header extends Component {
             <Logo mod="is-head-logo" href="#" src="client/img/logo.png" />
           </div>
           <div className="header__right">
-            <Nav mod="is-head-nav" arr={navTop}/>
+            { this.context.mobile ? <MobileMenu/> : <Nav mod="is-head-nav" arr={navTop}/> }
             <Action />
           </div>
         </div>
