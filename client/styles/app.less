@@ -36,16 +36,23 @@ body {
 
 h1 {
   font-size: 36px;
+  .tablet({ font-size: 40px; });
 }
 
 h2 {
   font-size: 24px;
   font-weight: 400;
+  .tablet({ font-size: 36px; });
 }
 
 h3 {
   font-size: 20px;
   font-weight: 400;
+  .tablet({ font-size: 24px; });
+}
+
+h4 {
+  .tablet({ font-size: 22px;})
 }
 
 a {
@@ -124,6 +131,8 @@ a {
     margin-left: 27px;
     font-size: 26px;
     color: @violetDark;
+
+    .tablet({ font-size: 36px; });
   }
 }
 
@@ -146,6 +155,7 @@ a {
   &__descr {
     font-size: 15px;
     margin-bottom: 20px;
+    .tablet({ font-size: 18px; });
   }
 
   h1 {
