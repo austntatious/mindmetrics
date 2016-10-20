@@ -20,7 +20,7 @@ export default class App extends Component {
     
     checkForMobile = () => {
         console.log("CHECK FOR MOBILE");
-        const mobile = window.matchMedia( '(max-width: 1023px)' ).matches;
+        const mobile = window.matchMedia( '(max-width: 767px)' ).matches;
         this.setState({mobile});
     }
 

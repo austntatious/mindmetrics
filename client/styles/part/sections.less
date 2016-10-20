@@ -83,7 +83,7 @@
     });
 
     .section__wrap {
-      padding: 70px 630px 79px 62px;
+      padding: 70px 0 79px 62px;
 
       .tablet({
         padding: 70px 0 62px;
@@ -97,10 +97,13 @@
     background-size: auto;
 
     .section__wrap {
+      display: flex;
+      justify-content: flex-end;
       background: url(/client/img/hand.png) 80px center no-repeat;
-      padding: 124px 40px 79px 650px;
+      padding: 124px 40px 79px 0;
 
       .tablet({
+        justify-content: center;
         background-position: top center;
         background-size: 155px;
         padding: 180px 0 79px;
@@ -113,10 +116,39 @@
     .section__wrap {
       padding: 82px 0 95px 62px;
 
+      .r1100({
+        flex-wrap: wrap;
+        padding: 82px 20px 95px;
+      });
+
       .tablet({
         flex-wrap: wrap;
         flex-direction: column-reverse;
         padding: 82px 0 95px;
+      });
+    }
+
+    .section-descr {
+
+      .r1100({
+        margin: 0 auto 80px;
+      });
+
+      .tablet({
+        margin-bottom: 0;
+      })
+    }
+
+    .progress-group {
+      left: 35px;
+
+      .r1100({
+        left: auto;
+        margin: 0 auto;
+      });
+
+      .tablet({
+        margin: 20px auto 107px;
       });
     }
   }
@@ -149,6 +181,15 @@
 
 .section-descr {
   max-width: 785px;
+
+  &.is-small {
+    max-width: 310px;
+
+    .tablet({
+      max-width: 420px;
+      margin: 0 auto;
+    });
+  }
 
   .tablet({
     max-width: 420px;

@@ -43,7 +43,8 @@ class Home extends Component {
         </section>
         <section className="section is-data">
           <div className="section__wrap container">
-            <SectionDescription title="Data driven and scientific"
+            <SectionDescription mod="is-small"
+                                title="Data driven and scientific"
                                 text="Using data science and natural language processing, we're able to predict your personality based on the most popular personality model used in the psychology community, the Five Factor Personality model."
                                 href="#"
               />
@@ -51,7 +52,8 @@ class Home extends Component {
         </section>
         <section className="section is-ease-use">
           <div className="section__wrap container">
-            <SectionDescription title="Easy to use"
+            <SectionDescription mod="is-small"
+                                title="Easy to use"
                                 text="Faster than any other personality analysis out there. Just choose where you want us to analyze, your twitter, Facebook, or copy and paste your blog. We'll have it analyzed in seconds."
                                 href="#"
                                 linkcolor="is-orange"
