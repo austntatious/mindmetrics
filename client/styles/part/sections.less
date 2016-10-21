@@ -41,11 +41,6 @@
           margin: 0 auto;
         });
       }
-
-      &__btn-group {
-        display: flex;
-        justify-content: space-between;
-      }
     }
 
     h1 {
@@ -57,6 +52,8 @@
     p {
       margin: 20px 0 55px;
       line-height: 1.2;
+
+      .tablet({ font-size: 22px; });
     }
   }
 
@@ -86,7 +83,7 @@
     });
 
     .section__wrap {
-      padding: 70px 630px 79px 62px;
+      padding: 70px 0 79px 62px;
 
       .tablet({
         padding: 70px 0 62px;
@@ -100,10 +97,13 @@
     background-size: auto;
 
     .section__wrap {
+      display: flex;
+      justify-content: flex-end;
       background: url(/client/img/hand.png) 80px center no-repeat;
-      padding: 124px 40px 79px 650px;
+      padding: 124px 40px 79px 0;
 
       .tablet({
+        justify-content: center;
         background-position: top center;
         background-size: 155px;
         padding: 180px 0 79px;
@@ -116,17 +116,80 @@
     .section__wrap {
       padding: 82px 0 95px 62px;
 
+      .r1100({
+        flex-wrap: wrap;
+        padding: 82px 20px 95px;
+      });
+
       .tablet({
         flex-wrap: wrap;
         flex-direction: column-reverse;
         padding: 82px 0 95px;
       });
     }
+
+    .section-descr {
+
+      .r1100({
+        margin: 0 auto 80px;
+      });
+
+      .tablet({
+        margin-bottom: 0;
+      })
+    }
+
+    .progress-group {
+      left: 35px;
+
+      .r1100({
+        left: auto;
+        margin: 0 auto;
+      });
+
+      .tablet({
+        margin: 20px auto 107px;
+      });
+    }
+  }
+
+  &.is-personal-info {
+    max-width: 740px;
+    padding: 40px 0;
+    margin: 0 auto;
+    text-align: center;
+    border-bottom: none;
+
+    .tablet({
+      padding: 40px 20px;
+    });
+
+    .section {
+
+      &__sub-title {
+        margin: 5px 0 60px;
+        font-size: 15px;
+      }
+
+      &__separator {
+        font-size: 16px;
+        margin: 32px 0 17px;
+      }
+    }
   }
 }
 
 .section-descr {
   max-width: 785px;
+
+  &.is-small {
+    max-width: 310px;
+
+    .tablet({
+      max-width: 420px;
+      margin: 0 auto;
+    });
+  }
 
   .tablet({
     max-width: 420px;
@@ -139,13 +202,15 @@
     line-height: 1.4;
     color: #5d5d5d;
     margin-bottom: 47px;
+
+    .tablet({ font-size: 20px; });
   }
 
   &__link {
     color: #da0480;
 
     .tablet({
-      font-size: 24px;
+      font-size: 30px;
       display: flex;
       justify-content: center;
     });

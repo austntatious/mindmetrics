@@ -3,13 +3,17 @@ import Title from './Title';
 
 export default class SectionDescription extends Component {
   render() {
-    let title = this.props.title,
-        text = this.props.text,
-        href = this.props.href,
-        linkColor = this.props.linkcolor;
+    const {mod, title, text, href, linkColor} = this.props;
+    let cls = 'section-descr';
+
+    if (mod) {
+      cls += ' ' + mod.split(' ').map(function (x) {
+          return x;
+        }).join(' ');
+    }
 
     return (
-      <div className="section-descr">
+      <div className={cls}>
         <Title size="2">
           {title}
         </Title>

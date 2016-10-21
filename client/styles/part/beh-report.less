@@ -8,7 +8,12 @@
     display: flex;
     flex-direction: row;
 
+    .r1100({
+      padding: 0 20px;
+    });
+
     .tablet({
+      padding: 0;
       flex-wrap: wrap;
     });
   }
@@ -36,7 +41,10 @@
   }
 
   &__text {
+    display: inline-flex;
+    text-align: left;
     font-size: 13px;
+    .tablet({ font-size: 18px; });
   }
 
   &__likes {

@@ -3,7 +3,7 @@ import Home from "./components/Home";
 import App from "./App";
 import { render } from "react-dom";
 import React from "react";
-import FormContainer from "./components/FormContainer";
+import Form from "./components/Form";
 import LandingHeader from "./components/LandingHeader";
 import Results from "./components/Results";
 import injectTapEventPlugin from 'react-tap-event-plugin';
@@ -20,7 +20,7 @@ render(
     <Router history = { browserHistory }>
         <Route                      component={App}>
             <Route path="/"         component={Home} />
-            <Route path="/form"     component={FormContainer} />
+            <Route path="/form"     component={Form} />
             <Route path="/results"  component={Results} />
         </Route>
     </Router>, document.getElementById("app-container")

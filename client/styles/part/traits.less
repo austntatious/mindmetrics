@@ -10,6 +10,10 @@
   padding: 28px 0 55px;
   border-bottom: 1px solid @greyLight;
 
+  .r1100({
+    padding: 28px 20px 55px;
+  });
+
   .tablet({
     padding: 28px 30px 55px;
   });
@@ -32,6 +36,10 @@
 
   &__left {
     padding-right: 40px;
+
+    .r1100({
+      padding-left: 40px;
+    });
 
 
     .tablet({
@@ -58,6 +66,10 @@
     font-size: 60px;
     font-weight: bold;
 
+    .r1100({
+      left: 0;
+    });
+
     .tablet({
       top: -5px;
       left: 70px;
@@ -66,6 +78,7 @@
 
   &__text {
     font-size: 13px;
+    .tablet({ font-size: 18px;});
   }
 
   &__details {
@@ -93,7 +106,7 @@
     text-align: right;
 
     .tablet({
-      font-size: 10px;
+      font-size: 17px;
     });
   }
 
@@ -114,6 +127,10 @@
     position: absolute;
     left: 10px;
     bottom: -30px;
+
+    .r1100({
+      left: 50px;
+    });
 
     .tablet({
       right: -30px;

@@ -5,17 +5,7 @@ import SectionHat from './SectionHat';
 
 export default class BehaviorReport extends Component {
     static defaultProps = {
-        text: `This is the graph representation of your
-               personality traits, values,
-               and needs. This is the graph representation
-               of your  personality traits, values,
-               and needs. personality traits, values,
-               and needs. This is the graph representation
-               of your  personality traits, values,
-               and needs. personality traits, values,
-               and needs. This is the graph representation
-               of your  personality traits, values,
-               and needs.`,
+        text: `                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium architecto aut culpa dolor dolore doloremque ducimus eaque eligendi excepturi facilis harum illum nesciunt odio quas, quasi quia quisquam sequi similique sint tenetur velit vitae, voluptate, voluptatum! Amet fugit impedit maxime molestiae rerum! Ad hic obcaecati optio sapiente veniam! Aliquid asperiores corporis culpa expedita ipsum officiis quam quo repellat reprehenderit voluptas?`,
         likelyBehaviorList: ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5', 'Item 6'],
         unlikelyBehaviorList: ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5']
     }

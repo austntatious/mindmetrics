@@ -3,7 +3,6 @@
 .premium {
   padding: 40px 0 68px;
   border-top: 1px solid @greyLight;
-  border-bottom: 3px solid #e4e4e4;
   background-color: #f7f7f7;
 
   &__wrap {
@@ -19,8 +18,25 @@
 
   &__col {
 
+    &:first-child {
+      margin-left: auto;
+    }
+    &:last-child {
+      margin-right: auto;
+      margin-left: 31px;
+    }
+
     .tablet({
       margin-bottom: 27px;
+
+      &:first-child {
+        margin-left: 0;
+      }
+
+      &:last-child {
+        margin-right: 0;
+        margin-left: 0;
+      }
     });
   }
 
