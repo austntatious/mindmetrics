@@ -31,7 +31,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   box-sizing: border-box;
-  min-width: 550px;
+  min-width: 320px;
 }
 
 h1 {
@@ -109,6 +109,11 @@ a {
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    .mobile({
+      flex-wrap: wrap;
+      flex-direction: column-reverse;
+    });
   }
 
   &__top {
@@ -116,6 +121,13 @@ a {
 
     .tablet({
       align-items: flex-start;
+    });
+  }
+
+  .logo {
+
+    .mobile({
+      margin-bottom: 20px;
     });
   }
 }
@@ -145,6 +157,10 @@ a {
       top: 40px;
       left: 50%;
       transform: translate(-50%,-50%)
+    });
+
+    .mobile({
+      top: 35px;
     });
   }
 }
@@ -182,6 +198,10 @@ a {
 
 .social {
   display: inline-flex;
+
+  .mobile({
+    margin-bottom: 20px;
+  });
 
   &__list {
     display: flex;

@@ -47,8 +47,8 @@
 }
 // media
 @mini: 479px;
-//@mobile: 767px;
 //@tablet: 1023px;
+@mobile: 549px;
 @tablet: 767px;
 @laptop: 1279px;
 @desktop: 1439px;
@@ -67,11 +67,11 @@
   };
 };
 
-//.mobile(@rules) {
-//  @media screen and (max-width: @mobile) {
-//    @rules();
-//  };
-//};
+.mobile(@rules) {
+  @media screen and (max-width: @mobile) {
+    @rules();
+  };
+};
 
 .tablet(@rules) {
   @media screen and (max-width: @tablet) {

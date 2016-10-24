@@ -3,6 +3,10 @@
 .beh-report {
   padding: 35px 0 67px!important;
 
+  .mobile({
+    padding: 35px 10px 67px!important;
+  });
+
   &__row {
     margin-top: 40px;
     display: flex;
@@ -37,6 +41,10 @@
 
     &:last-child {
       border-left: 1px solid @greyLight;
+
+      .tablet({
+        border-left: none;
+      });
     }
   }
 

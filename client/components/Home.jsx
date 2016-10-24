@@ -8,29 +8,33 @@ import GoPremium from './GoPremium';
 import { Link } from "react-router";
 
 class Home extends Component {
+  static contextTypes = {
+    mobile: React.PropTypes.bool
+  };
+
   render() {
     return (
       <Layout classnames='Home'>
         <section className="section is-info">
-          <div className="section__wrap container">
-            <div className="section__info">
-              <div className="section__text">
-                <Title mod="i-violet-dark" size="1">
-                  Your True Personality Revealed
-                </Title>
-                <p>
-                  We use your writing and social media
-                  profiles to build you a detailed and
-                  accurate personality report.
-                </p>
-              </div>
-              <div className="btn-group">
-                <Btn mod="is-small is-violet" type="link" href="#">
-                  Take a test now
-                </Btn>
-                <Btn mod="is-small" type="link" href="#">
-                  Go premium
-                </Btn>
+          <div className="section__bg">
+            <div className="section__wrap container">
+              <div className="section__info">
+                <div className="section__text">
+                  <Title mod="i-violet-dark" size="1">
+                    Your True Personality Revealed
+                  </Title>
+                  <p>
+                    We use your writing and social media
+                    profiles to build you a detailed and
+                    accurate personality report.
+                  </p>
+                </div>
+                <div className="btn-group">
+                  <Btn mod="is-small is-violet" type="link" href="#">
+                    Take a test now
+                  </Btn>
+                  {this.context.mobile === "small" ? null : <Btn mod="is-small" type="link" href="#">Go premium</Btn>}
+                </div>
               </div>
             </div>
           </div>

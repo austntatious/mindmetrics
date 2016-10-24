@@ -31,12 +31,12 @@ const TABS = [
     {
         id: 2,
         title: 'Needs',
-        descr: 'This is the graph representation of your personality traits, values, and needs. This is the graph representation of your personality traits, values, and needs. This is the graph representation of your personality traits, values, and needs. '
+        descr: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam consequatur fuga fugiat molestiae nulla obcaecati perferendis quo soluta, suscipit. Amet distinctio dolore esse ex minus quaerat vitae! Deserunt dolorum, sequi?'
     },
     {
         id: 3,
         title: 'Values',
-        descr: 'This is the graph representation of your personality traits, values, and needs. This is the graph representation of your personality traits, values, and needs. This is the graph representation of your personality traits, values, and needs. '
+        descr: 'Ab consequuntur culpa cum cupiditate distinctio ea excepturi expedita facilis fugiat, harum illo, impedit in iusto magnam nulla odio officiis placeat praesentium quam quasi quia quis recusandae rem repudiandae sequi soluta suscipit temporibus totam unde vero.'
     }
 ];
 
@@ -304,7 +304,6 @@ export default class StaticResults extends Component {
                                 descr="123123 words analysed. "
                                 span="Very Strong Analysis"/>
                     <Tabs tabs={TABS} active={this.state.activeTab} onChange={this.setActiveTab}/>
-                    <TabDescr text="This is the graph representation of your personality traits, values, and needs. This is the graph representation of your personality traits, values, and needs. This is the graph representation of your personality traits, values, and needs." />
                 </main>
                 <Traits list={TRAITS} />
                 <BehaviorReport />

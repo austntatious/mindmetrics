@@ -1,65 +1,80 @@
 import React, { Component } from 'react';
 
 export class Tab extends Component {
+  static contextTypes = {
+    mobile: React.PropTypes.bool
+  };
 
-    render() {
-        const {title, onClick, onTouchTap} = this.props;
-        let cls = 'tabs__el';
-        if (this.props.active) {
-            cls += ' ' + 'is-active';
+  render() {
+    const {title, text, onClick, onTouchTap} = this.props;
+    let cls = 'tabs__el';
+    if (this.props.active) {
+      cls += ' ' + 'is-active';
+    }
+
+    return (
+      <li className={cls} onClick={onClick} onTouchTap={onTouchTap}>
+        <div className="tabs__title">
+          {title}
+        </div>
+        {
+          this.context.mobile === "small" &&
+          <div className="tabs__descr">
+            <p className="tabs__text">
+              {text}
+            </p>
+          </div>
         }
+      </li>
 
-        return (
-            <li className={cls} onClick={onClick} onTouchTap={onTouchTap}>
-                {title}
-            </li>
-        );
-    }
-}
-
-export class TabDescr extends Component {
-
-    render() {
-        let text = this.props.text;
-
-        return (
-            <div className="tab-descr">
-                <p className="tab-descr__text">
-                    {text}
-                </p>
-            </div>
-        );
-    }
+    );
+  }
 }
 
 export class Tabs extends Component {
-    handleChange = (tabId) => {
-        return () => {
-            this.props.onChange(tabId);
-        };
-    }
+  static contextTypes = {
+    mobile: React.PropTypes.bool
+  };
 
-    render() {
-        const {active} = this.props;
+  handleChange = (tabId) => {
+    return () => {
+      this.props.onChange(tabId);
+    };
+  };
 
-        let li = this.props.tabs.map((t) => {
-            return (
-                <Tab key={t.id}
-                     active={active === t.id}
-                     title={t.title}
-                     onClick={this.handleChange(t.id)}
-                     onTouchTap={this.handleChange(t.id)}
-                />
-            );
-        });
+  render() {
+    const {active} = this.props;
+    const activeTab = this.props.tabs.find((t) => t.id === active );
 
-        return (
-            <div className="tabs">
-                <ul className="tabs__list">
-                    {li}
-                </ul>
+    let li = this.props.tabs.map((t) => {
+      return (
+        <Tab key={t.id}
+             active={active === t.id}
+             title={t.title}
+             text={t.descr}
+             onClick={this.handleChange(t.id)}
+             onTouchTap={this.handleChange(t.id)}
+          />
+
+      );
+    });
+
+    return (
+
+        <div className="tabs">
+          <ul className="tabs__list">
+            {li}
+          </ul>
+          {
+            this.context.mobile !== "small" &&
+            <div className="tabs__descr">
+              <p className="tabs__text">
+                {activeTab.descr}
+              </p>
             </div>
-        );
-    }
+          }
+        </div>
+    );
+  }
 }
 

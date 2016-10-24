@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import Progress from './Progress';
 
 export default class DetailsProgress extends Component {
+  static contextTypes = {
+    mobile: React.PropTypes.bool
+  };
 
   render() {
     let trait = this.props.trait,
@@ -22,7 +25,9 @@ export default class DetailsProgress extends Component {
           <Progress mod={color + ' is-big is-shadow'}>
             {percent}
           </Progress>
-          <span className="details-progress__pointer"></span>
+
+          {this.context.mobile === "small" ? null : <span className="details-progress__pointer"></span>}
+
         </div>
       </li>
     );

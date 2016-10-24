@@ -7,16 +7,27 @@
     display: flex;
   }
 
+  .section-descr {
+
+    .mobile({
+      padding: 0 20px;
+    });
+  }
+
   &.is-info {
     background: url(/client/img/result.png) center no-repeat;
     background-size: auto;
 
     .tablet({
-      background: url(/client/img/curves_bg.png) center no-repeat;
-
+      background-image: none;
     });
 
     .section {
+
+      &__bg {
+        background: url(/client/img/curves_bg.png) center no-repeat;
+        background-size: cover;
+      }
 
       &__wrap {
         padding: 168px 54px 155px 0;
@@ -28,6 +39,10 @@
 
       &__text {
         padding: 0 65px;
+
+        .mobile({
+          padding: 0 20px;
+        });
       }
 
       &__info {
@@ -54,6 +69,13 @@
       line-height: 1.2;
 
       .tablet({ font-size: 22px; });
+    }
+
+    .btn-group {
+
+      .mobile({
+        justify-content: center;
+      });
     }
   }
 
@@ -102,6 +124,11 @@
       background: url(/client/img/hand.png) 80px center no-repeat;
       padding: 124px 40px 79px 0;
 
+      .r1100({
+        padding: 15px 40px 190px 0;
+        background-position: 20px;
+      });
+
       .tablet({
         justify-content: center;
         background-position: top center;
@@ -136,7 +163,7 @@
 
       .tablet({
         margin-bottom: 0;
-      })
+      });
     }
 
     .progress-group {

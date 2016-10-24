@@ -18,6 +18,10 @@
     padding: 28px 30px 55px;
   });
 
+  .mobile({
+    padding: 28px 0 55px;
+  });
+
   &__wrap {
     position: relative;
     display: flex;
@@ -45,6 +49,10 @@
     .tablet({
       padding-left: 114px;
       padding-right: 0;
+    });
+
+    .mobile({
+      padding-left: 40px;
     });
   }
 
@@ -74,6 +82,10 @@
       top: -5px;
       left: 70px;
     });
+
+    .mobile({
+      left: 8px;
+    });
   }
 
   &__text {
@@ -97,6 +109,10 @@
     margin-bottom: 22px;
     display: flex;
     align-items: center;
+
+    .mobile({
+      flex-direction: column;
+    });
   }
 
   &__descr {
@@ -107,6 +123,12 @@
 
     .tablet({
       font-size: 17px;
+    });
+
+    .mobile({
+      margin-left: 15px;
+      width: 100%;
+      text-align: left;
     });
   }
 
@@ -137,6 +159,10 @@
       top: -28px;
       left: auto;
       bottom: auto;
+    });
+
+    .mobile({
+      right: 0;
     });
   }
 }

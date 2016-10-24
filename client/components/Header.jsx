@@ -49,8 +49,8 @@ export default class Header extends Component {
             <Logo mod="is-head-logo" href="#" src="client/img/logo.png" />
           </div>
           <div className="header__right">
-            { this.context.mobile ? <MobileMenu/> : <Nav mod="is-head-nav" arr={navTop}/> }
-            <Action />
+            {this.context.mobile ? <MobileMenu/> : <Nav mod="is-head-nav" arr={navTop}/>}
+            {this.context.mobile === 'small' ? null : <Action />}
           </div>
         </div>
       </header>
