@@ -17,10 +17,14 @@ export default class App extends Component {
             mobile: this.state.mobile
         };
     }
-    
+
     checkForMobile = () => {
-        console.log("CHECK FOR MOBILE");
-        const mobile = window.matchMedia( '(max-width: 767px)' ).matches;
+        let mobile = window.matchMedia( '(max-width: 767px)' ).matches;
+        // TODO should we have a separate "tab" and "mobile" boolean?
+        if (window.matchMedia( '(max-width: 549px)' ).matches) {
+            mobile = "small";
+        }
+
         this.setState({mobile});
     }
 
