@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 export class Tab extends Component {
   static contextTypes = {
-    mobile: React.PropTypes.bool
+    mobile: React.PropTypes.oneOf(['small', 'tablet', false])
   };
 
   render() {
@@ -34,7 +34,7 @@ export class Tab extends Component {
 
 export class Tabs extends Component {
   static contextTypes = {
-    mobile: React.PropTypes.bool
+    mobile: React.PropTypes.oneOf(['small', 'tablet', false])
   };
 
   handleChange = (tabId) => {

@@ -10,7 +10,7 @@ class Trait extends Component{
     }
 
     static contextTypes = {
-        mobile: React.PropTypes.bool
+        mobile: React.PropTypes.oneOf(['small', 'tablet', false])
     }
 
     state = {

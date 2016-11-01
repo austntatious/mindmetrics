@@ -9,7 +9,7 @@ import { Link } from "react-router";
 
 class Home extends Component {
   static contextTypes = {
-    mobile: React.PropTypes.bool
+    mobile: React.PropTypes.oneOf(['small', 'tablet', false])
   };
 
   render() {
