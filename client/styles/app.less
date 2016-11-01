@@ -10,7 +10,7 @@
 @import "part/nav.less";
 @import "part/tabs.less";
 @import "part/progress.less";
-@import "part/premium.less";
+@import "part/free-analysis.less";
 @import "part/beh-report.less";
 @import "part/traits.less";
 @import "part/hamburger.less";
@@ -116,6 +116,14 @@ a {
     });
   }
 
+  &__right.is-in-top {
+    .mobile({
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+    })
+  }
+
   &__top {
     margin-bottom: 40px;
 
@@ -214,6 +222,10 @@ a {
 
   &__link {
     display: flex;
+
+    &:hover {
+      opacity: .5;
+    }
   }
 }
 

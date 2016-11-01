@@ -54,7 +54,7 @@ export default class Footer extends Component {
             <div className="footer__left">
               <Nav arr={navFoot} />
             </div>
-            <div className="footer__right">
+            <div className="footer__right is-in-top">
               <Social />
             </div>
           </div>

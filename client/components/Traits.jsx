@@ -51,9 +51,13 @@ class Trait extends Component{
 
     render() {
         const percentage = this.percentage(this.props.percentage);
+        let cls = 'trait';
+        if(this.state.open){
+            cls += ' ' + 'is-open';
+        }
 
         return (
-            <div className="trait">
+            <div className={cls}>
                 <div className="trait__wrap container">
                     <div className="trait__left">
                         <span className="trait__num">

@@ -12,10 +12,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-
-    .mobile({
-      flex-direction: column;
-    });
   }
 
   &__el {
@@ -34,54 +30,25 @@
       padding: 0 18px 7px;
     });
 
-    .mobile({
-      width: 100%;
-      margin-top: 10px;
-      margin-bottom: 10px;
-      border-bottom: none;
-    });
-
     &.is-active {
       border-color: @blue;
-
-      .mobile({
-        .tabs__title {
-          color: @blue;
-
-          &::before {
-            transform: rotate(90deg);
-          }
-        }
-      });
     }
   }
 
   &__title {
     position: relative;
     font-family: 'book', Helvetica, Arial, serif;
+  }
 
-    .mobile({
-      text-align: center;
-
-      &::before {
-        position: absolute;
-        content: '>';
-        left: 0;
-        top: 0;
-      }
-    });
+  &__img {
+    max-width: 35px;
   }
 
   &__descr {
     margin: 0 auto;
-    padding: 40px 0 49px;
+    padding: 40px 10px 49px;
     text-align: center;
     border-top: 1px solid @greyLight;
-
-    .mobile({
-      padding: 20px 0;
-      border-top: none;
-    });
   }
 
   &__text {

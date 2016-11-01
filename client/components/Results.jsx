@@ -14,7 +14,6 @@ import User from './User';
 import Action from './Action';
 import Hamburger from './Hamburger';
 import Copyright from './Copyright';
-import GoPremium from './GoPremium';
 import BehaviorReport from './BehaviorReport';
 import Traits from './Traits';
 
@@ -26,16 +25,19 @@ const TABS = [
     {
         id: 1,
         title: 'Personality',
+        ico: 'client/img/ico-personality.svg',
         descr: 'This is the graph representation of your personality traits, values, and needs. This is the graph representation of your personality traits, values, and needs. This is the graph representation of your personality traits, values, and needs. '
     },
     {
         id: 2,
         title: 'Needs',
+        ico: 'client/img/ico-needs.svg',
         descr: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam consequatur fuga fugiat molestiae nulla obcaecati perferendis quo soluta, suscipit. Amet distinctio dolore esse ex minus quaerat vitae! Deserunt dolorum, sequi?'
     },
     {
         id: 3,
         title: 'Values',
+        ico: 'client/img/ico-values.svg',
         descr: 'Ab consequuntur culpa cum cupiditate distinctio ea excepturi expedita facilis fugiat, harum illo, impedit in iusto magnam nulla odio officiis placeat praesentium quam quasi quia quis recusandae rem repudiandae sequi soluta suscipit temporibus totam unde vero.'
     }
 ];
@@ -307,7 +309,6 @@ export default class StaticResults extends Component {
                 </main>
                 <Traits list={TRAITS} />
                 <BehaviorReport />
-                <GoPremium />
             </Layout>
         );
     }

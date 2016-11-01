@@ -4,7 +4,7 @@ import SectionDescription from './SectionDescription';
 import ProgressGroup from './ProgressGroup';
 import Title from './Title';
 import Btn from './Btn';
-import GoPremium from './GoPremium';
+import FreeAnalysis from './FreeAnalysis';
 import { Link } from "react-router";
 
 class Home extends Component {
@@ -30,10 +30,9 @@ class Home extends Component {
                   </p>
                 </div>
                 <div className="btn-group">
-                  <Btn mod="is-small is-violet" type="link" href="#">
+                  <Btn mod="is-big is-violet" type="link" href="#">
                     Take a test now
                   </Btn>
-                  {this.context.mobile === "small" ? null : <Btn mod="is-small" type="link" href="#">Go premium</Btn>}
                 </div>
               </div>
             </div>
@@ -73,8 +72,8 @@ class Home extends Component {
               />
             <ProgressGroup />
           </div>
-          <GoPremium mobile />
         </section>
+        <FreeAnalysis />
       </Layout>
     );
   }
