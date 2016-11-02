@@ -19,6 +19,12 @@ import Traits from './Traits';
 
 import {Tabs, TabDescr} from './Tabs';
 
+import DATA from '../../personality-data.json';
+window.data = DATA;
+
+var summary = require('../text-summary');
+window.summary = summary;
+
 const USER = { name: 'Your name', ico: '/client/img/user-ico-1.png'};
 
 const TABS = [

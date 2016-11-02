@@ -1,3 +1,4 @@
+var dictionary = require('./text');
 
 /**
  * Given a template string to format and serveral strings
@@ -32,11 +33,12 @@ function format(subject) {
 /**
  * Provides a Text Summary for profiles.
  */
-module.exports = function (lang) {
+module.exports = function () {
 
     var self = {},
-        dictionary = i18n.getDictionary(lang),
-        tphrase = i18n.translatorFactory.createTranslator(dictionary.phrases); // i18n for phrases
+        //dictionary = i18n.getDictionary(lang),
+        //tphrase = i18n.translatorFactory.createTranslator(dictionary.phrases); // i18n for phrases
+        tphrase = function (key) {return dictionary.phrases[key];};
 
     // Download all static data.
     self.circumplexData = dictionary.traits;
