@@ -30,7 +30,7 @@ class Home extends Component {
                   </p>
                 </div>
                 <div className="btn-group">
-                  <Btn mod="is-big is-violet" type="link" href="#">
+                  <Btn mod="is-big is-violet" type="link" to="/form">
                     Take a test now
                   </Btn>
                 </div>

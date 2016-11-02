@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {Link} from 'react-router';
 
 export default class Btn extends Component {
 
@@ -14,9 +15,9 @@ export default class Btn extends Component {
 
         return (
             type === 'link' ?
-            <a className={cls} href={href} onClick={onClick} onTouchTap={onTouchTap}>
+            <Link className={cls} href={href} onClick={onClick} onTouchTap={onTouchTap} to={this.props.to}>
                 {this.props.children}
-            </a>
+            </Link>
             :
             <span className={cls} onClick={onClick} onTouchTap={onTouchTap}>
                 {this.props.children}
