@@ -51,23 +51,24 @@ module.exports = {
   ],
 
   module: {
-    // add CSS loader 
+    // add CSS loader
     loaders: [
       {
         test: /\.css$/,
         loader: "style-loader!css-loader"
       },
-      { test: /\.less$/,   loader: "style!css!less" },        
-      { test: /\.(eot|woff|woff2|ttf|svg|png|jpe?g|gif)(\?\S*)?$/, 
+      { test: /\.less$/,   loader: "style!css!less" },
+      { test: /\.(eot|woff|woff2|ttf|svg|png|jpe?g|gif)(\?\S*)?$/,
       loader: "url?limit=100000&name=[name].[ext]"
       },
-      { test: /\.js$/, 
-        exclude: /node_modules/, 
-        loader: "babel", 
+      { test: /\.js$/,
+        exclude: /node_modules/,
+        loader: "babel",
         query: {
           presets:['react', 'es2015', 'stage-1']
         }
-      }
+      },
+      { test: /\.json$/, loader: 'json' }
     ]
   }
 };
