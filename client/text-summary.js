@@ -33,7 +33,7 @@ function format(subject) {
 /**
  * Provides a Text Summary for profiles.
  */
-module.exports = function () {
+var TextSummary = function () {
 
     var self = {},
         //dictionary = i18n.getDictionary(lang),
@@ -393,3 +393,5 @@ module.exports = function () {
 
     return self;
 };
+
+export default new TextSummary();

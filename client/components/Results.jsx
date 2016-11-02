@@ -314,7 +314,7 @@ export default class StaticResults extends Component {
                     <Tabs tabs={TABS} active={this.state.activeTab} onChange={this.setActiveTab}/>
                 </main>
                 <Traits list={TRAITS} />
-                <BehaviorReport />
+                <BehaviorReport traits={DATA.tree} />
             </Layout>
         );
     }
