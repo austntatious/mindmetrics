@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import classnames from 'classnames';
 import Nav from './Nav';
 
 const mobileMenuNav = [
@@ -30,10 +31,9 @@ const mobileMenuNav = [
 ];
 
 export default class MobileMenu extends Component {
-
   render() {
     return (
-        <div className="mobile-menu">
+        <div className={classnames("mobile-menu", {open: this.props.open})}>
           <Nav arr={mobileMenuNav}/>
         </div>
     );
