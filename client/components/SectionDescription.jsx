@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
 import Title from './Title';
+import Icon from "./Icon";
 
 export default class SectionDescription extends Component {
+  static contextTypes = {
+    mobile: React.PropTypes.bool
+  };
+
   render() {
-    const {mod, title, text, href, linkColor} = this.props;
+    const {mod, title, titleMobile, ico, text, href, linkColor} = this.props;
     let cls = 'section-descr';
 
     if (mod) {
@@ -14,8 +19,16 @@ export default class SectionDescription extends Component {
 
     return (
       <div className={cls}>
+        {
+          this.context.mobile === 'small' && ico ?
+            <div className="section-descr__ico">
+              <Icon ico={ico} />
+            </div>
+          :
+            null
+        }
         <Title size="2">
-          {title}
+          {this.context.mobile === 'small' ? titleMobile : title}
         </Title>
         <p className="section-descr__text">
           {text}

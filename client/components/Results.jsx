@@ -14,12 +14,13 @@ import User from './User';
 import Action from './Action';
 import Hamburger from './Hamburger';
 import Copyright from './Copyright';
-import BehaviorReport from './BehaviorReport';
+import UserLikes from './UserLikes';
+import FreeAnalysis from './FreeAnalysis';
 import Traits from './Traits';
 
 import {Tabs, TabDescr} from './Tabs';
 
-const USER = { name: 'Your name', ico: '/client/img/user-ico-1.png'};
+const USER = { name: 'Your name', ico: '/client/img/user-ico-1.png', descr: '123123 words analysed. Very Strong Analysis', status: 'something'};
 
 const TABS = [
     {
@@ -301,14 +302,14 @@ export default class StaticResults extends Component {
         return (
             <Layout classnames='Results'>
                 <main className="main">
-                    <User ico={USER.ico} name={USER.name}/>
+                    <User ico={USER.ico} name={USER.name} descr={USER.descr} status={USER.status}/>
                     <SectionHat title="Trait report"
                                 descr="123123 words analysed. "
                                 span="Very Strong Analysis"/>
                     <Tabs tabs={TABS} active={this.state.activeTab} onChange={this.setActiveTab}/>
                 </main>
                 <Traits list={TRAITS} />
-                <BehaviorReport />
+                <FreeAnalysis />
             </Layout>
         );
     }

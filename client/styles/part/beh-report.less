@@ -10,7 +10,7 @@
   &__row {
     margin-top: 40px;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
 
     .r1100({
       padding: 0 20px;
@@ -23,8 +23,6 @@
   }
 
   &__col {
-    width: 33.333%;
-    text-align: center;
 
     .tablet({
       width: 100%;
@@ -38,14 +36,6 @@
         max-width: 305px;
       });
     }
-
-    &:last-child {
-      border-left: 1px solid @greyLight;
-
-      .tablet({
-        border-left: none;
-      });
-    }
   }
 
   &__text {
@@ -55,51 +45,5 @@
     .tablet({ font-size: 18px; });
   }
 
-  &__likes {
 
-    li {
-
-      &:before {
-        position: absolute;
-        content: '';
-        width: 26px;
-        height: 19px;
-        background-image: url(/client/img/ico_check.png);
-      }
-    }
-  }
-
-  &__unlikes {
-
-    li {
-
-      &:before {
-        position: absolute;
-        content: '';
-        width: 20px;
-        height: 21px;
-        background-image: url(/client/img/ico_cross.png);
-      }
-    }
-  }
-
-  &__el {
-    position: relative;
-    margin-bottom: 23px;
-    font-size: 18px;
-    letter-spacing: -1px;
-
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
-
-  &__item {
-    display: inline-flex;
-    padding-left: 49px;
-  }
-
-  .title {
-    margin-bottom: 34px;
-  }
 }
