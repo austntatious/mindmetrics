@@ -3,7 +3,7 @@ import Progress from './Progress';
 
 export default class DetailsProgress extends Component {
   static contextTypes = {
-    mobile: React.PropTypes.bool
+    mobile: React.PropTypes.oneOf(['small', 'tablet', false])
   };
 
   render() {

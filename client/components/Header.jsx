@@ -36,7 +36,7 @@ const navTop = [
 
 export default class Header extends Component {
   static contextTypes = {
-    mobile: React.PropTypes.bool
+    mobile: React.PropTypes.oneOf(['small', 'tablet', false])
   };
 
   render() {
@@ -49,7 +49,7 @@ export default class Header extends Component {
             <Logo mod="is-head-logo" href="#" src="client/img/logo.png" />
           </div>
           <div className="header__right">
-            {this.context.mobile ? <MobileMenu/> : <Nav mod="is-head-nav" arr={navTop}/>}
+            {!this.context.mobile ? <Nav mod="is-head-nav" arr={navTop}/> : null}
             {this.context.mobile === 'small' ? null : <Action />}
           </div>
         </div>

@@ -22,6 +22,13 @@ import {Tabs, TabDescr} from './Tabs';
 
 const USER = { name: 'Your name', ico: '/client/img/user-ico-1.png', descr: '123123 words analysed. Very Strong Analysis', status: 'something'};
 
+import DATA from '../../personality-data.json';
+window.data = DATA;
+
+var summary = require('../text-summary');
+window.summary = summary;
+
+
 const TABS = [
     {
         id: 1,
@@ -259,7 +266,7 @@ let color = d3.scale.ordinal()
 
 export default class StaticResults extends Component {
     static contextTypes = {
-        mobile: React.PropTypes.bool
+        mobile: React.PropTypes.oneOf(['small', 'tablet', false])
     }
 
     state = {
