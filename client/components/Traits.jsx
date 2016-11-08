@@ -49,7 +49,7 @@ class Trait extends Component{
         <div className="trait__details">
 
           {this.props.data.children.map((c) => {
-             const percentage = this.percentage(c.percentage);
+             const percentage = this.percentage(c.percentile);
 
              return (
                <div className="trait__row" key={this.props.id + c.name}>
@@ -95,11 +95,12 @@ class Trait extends Component{
             </Progress>
           </div>
           {this.renderDetails()}
-          {
+          { this.props.data.children ?
             this.context.mobile ?
             <Btn onClick={this.toggleOpen} mod="is-plus"></Btn>
             :
             <Btn onClick={this.toggleOpen}>Details ></Btn>
+            : null
           }
         </div>
       </div>
@@ -116,7 +117,7 @@ export default class Traits extends Component {
                id={i + 1}
                name={t.name}
                text={t.text}
-               percentage={t.percentage}
+               percentage={t.percentile}
                data={t} />
       );
     });
