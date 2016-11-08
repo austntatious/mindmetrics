@@ -8,7 +8,9 @@ export default class User extends Component {
         let ico = this.props.ico,
             name = this.props.name,
             descr = this.props.descr,
-            status = this.props.status;
+            summary = this.props.summary,
+            likely = this.props.likely,
+            unlikely = this.props.unlikely;
 
         return (
             <div className="user container">
@@ -26,10 +28,10 @@ export default class User extends Component {
                         <div className="user__status">
                             You are:&nbsp;
                         <span className="user__status-text">
-                            {status}
+                            {summary}
                         </span>
                         </div>
-                        <UserLikes />
+                        <UserLikes likelyList={likely} unlikelyList={unlikely} />
                     </div>
                 </div>
                 <div className="user__right">

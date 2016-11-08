@@ -19,7 +19,7 @@ export default class UserLikes extends Component {
                         {this.props.likelyList.map((t, i) =>
                             <li className="user-likes__el" key={i}>
                                 <span className="user-likes__item">
-                                    {t}
+                                    {t.name.replace("Likely to", '')}
                                 </span>
                             </li>
                          )}
@@ -33,7 +33,7 @@ export default class UserLikes extends Component {
                         {this.props.unlikelyList.map((t, i) =>
                             <li className="user-likes__el" key={i}>
                                 <span className="user-likes__item">
-                                    {t}
+                                    {t.name.replace("Likely to", '')}
                                 </span>
                             </li>
                          )}

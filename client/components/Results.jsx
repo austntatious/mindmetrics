@@ -20,13 +20,13 @@ import Traits from './Traits';
 
 import {Tabs, TabDescr} from './Tabs';
 
-const USER = { name: 'Your name', ico: '/client/img/user-ico-1.png', descr: '123123 words analysed. Very Strong Analysis', status: 'something'};
+const USER = { name: 'Your name', ico: '/client/img/user-ico-1.png', descr: '123123 words analysed. Very Strong Analysis'};
 
 import DATA from '../../personality-data.json';
 window.data = DATA;
 
-var summary = require('../text-summary');
-window.summary = summary;
+import TextSummary from '../text-summary';
+window.summary = TextSummary;
 
 
 const TABS = [
@@ -71,6 +71,13 @@ export default class StaticResults extends Component {
         this.setState({activeTab});
     }
 
+    getConsumptionPreferences(data) {
+      const preferencesList = data.consumption_preferences[0].consumption_preferences;
+      const likely = preferencesList.filter((i) => i.score >= 0.5);
+      const unlikely = preferencesList.filter((i) => i.score < 0.5);
+      return {likely, unlikely};
+    }
+
     componentDidMount() {
         let self = this;
         const id = this.props.params.id;
@@ -101,10 +108,13 @@ export default class StaticResults extends Component {
 
   render() {
         const {activeTab} = this.state;
+        const {likely, unlikely} = this.getConsumptionPreferences(DATA);
         return (
             <Layout classnames='Results'>
                 <main className="main">
-                    <User ico={USER.ico} name={USER.name} descr={USER.descr} status={USER.status}/>
+                    <User ico={USER.ico} name={USER.name} descr={USER.descr}
+                          summary={TextSummary.assembleTraits(DATA.personality)[0]}
+                          likely={likely} unlikely={unlikely} />
                     <SectionHat title="Trait report"
                                 descr="123123 words analysed. "
                                 span="Very Strong Analysis"/>

@@ -49,11 +49,11 @@ var TextSummary = function () {
     function compareByRelevance(o1, o2) {
         var result = 0;
 
-        if (Math.abs(0.5 - o1.percentage) > Math.abs(0.5 - o2.percentage)) {
+        if (Math.abs(0.5 - o1.percentile) > Math.abs(0.5 - o2.percentile)) {
             result = -1; // A trait with 1% is more interesting than one with 60%.
         }
 
-        if (Math.abs(0.5 - o1.percentage) < Math.abs(0.5 - o2.percentage)) {
+        if (Math.abs(0.5 - o1.percentile) < Math.abs(0.5 - o2.percentile)) {
             result = 1;
         }
 
@@ -63,11 +63,11 @@ var TextSummary = function () {
     function compareByValue(o1, o2) {
         var result = 0;
 
-        if (Math.abs(o1.percentage) > Math.abs(o2.percentage)) {
+        if (Math.abs(o1.percentile) > Math.abs(o2.percentile)) {
             result = -1; // 100 % has precedence over 99%
         }
 
-        if (Math.abs(o1.percentage) < Math.abs(o2.percentage)) {
+        if (Math.abs(o1.percentile) < Math.abs(o2.percentile)) {
             result = 1;
         }
 
@@ -84,7 +84,7 @@ var TextSummary = function () {
         }),
 
             // Assemble the identifier as the JSON file stored it.
-            identifier = ordered[0].id.concat(ordered[0].percentage > 0.5 ? '_plus_' : '_minus_').concat(ordered[1].id).concat(ordered[1].percentage > 0.5 ? '_plus' : '_minus'),
+            identifier = ordered[0].id.concat(ordered[0].percentile > 0.5 ? '_plus_' : '_minus_').concat(ordered[1].id).concat(ordered[1].percentile > 0.5 ? '_plus' : '_minus'),
             traitMult = self.circumplexData[identifier][0],
             sentence = "%s";
 
@@ -110,7 +110,7 @@ var TextSummary = function () {
             t,
             d;
 
-        if (f.percentage > 0.5) {
+        if (f.percentile > 0.5) {
             t = data.HighTerm.toLowerCase();
             d = data.HighDescription.toLowerCase();
         } else {
@@ -132,7 +132,7 @@ var TextSummary = function () {
 
     function getInfoForValue(v) {
         var data = self.valuesData[v.id.replace(/[_ ]/g, '-')][0],
-            d = v.percentage > 0.5 ? data.HighDescription : data.LowDescription;
+            d = v.percentile > 0.5 ? data.HighDescription : data.LowDescription;
 
         return {
             name: v.id,
@@ -157,17 +157,17 @@ var TextSummary = function () {
             adj3;
 
         // Sort the Big 5 based on how extreme the number is.
-        personalityTree.children[0].children.forEach(function (p) {
+        personalityTree.forEach(function (p) {
             big5elements.push({
-                id: p.id,
-                percentage: p.percentage
+                id: p.name,
+                percentile: p.percentile
             });
         });
         big5elements.sort(compareByRelevance);
 
         // Remove everything between 32% and 68%, as it's inside the common people.
         relevantBig5 = big5elements.filter(function (item) {
-            return Math.abs(0.5 - item.percentage) > 0.18;
+            return Math.abs(0.5 - item.percentile) > 0.18;
         });
         if (relevantBig5.length < 2) {
             // Even if no Big 5 attribute is interesting, you get 1 adjective.
@@ -178,13 +178,13 @@ var TextSummary = function () {
             case 2:
                 // Report 1 adjective.
                 adj = getCircumplexAdjective(relevantBig5[0], relevantBig5[1], 0);
-                sentences.push(format(tphrase('You are %s'), adj) + '.');
+                sentences.push(format(tphrase('%s'), adj) + '.');
                 break;
             case 3:
                 // Report 2 adjectives.
                 adj1 = getCircumplexAdjective(relevantBig5[0], relevantBig5[1], 0);
                 adj2 = getCircumplexAdjective(relevantBig5[1], relevantBig5[2], 1);
-                sentences.push(format(tphrase('You are %s and %s'), adj1, adj2) + '.');
+                sentences.push(format(tphrase('%s and %s'), adj1, adj2) + '.');
                 break;
             case 4:
             case 5:
@@ -192,7 +192,7 @@ var TextSummary = function () {
                 adj1 = getCircumplexAdjective(relevantBig5[0], relevantBig5[1], 0);
                 adj2 = getCircumplexAdjective(relevantBig5[1], relevantBig5[2], 1);
                 adj3 = getCircumplexAdjective(relevantBig5[2], relevantBig5[3], 2);
-                sentences.push(format(tphrase('You are %s, %s and %s'), adj1, adj2, adj3) + '.');
+                sentences.push(format(tphrase('%s, %s and %s'), adj1, adj2, adj3) + '.');
                 break;
         }
 
@@ -207,11 +207,11 @@ var TextSummary = function () {
 
         // Assemble the full list of facets and sort them based on how extreme
         // is the number.
-        personalityTree.children[0].children.forEach(function (p) {
+        personalityTree.forEach(function (p) {
             p.children.forEach(function (f) {
                 facetElements.push({
-                    id: f.id,
-                    percentage: f.percentage,
+                    id: f.name,
+                    percentile: f.percentile,
                     parent: p
                 });
             });
@@ -253,16 +253,16 @@ var TextSummary = function () {
             term1,
             term2;
 
-        valuesTree.children[0].children.forEach(function (p) {
+        valuesTree.forEach(function (p) {
             valuesList.push({
-                id: p.id,
-                percentage: p.percentage
+                id: p.name,
+                percentile: p.percentile
             });
         });
         valuesList.sort(compareByRelevance);
 
         // Are the two most relevant in the same quartile interval? (e.g. 0%-25%)
-        sameQI = intervalFor(valuesList[0].percentage) === intervalFor(valuesList[1].percentage);
+        sameQI = intervalFor(valuesList[0].percentile) === intervalFor(valuesList[1].percentile);
 
         // Get all the text and data required.
         info1 = getInfoForValue(valuesList[0]);
@@ -272,7 +272,7 @@ var TextSummary = function () {
             // Assemble the first 'both' sentence.
             term1 = info1.term;
             term2 = info2.term;
-            switch (intervalFor(valuesList[0].percentage)) {
+            switch (intervalFor(valuesList[0].percentile)) {
                 case 0:
                     sentence = format(tphrase('You are relatively unconcerned with both %s and %s'), term1, term2) + '.';
                     break;
@@ -295,7 +295,7 @@ var TextSummary = function () {
             valuesInfo = [info1, info2];
             for (i = 0; i < valuesInfo.length; i += 1) {
                 // Process it this way because the code is the same.
-                switch (intervalFor(valuesList[i].percentage)) {
+                switch (intervalFor(valuesList[i].percentile)) {
                     case 0:
                         sentence = format(tphrase('You are relatively unconcerned with %s'), valuesInfo[i].term);
                         break;
@@ -326,10 +326,10 @@ var TextSummary = function () {
             word,
             sentence;
 
-        needsTree.children[0].children.forEach(function (p) {
+        needsTree.forEach(function (p) {
             needsList.push({
-                id: p.id,
-                percentage: p.percentage
+                id: p.name,
+                percentile: p.percentile
             });
         });
         needsList.sort(compareByValue);
@@ -338,7 +338,7 @@ var TextSummary = function () {
         word = getWordsForNeed(needsList[0])[0];
 
         // Form the right sentence for the single need.
-        switch (intervalFor(needsList[0].percentage)) {
+        switch (intervalFor(needsList[0].percentile)) {
             case 0:
                 sentence = tphrase('Experiences that make you feel high %s are generally unappealing to you');
                 break;
@@ -367,7 +367,7 @@ var TextSummary = function () {
      *         paragraphs of the text summary.
      */
     function assemble(tree) {
-        return [assembleTraits(tree.children[0]), assembleFacets(tree.children[0]), assembleNeeds(tree.children[1]), assembleValues(tree.children[2])];
+        return [assembleTraits(tree.personality), assembleFacets(tree.personality), assembleNeeds(tree.needs), assembleValues(tree.values)];
     }
 
     /**
@@ -377,8 +377,8 @@ var TextSummary = function () {
      * @param tree A TraitTree.
      * @return A String containing the text summary.
      */
-    function getSummary(profile) {
-        return assemble(profile.tree).map(function (paragraph) {
+    function getSummary(tree) {
+        return assemble(tree).map(function (paragraph) {
             return paragraph.join(" ");
         }).join("\n");
     }
