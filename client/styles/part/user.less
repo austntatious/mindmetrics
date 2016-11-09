@@ -12,20 +12,24 @@
   });
 
   &__left {
+    width: 55%;
     min-width: 400px;
     display: flex;
     align-items: flex-start;
     margin-bottom: 85px;
 
     .tablet({
+      width: 100%;
       margin-bottom: 35px;
       min-width: 0;
     })
   }
 
   &__right {
+    width: 45%;
 
     .tablet({
+      width: 100%;
       margin-bottom: 35px;
     })
   }
@@ -81,6 +85,7 @@
   }
 
   &__likes {
+    margin-bottom: 15px;
 
     .title {
 
@@ -116,7 +121,7 @@
     display: inline-flex;
     padding: 0 18px;
     width: 148px;
-    height: 35px;
+    min-height: 35px;
     line-height: 35px;
     background-color: #f5f5f5;
     border-radius: 10px;
