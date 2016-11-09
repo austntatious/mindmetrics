@@ -5,12 +5,7 @@ import UserLikes from './UserLikes';
 export default class User extends Component {
 
     render() {
-        let ico = this.props.ico,
-            name = this.props.name,
-            descr = this.props.descr,
-            summary = this.props.summary,
-            likely = this.props.likely,
-            unlikely = this.props.unlikely;
+        const {ico, name, descr, summary, likely, unlikely} = this.props;
 
         return (
             <div className="user container">

@@ -4,6 +4,7 @@
   cursor: pointer;
   color: #00729A;
   box-sizing: border-box;
+  position: relative;
 
   &:hover {
     color: lighten(#00729A, 15%)
@@ -76,6 +77,49 @@
       width: 5px;
       height: 30px;
       background-color: #bbb;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
+    }
+
+    &:before {
+      transform: translate(-50%,-50%) rotate(90deg);
+    }
+  }
+
+  &.is-plus {
+    width: 50px;
+    height: 50px;
+    background-color: #efefef;
+
+    &:after,
+    &:before {
+      position: absolute;
+      content: '';
+      width: 5px;
+      height: 30px;
+      background-color: #bbb;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
+    }
+
+    &:before {
+      transform: translate(-50%,-50%) rotate(90deg);
+    }
+  }
+
+  &.is-plus-small {
+    width: 28px;
+    height: 28px;
+
+    &:after,
+    &:before {
+      position: absolute;
+      content: '';
+      width: 5px;
+      height: 30px;
+      background-color: #ccc;
       top: 50%;
       left: 50%;
       transform: translate(-50%,-50%);

@@ -38,13 +38,14 @@ class Home extends Component {
             </div>
           </div>
         </section>
-        {
-          this.context.mobile === 'small' ? null :
+        {this.context.mobile === 'small' ? null :
           <section className="section is-about-you">
-            <SectionDescription title="What your words say about you"
-                                text="Your writing is a sample of how you think. Studying the patterns we've found in the way certain people of certain personalities use words, we can use your writing to determine using data, what kind of personality you have exactly."
-                                href="#"
-              />
+            <div className="section__wrap container">
+              <SectionDescription title="What your words say about you"
+                                  text="Your writing is a sample of how you think. Studying the patterns we've found in the way certain people of certain personalities use words, we can use your writing to determine using data, what kind of personality you have exactly."
+                                  href="#"
+                />
+            </div>
           </section>
         }
         <section className="section is-data">
@@ -76,8 +77,9 @@ class Home extends Component {
                                 text="Free reports include your personality profile, including your 5 major traits, values, and needs and text summary as well as a graph representation of who you are."
                                 href="#"
                                 linkcolor="is-orange"
+                                ico="is-ico-chart"
               />
-            <ProgressGroup />
+            {this.context.mobile === 'small' ? null : <ProgressGroup />}
           </div>
         </section>
         <FreeAnalysis />

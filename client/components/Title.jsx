@@ -3,9 +3,8 @@ import React, { Component } from 'react';
 export default class Title extends Component{
 
     render() {
+        const {mod, size} = this.props;
         let cls = 'title',
-            mod = this.props.mod,
-            size = this.props.size,
             text = this.props.children;
 
         if (mod) {

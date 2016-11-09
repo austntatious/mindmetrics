@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import Title from './Title';
 import Icon from "./Icon";
+import Btn from "./Btn";
 
 export default class SectionDescription extends Component {
   static contextTypes = {
-    mobile: React.PropTypes.bool
+    mobile: React.PropTypes.oneOf(['small', 'tablet', false])
   };
 
   render() {
@@ -19,14 +20,12 @@ export default class SectionDescription extends Component {
 
     return (
       <div className={cls}>
-        {
-          this.context.mobile === 'small' && ico ?
+        {this.context.mobile === 'small' && ico ?
             <div className="section-descr__ico">
               <Icon ico={ico} />
             </div>
           :
-            null
-        }
+            null}
         <Title size="2">
           {this.context.mobile === 'small' ? titleMobile : title}
         </Title>
@@ -41,6 +40,8 @@ export default class SectionDescription extends Component {
           <a href={href} className="section-descr__link">
             Find our more >
           </a>}
+
+        {this.context.mobile === 'small' ? <Btn mod="is-plus-small"></Btn> : null}
       </div>
     );
   }
