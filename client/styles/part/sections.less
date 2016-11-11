@@ -115,23 +115,38 @@
     background-size: auto;
 
     .tablet({
-      background: url(/client/img/scheme_small.png) top center no-repeat;
-      background-size: 450px;
-      padding: 200px 0 80px;
+      padding: 0 0 80px;
+      background-image: none;
+
+      .section-descr {
+        padding-top: 220px;
+        background-size: 450px;
+        background: url(/client/img/scheme_small.png) top center no-repeat;
+      }
     });
 
     .mobile({
-      background-color: #f4f4f4;
       padding: 40px 0 30px;
       border-bottom: none;
-      background-size: 300px;
-      background-position: bottom;
       margin-bottom: 10px;
+      background-color: #f4f4f4;
+
+      .section-descr {
+        padding-top: 0;
+        background: none;
+      }
+
+      .section-descr__item {
+        padding-top: 0;
+        background: url(/client/img/scheme_small.png) bottom no-repeat;
+        background-size: 300px;
+        padding-bottom: 180px;
+      }
 
       .section-descr__link {
-        margin-bottom: 165px;
+        //margin-bottom: 180px;
       }
-    })
+    });
   }
 
   &.is-ease-use {
@@ -183,7 +198,7 @@
     });
 
     .mobile({
-      padding-bottom: 30px;
+      padding: 30px 0;
       background-color: #f4f4f4;
       margin-bottom: 10px;
     });

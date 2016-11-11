@@ -1,50 +1,67 @@
 import React, { Component } from 'react';
+import classnames from 'classnames';
 import Title from './Title';
 import Icon from "./Icon";
 import Btn from "./Btn";
 
 export default class SectionDescription extends Component {
 
+  state = {
+    open: false
+  };
+
+  toggleOpen = () => {
+    this.setState({open: !this.state.open});
+  };
+
   static contextTypes = {
     mobile: React.PropTypes.oneOf(['small', 'tablet', false])
   };
 
+  componentDidUpdate() {
+
+  }
 
   render() {
     const {mod, title, titleMobile, ico, text, href, linkColor} = this.props;
-    let cls = 'section-descr';
+    const {open} = this.state;
+    const {mobile} = this.context;
 
+    let cls = 'section-descr';
     if (mod) {
       cls += ' ' + mod.split(' ').map(function (x) {
           return x;
         }).join(' ');
     }
 
+    const buttonMod = classnames("is-plus-small", {"is-open": open});
+
     return (
-      <div className={cls}>
-        {this.context.mobile === 'small' && ico ? <div className="section-descr__ico"><Icon ico={ico} /></div> : null}
+      <div className={cls} ref="myref">
+        {(mobile === 'small' && ico) && <div className="section-descr__ico"><Icon ico={ico} /></div>}
 
         <Title size="2">
-          {this.context.mobile === 'small' ? titleMobile : title}
+          {mobile === 'small' ? titleMobile : title}
         </Title>
 
-        <div className="section-descr__item">
-          <p className="section-descr__text">
-            {text}
-          </p>
+        {(mobile !== "small" || open) &&
+          <div className="section-descr__item">
+            <p className="section-descr__text">
+              {text}
+            </p>
+            {
+              linkColor === 'is-orange' ?
+                <a href={href} className="section-descr__link is-orange">
+                  Try it out >
+                </a>
+                :
+                <a href={href} className="section-descr__link">
+                  Find our more >
+                </a>
+            }
+          </div>}
 
-          {linkColor === 'is-orange' ?
-            <a href={href} className="section-descr__link is-orange">
-              Try it out >
-            </a>
-            :
-            <a href={href} className="section-descr__link">
-              Find our more >
-            </a>
-          }
-        </div>
-
-        {this.context.mobile === 'small' ? <Btn mod="is-plus-small"></Btn> : null}
+        {mobile === 'small' && <Btn onClick={this.toggleOpen} mod={buttonMod} />}
       </div>
     );
   }
