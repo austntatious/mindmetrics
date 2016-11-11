@@ -51,7 +51,7 @@ const TABS = [
 ];
 
 
-let color = d3.scale.ordinal()
+const COLORS = d3.scale.ordinal()
               .range(["#EDC951","#CC333F","#00A0B0"]);
 
 // this component will render differently when called by the webapp formcontainer or by a direct URL link.
@@ -97,7 +97,9 @@ export default class StaticResults extends Component {
         fetch(fetchReq, httpOptions)
             .then(function (response) {
                 response.json().then(function (data) {
-                    self.setState({data: data.watsonData});
+                    if (data) {
+                      self.setState({data: data.watsonData});
+                    }
                 }, function (err) {
                     console.log("error", err);
                 });
@@ -118,7 +120,9 @@ export default class StaticResults extends Component {
                     <SectionHat title="Trait report"
                                 descr="123123 words analysed. "
                                 span="Very Strong Analysis"/>
-                    <Tabs tabs={TABS} active={this.state.activeTab} onChange={this.setActiveTab}/>
+                    <Tabs tabs={TABS} colors={COLORS}
+                          active={this.state.activeTab}
+                          onChange={this.setActiveTab}/>
                 </main>
                 <Traits list={DATA[activeTab]} />
                 <FreeAnalysis />
