@@ -20,6 +20,7 @@ export default class TextInput extends Component {
                className="input__el"
                name={name}
                onFocus={onFocus}
+               onChange={this.props.onChange}               
                />
 
         { check && mark }
