@@ -6,14 +6,17 @@ export class Tab extends Component {
   };
 
   render() {
-    const {title, ico, text, onClick, onTouchTap} = this.props;
+    const {title, ico, text, onClick, onTouchTap, color, active} = this.props;
     let cls = 'tabs__el';
-    if (this.props.active) {
+    if (active) {
       cls += ' ' + 'is-active';
     }
 
     return (
-      <li className={cls} onClick={onClick} onTouchTap={onTouchTap}>
+      <li className={cls}
+          onClick={onClick}
+          style={active ? {borderColor: color} : {}}
+          onTouchTap={onTouchTap}>
           {
             this.context.mobile === 'small'
             ?
@@ -44,15 +47,16 @@ export class Tabs extends Component {
   };
 
   render() {
-    const {active} = this.props;
+    const {active, colors} = this.props;
     const activeTab = this.props.tabs.find((t) => t.id === active );
 
-    let li = this.props.tabs.map((t) => {
+    let li = this.props.tabs.map((t, i) => {
       return (
         <Tab key={t.id}
              active={active === t.id}
              title={t.title}
              ico={t.ico}
+             color={colors(i + 1)}
              text={t.descr}
              onClick={this.handleChange(t.id)}
              onTouchTap={this.handleChange(t.id)}
@@ -62,7 +66,6 @@ export class Tabs extends Component {
     });
 
     return (
-
         <div className="tabs">
           <ul className="tabs__list">
             {li}

@@ -20,6 +20,7 @@ export default class TextField extends Component {
                   rows={rows}
                   cols={cols}
                   onFocus={onFocus}
+                  onChange={this.props.onChange}
           />
       </div>
     );
