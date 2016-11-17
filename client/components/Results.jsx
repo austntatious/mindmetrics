@@ -111,15 +111,14 @@ export default class StaticResults extends Component {
         const {likely, unlikely} = this.getConsumptionPreferences(DATA);
         return (
             <Layout classnames='Results'>
-                <main className="main">
-                    <User ico={USER.ico} name={USER.name} descr={USER.descr}
-                          summary={TextSummary.assembleTraits(DATA.personality)[0]}
-                          likely={likely} unlikely={unlikely} />
-                    <SectionHat title="Trait report"
-                                descr="123123 words analysed. "
-                                span="Very Strong Analysis"/>
-                    <Tabs tabs={TABS} active={this.state.activeTab} onChange={this.setActiveTab}/>
-                </main>
+                <User ico={USER.ico} name={USER.name} descr={USER.descr}
+                      summary={TextSummary.assembleTraits(DATA.personality)[0]}
+                      likely={likely} unlikely={unlikely} />
+                <SectionHat title="Trait report"
+                            descr="123123 words analysed. "
+                            span="Very Strong Analysis"/>
+                <Tabs tabs={TABS} active={this.state.activeTab} onChange={this.setActiveTab}/>
+
                 <Traits list={DATA[activeTab]} />
                 <FreeAnalysis />
             </Layout>

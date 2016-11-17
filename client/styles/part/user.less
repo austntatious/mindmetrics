@@ -1,32 +1,51 @@
 @import "../core/mixins.less";
 
 .user {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: space-between;
+  padding-top: 45px;
+  margin-bottom: 85px;
+  background-color: #fafafa;
 
-  .tablet({
-    flex-direction: column;
-    align-items: center;
-  });
+  &__wrap {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    .tablet({
+      flex-direction: column;
+      align-items: center;
+    });
+  }
+
+  &__top {
+    display: flex;
+    width: 100%;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e7e6e6;
+
+    .mobile({
+      flex-direction: column;
+    });
+  }
 
   &__left {
     display: flex;
-    min-width: 400px;
-    width: 55%;
-    margin-bottom: 85px;
+    flex-direction: column;
     align-items: flex-start;
+    min-width: 400px;
+    width: 61%;
+    border-right: 1px solid #e7e6e6;
 
     .tablet({
       min-width: 0;
       width: 100%;
       margin-bottom: 35px;
+      border-right: none;
     })
   }
 
   &__right {
-    width: 45%;
+    width: 39%;
 
     .tablet({
       width: 100%;
@@ -34,8 +53,23 @@
     })
   }
 
+  &__ico {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    border: 1px solid #eee;
+    border-radius: 50%;
+    overflow: hidden;
+
+    .mobile({
+      margin: 0 auto;
+    })
+  }
+
   &__details {
-    margin-left: 27px;
+    margin-left: 15px;
   }
 
   &__name {
@@ -44,6 +78,7 @@
   }
 
   &__descr {
+    margin-bottom: 20px;
     font-size: 15px;
     letter-spacing: -.5px;
   }
@@ -54,82 +89,62 @@
   }
 
   &__status-text {
+    display: flex;
+    margin-left: 30px;
+    font-size: 32px;
     font-weight: 600;
-    text-transform: uppercase;
-    color: #f49b1c;
-
-    .mobile({
-      display: flex;
-    });
   }
 }
 
 .user-likes {
+  padding-bottom: 20px;
 
   &__list {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     flex-wrap: wrap;
   }
 
   &__el {
     position: relative;
+    padding: 0 18px;
     margin-right: 15px;
     margin-bottom: 10px;
+    border-bottom: 1px solid #e6e6e6;
     font-size: 15px;
     letter-spacing: -1px;
 
     &:last-child {
-      margin-right: 0;
+      border-bottom: none;
     }
   }
 
   &__likes {
+    padding-left: 30px;
     margin-bottom: 15px;
+    border-left: 6px solid #00a0a6;
 
     .title {
-
-      &:before {
-        position: absolute;
-        top: 0;
-        left: -35px;
-        content: '';
-        width: 26px;
-        height: 19px;
-        background-image: url(/client/img/ico_check_orange.png);
-      }
+      color: #00a0a6;
     }
   }
 
   &__unlikes {
+    padding-left: 30px;
+    border-left: 6px solid #e5063f;
 
     .title {
-
-      &:before {
-        position: absolute;
-        top: 0;
-        left: -35px;
-        content: '';
-        width: 20px;
-        height: 21px;
-        background-image: url(/client/img/ico_cross_red.png);
-      }
+      color: #e5063f;
     }
   }
 
   &__item {
-    display: inline-flex;
-    width: 148px;
-    padding: 0 18px;
     min-height: 35px;
     line-height: 35px;
-    background-color: #f5f5f5;
-    border-radius: 10px;
     box-sizing: border-box;
   }
 
   .title {
-    position: relative;
     margin-bottom: 15px;
   }
 }

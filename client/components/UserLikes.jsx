@@ -13,7 +13,7 @@ export default class UserLikes extends Component {
             <div className="user-likes">
                 <div className="user-likes__likes">
                     <Title size="6">
-                        You are likely to:
+                        Likely behaviors
                     </Title>
                     <ul className="user-likes__list">
                         {this.props.likelyList.map((t, i) =>
@@ -27,7 +27,7 @@ export default class UserLikes extends Component {
                 </div>
                 <div className="user-likes__unlikes">
                     <Title size="6">
-                        You are unlikely to:
+                        Unlikely behaviors
                     </Title>
                     <ul className="user-likes__list">
                         {this.props.unlikelyList.map((t, i) =>
