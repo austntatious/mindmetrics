@@ -19,7 +19,7 @@ export default class Form extends Component {
   static contextTypes = {
     router: React.PropTypes.object.isRequired
   }
-  
+
   state = {
     showTextArea: false,
     email: "",
