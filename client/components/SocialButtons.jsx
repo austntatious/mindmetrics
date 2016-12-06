@@ -8,10 +8,10 @@ export default class SocialButtons extends Component {
     return (
       <div className="social-buttons">
         <SocialButtonsEl mod="is-social is-facebook" check="true">
-          Conntect Facebook
+          Connect Facebook
         </SocialButtonsEl>
         <SocialButtonsEl mod="is-social is-twitter" check="true">
-          Conntect Twitter
+          Connect Twitter
         </SocialButtonsEl>
       </div>
     );
