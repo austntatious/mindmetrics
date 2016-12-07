@@ -6,6 +6,7 @@ import TextInput from './TextInput';
 import TextField from './TextField';
 import SelectField from './SelectField';
 import Btn from './Btn';
+import InfoMeter from './InfoMeter';
 import { Link } from "react-router";
 
 let options = [
@@ -75,29 +76,80 @@ export default class Form extends Component {
     return (
       <Layout classnames='Form'>
         <section className="section is-personal-info">
-          <Title size="1">
-            Your info
-          </Title>
-          <p className="section__sub-title">
-            Small text Small text Small text
-          </p>
-          <SocialButtons />
-          <TextInput check={this.validateEmail()} name="email" title="E-mail:"
-                     onChange={this.setField("email")}/>
-          <p className="section__separator">
-            OR
-          </p>
-          <div className="add-text">
-            <Btn onClick={this.openTextArea}>Upload text</Btn>
-            {this.state.showTextArea && 
-             <span>
-               <TextField mod="i-mt-19" rows="18" name="text" title="Text:"
-                          onChange={this.setField("textInput")}/>
-               <SelectField mod="i-mt-27 i-mb-40" options={options} />
-             </span>
+
+          <div className="section__info">
+            <Title size="2">
+              Your info
+            </Title>
+            <p className="section__sub-title">
+              Small text Small text Small text
+            </p>
+          </div>
+
+          <div className="section__profile">
+            <Title size="3">
+              Profile
+            </Title>
+            <TextInput check={this.validateEmail()} name="email" placeholder="name@example.com"
+                       onChange={this.setField("email")}/>
+
+            <div className="input-group">
+              <TextInput mod="is-small" name="first name" placeholder="First name"/>
+              <TextInput mod="is-small" name="last name" placeholder="Last name"/>
+            </div>
+          </div>
+
+          <div className="section__data">
+            <Title size="3">
+              Data
+            </Title>
+            <SocialButtons />
+          </div>
+
+          <div className="section__separator">
+            <span>
+              OR
+            </span>
+          </div>
+
+          <div className="section__add-text">
+            <Btn mod="is-orange" onClick={this.openTextArea}>Upload text</Btn>
+            <p className="section__descr">
+              E-mails, blog entrys, etc
+            </p>
+            {
+              this.state.showTextArea &&
+               <div>
+                 <div className="see-result">
+                   <div className="see-result__line"></div>
+                   <InfoMeter proc="97"/>
+                   <Btn type="link" onClick={this.nextPage} mod="is-big is-block">See My Results</Btn>
+                   <p className="section__descr">
+                     By clicking Analyze, you agree to Mindmetrics Terms and Privacy Policy
+                   </p>
+                 </div>
+
+                 <div className="section__separator">
+                   <span>
+                     OR
+                   </span>
+                 </div>
+                 <SelectField mod="i-mt-27 i-mb-40" options={options} />
+
+                 <TextField mod="i-mt-19" rows="18" name="text" placeholder="This is a dummy text"
+                            onChange={this.setField("textInput")}/>
+               </div>
             }
           </div>
-          <Btn type="link" onClick={this.nextPage} mod="is-big is-violet">Analyse</Btn>
+
+          <div className="see-result">
+            <div className="see-result__line"></div>
+            <InfoMeter proc="97"/>
+            <Btn type="link" onClick={this.nextPage} mod="is-big is-block">See My Results</Btn>
+            <p className="section__descr">
+              By clicking Analyze, you agree to Mindmetrics Terms and Privacy Policy
+            </p>
+          </div>
         </section>
       </Layout>
     );

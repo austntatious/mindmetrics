@@ -4,12 +4,32 @@
   padding-top: 45px;
   margin-bottom: 85px;
   background-color: #fafafa;
+  overflow: hidden;
+
+  .tablet({
+    background-color: #fff;
+  });
 
   &__wrap {
+    position: relative;
     display: flex;
     flex-direction: row;
     align-items: flex-start;
     justify-content: space-between;
+
+    &:after {
+      position: absolute;
+      content: '';
+      left: 60.8%;
+      bottom: 0;
+      width: 200%;
+      height: 1px;
+      background-color: #e7e6e6;
+
+      .tablet({
+        display: none;
+      });
+    }
 
     .tablet({
       flex-direction: column;
@@ -26,6 +46,10 @@
     .mobile({
       flex-direction: column;
     });
+  }
+
+  &__bottom {
+    width: 100%;
   }
 
   &__left {
@@ -48,8 +72,7 @@
     width: 39%;
 
     .tablet({
-      width: 100%;
-      margin-bottom: 35px;
+      display: none;
     })
   }
 
@@ -83,6 +106,10 @@
     letter-spacing: -.5px;
   }
 
+  &__emphasis {
+    color: #96458d;
+  }
+
   &__status {
     margin: 25px 0 70px;
     font-size: 26px;
@@ -106,6 +133,7 @@
   }
 
   &__el {
+    max-width: 400px;
     position: relative;
     padding: 0 18px;
     margin-right: 15px;
@@ -120,9 +148,11 @@
   }
 
   &__likes {
+    padding-top: 15px;
     padding-left: 30px;
     margin-bottom: 15px;
     border-left: 6px solid #00a0a6;
+    background-color: #f7f7f7;
 
     .title {
       color: #00a0a6;
@@ -130,8 +160,10 @@
   }
 
   &__unlikes {
+    padding-top: 15px;
     padding-left: 30px;
     border-left: 6px solid #e5063f;
+    background-color: #f7f7f7;
 
     .title {
       color: #e5063f;
@@ -139,8 +171,9 @@
   }
 
   &__item {
-    min-height: 35px;
-    line-height: 35px;
+    display: flex;
+    margin: 5px 0;
+    line-height: 1.4;
     box-sizing: border-box;
   }
 

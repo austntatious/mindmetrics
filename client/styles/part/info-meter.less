@@ -1,0 +1,47 @@
+.info-meter {
+  max-width: 350px;
+  margin: 30px auto;
+
+  &__text {
+    margin-bottom: 10px;
+    font-size: 12px;
+    color: #929292;
+    text-align: left;
+  }
+
+  &__scale {
+    display: flex;
+    width: 100%;
+  }
+
+  &__percent {
+    margin-left: 5px;
+    width: 20%;
+    height: 5px;
+    border-radius: 10px;
+
+    &:first-child {
+      margin-left: 0;
+    }
+
+    &.is-twenty {
+      background-color: #ff0000;
+    }
+
+    &.is-forty {
+      background-color: #ff8500;
+    }
+
+    &.is-sixty {
+      background-color: #ffc100;
+    }
+
+    &.is-eighty {
+      background-color: #a0c414;
+    }
+
+    &.is-hundred {
+      background-color: #00af00;
+    }
+  }
+}

@@ -8,9 +8,12 @@ export default class FreeAnalysis extends Component {
 
         return (
             <div className="free-analysis">
-                 <Btn type="link" href="#" mod="is-big is-violet">
-                     Get free analysis
-                 </Btn>
+                <p className="free-analysis__text">
+                  Discover who you are.
+                </p>
+                <Btn type="link" href="#" mod="is-big">
+                    Get free analysis
+                </Btn>
             </div>
         );
     }

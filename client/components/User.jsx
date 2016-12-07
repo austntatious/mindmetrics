@@ -6,7 +6,7 @@ import UserLikes from './UserLikes';
 export default class User extends Component {
 
     render() {
-        const {ico, name, descr, summary, likely, unlikely} = this.props;
+        const {ico, name, descr, emphasis, summary, likely, unlikely} = this.props;
 
         return (
             <div className="user">
@@ -22,6 +22,9 @@ export default class User extends Component {
                                 </div>
                                 <div className="user__descr">
                                     {descr}
+                                    <span className="user__emphasis">
+                                        {emphasis}
+                                    </span>
                                 </div>
                                 <Social />
                             </div>

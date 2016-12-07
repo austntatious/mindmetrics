@@ -10,7 +10,10 @@
   &__list {
     display: flex;
     align-items: center;
-    justify-content: center;
+
+    .tablet({
+      justify-content: center;
+    })
   }
 
   &__el {
@@ -22,6 +25,10 @@
     cursor: pointer;
     box-sizing: border-box;
     font-weight: 400;
+
+    &:first-child {
+      margin-left: 0;
+    }
 
     .tablet({
       margin: 0 20px;

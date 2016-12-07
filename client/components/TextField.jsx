@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 export default class TextField extends Component {
 
   render() {
-    const {mod, name, title, onFocus, rows, cols} = this.props;
+    const {mod, name, placeholder, onFocus, rows, cols} = this.props;
     let cls = 'field';
 
     if (mod) {
@@ -14,8 +14,9 @@ export default class TextField extends Component {
 
     return (
       <div className={cls}>
-        <label className="field__label" htmlFor={name} >{title}</label>
+        <label className="field__label" htmlFor={name} ></label>
         <textarea name={name}
+                  placeholder={placeholder}
                   className="field__el"
                   rows={rows}
                   cols={cols}

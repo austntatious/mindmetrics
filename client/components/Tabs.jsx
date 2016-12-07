@@ -67,7 +67,7 @@ export class Tabs extends Component {
 
     return (
         <div className="tabs">
-          <ul className="tabs__list">
+          <ul className="tabs__list container">
             {li}
           </ul>
           <div className="tabs__descr">

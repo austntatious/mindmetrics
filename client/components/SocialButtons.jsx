@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Btn from './Btn';
+import Icon from './Icon';
 
 export default class SocialButtons extends Component {
 
@@ -7,10 +8,12 @@ export default class SocialButtons extends Component {
 
     return (
       <div className="social-buttons">
-        <SocialButtonsEl mod="is-social is-facebook" check="true">
+        <SocialButtonsEl mod="is-social is-facebook" connect="true">
+          <Icon ico="is-fb" />
           Conntect Facebook
         </SocialButtonsEl>
-        <SocialButtonsEl mod="is-social is-twitter" check="true">
+        <SocialButtonsEl mod="is-social is-twitter" connect="true">
+          <Icon ico="is-tw" />
           Conntect Twitter
         </SocialButtonsEl>
       </div>
@@ -21,7 +24,7 @@ export default class SocialButtons extends Component {
 class SocialButtonsEl extends Component {
 
   render() {
-    const {mod, check} = this.props;
+    const {mod, connect} = this.props;
     let mark = <span className="mark"><i className="ico is-check-mark"></i></span>;
 
     return (
@@ -30,7 +33,6 @@ class SocialButtonsEl extends Component {
         <Btn mod={mod}>
           {this.props.children}
         </Btn>
-        { check && mark }
       </div>
     );
   }

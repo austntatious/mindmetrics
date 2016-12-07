@@ -9,18 +9,19 @@ import Footer from './Footer';
 import Nav from './Nav';
 import Social from './Social';
 import SectionHat from './SectionHat';
+import Title from './Title';
 import Logo from './Logo';
 import User from './User';
 import Action from './Action';
 import Hamburger from './Hamburger';
 import Copyright from './Copyright';
 import UserLikes from './UserLikes';
-import FreeAnalysis from './FreeAnalysis';
+import TellFriends from './TellFriends';
 import Traits from './Traits';
 
 import {Tabs, TabDescr} from './Tabs';
 
-const USER = { name: 'Your name', ico: '/client/img/user-ico-1.png', descr: '123123 words analysed. Very Strong Analysis'};
+const USER = { name: 'Your name', ico: '/client/img/user-ico-1.png', descr: '123123 words analysed. ', emphasis: 'Very Strong Analysis'};
 
 import DATA from '../../personality-data.json';
 window.data = DATA;
@@ -113,19 +114,28 @@ export default class StaticResults extends Component {
         const {likely, unlikely} = this.getConsumptionPreferences(DATA);
         return (
             <Layout classnames='Results'>
-                <User ico={USER.ico} name={USER.name} descr={USER.descr}
+                <User ico={USER.ico} name={USER.name} descr={USER.descr} emphasis={USER.emphasis}
                       summary={TextSummary.assembleTraits(DATA.personality)[0]}
                       likely={likely} unlikely={unlikely} />
-                <SectionHat title="Trait report"
-                            descr="123123 words analysed. "
-                            span="Very Strong Analysis"/>
+
+
+                {
+                  !this.context.mobile &&
+
+                  <div className="container">
+                    <Title mod="i-uppercase" size="1">
+                      Trait report
+                    </Title>
+                  </div>
+                }
+
                 <Tabs tabs={TABS}
                       colors={COLORS}
                       active={this.state.activeTab}
                       onChange={this.setActiveTab}/>
 
                 <Traits list={DATA[activeTab]} />
-                <FreeAnalysis />
+                <TellFriends/>
             </Layout>
         );
     }

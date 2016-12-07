@@ -9,10 +9,10 @@ export default class Action extends Component {
 
         return (
             <div className="action">
-                <Btn type="link" href="#" mod="is-orange">
+                <Btn type="link" href="#" mod="is-small">
                     Take test
                 </Btn>
-                <Btn type="link" href="#" mod="is-fb" />
+                {/*<Btn type="link" href="#" mod="is-fb" />*/}
             </div>
         );
     }

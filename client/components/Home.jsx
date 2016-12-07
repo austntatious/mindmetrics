@@ -20,7 +20,7 @@ class Home extends Component {
             <div className="section__wrap container">
               <div className="section__info">
                 <div className="section__text">
-                  <Title mod="i-violet-dark" size="1">
+                  <Title size="1">
                     Your True Personality Revealed
                   </Title>
                   <p>
@@ -30,8 +30,8 @@ class Home extends Component {
                   </p>
                 </div>
                 <div className="btn-group">
-                  <Btn mod="is-big is-violet" type="link" to="/form">
-                    Take a test now
+                  <Btn mod="is-big" type="link" to="/form">
+                    Get free analysis
                   </Btn>
                 </div>
               </div>
@@ -82,7 +82,7 @@ class Home extends Component {
             {this.context.mobile === 'small' ? null : <ProgressGroup />}
           </div>
         </section>
-        <FreeAnalysis />
+        {this.context.mobile === 'small' ? null : <FreeAnalysis />}
       </Layout>
     );
   }

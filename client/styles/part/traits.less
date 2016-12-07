@@ -4,6 +4,10 @@
 .traits {
   border-top: 1px solid @greyLight;
   border-bottom: 1px solid @greyLight;
+
+  .mobile({
+    border-bottom: none
+  });
 }
 
 .trait {
@@ -32,6 +36,10 @@
     display: flex;
     position: relative;
     flex-wrap: wrap;
+
+    .tablet({
+      padding-bottom: 70px!important;
+    })
   }
 
   &__left,
@@ -164,14 +172,9 @@
     });
 
     .tablet({
-      right: -30px;
-      top: -28px;
-      left: auto;
-      bottom: auto;
+      left: 50%;
+      bottom: 0;
     });
 
-    .mobile({
-      right: 0;
-    });
   }
 }
