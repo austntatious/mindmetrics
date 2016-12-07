@@ -7,7 +7,7 @@
   box-sizing: border-box;
 
   &:hover {
-    color: lighten(#00729A, 15%)
+    color: darken(#00729A, 15%)
   }
 
   &.is-orange {
@@ -16,8 +16,7 @@
 
   &.is-big {
     width: 250px;
-    padding: 12px 0;
-    border: 3px solid transparent;
+    padding: 15px 0;
     border-radius: 50px;
     color: white;
     text-transform: uppercase;
@@ -26,15 +25,12 @@
     background-color: @orange;
 
     &:hover {
-      color: @orange;
-      background-color: transparent;
-      border-color: @orange;
+      background-color: darken(@orange, 10%);
     }
   }
 
   &.is-small {
-    padding: 11px 29px;
-    border: 3px solid transparent;
+    padding: 13px 29px;
     border-radius: 50px;
     color: white;
     text-transform: uppercase;
@@ -42,9 +38,7 @@
     background-color: @orange;
 
     &:hover {
-      color: @orange;
-      background-color: transparent;
-      border-color: @orange;
+      background-color: darken(@orange, 10%);
     }
   }
 
