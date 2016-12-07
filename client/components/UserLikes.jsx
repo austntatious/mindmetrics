@@ -34,7 +34,7 @@ export default class UserLikes extends Component {
             Unlikely behaviors
           </Title>
           <ul className="user-likes__list">
-            {this.getUnlikelyList.map((t, i) =>
+            {this.getUnlikelyList().map((t, i) =>
               <li className="user-likes__el" key={i}>
                 <span className="user-likes__item">
                   {t.name.replace("Likely to", '')}
