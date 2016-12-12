@@ -37,6 +37,35 @@ export default class Form extends Component {
     };
   }
 
+  connectData = () => {
+    // open new window and initiate request token post & redirect in new window
+    var windowObjReference = window.open("/oauth");
+    // when finished with Authorization flow and receiving Access Token, send credentials to server & close this window
+
+
+    // const fetchHeaders = new Headers();
+    // fetchHeaders.append("Content-Type", "application/json");
+
+    // const httpOptions = {
+    //   method: "POST",
+    //   headers: fetchHeaders,
+    //   mode: "no-cors",
+    // };
+
+    // const fetchReq = new Request("/data", httpOptions);
+    // fetch(fetchReq, httpOptions)
+    //   .then(function(response) {
+    //     response.json().then(function(data) {
+    //       // replace with POST request 
+    //       window.open(data.authorizeUrlString);
+    //     }, function(err) {
+    //       console.log(err);
+    //     })
+    //   });
+  }
+
+  // TODO: edit this so that on submit, loading state immediately overlays over screen 
+  // on error, flash to screen. on success, move page to results 
   nextPage = () => {
     const {email, textInput} = this.state;
     let userData = {email, textInput};
@@ -145,7 +174,7 @@ export default class Form extends Component {
           <div className="see-result">
             <div className="see-result__line"></div>
             <InfoMeter proc="97"/>
-            <Btn type="link" onClick={this.nextPage} mod="is-big is-block">See My Results</Btn>
+            <Btn type="link" onClick={this.connectData} mod="is-big is-block">See My Results</Btn>
             <p className="section__descr">
               By clicking Analyze, you agree to Mindmetrics Terms and Privacy Policy
             </p>

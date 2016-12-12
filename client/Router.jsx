@@ -4,8 +4,8 @@ import App from "./App";
 import { render } from "react-dom";
 import React from "react";
 import Form from "./components/Form";
-import LandingHeader from "./components/LandingHeader";
 import Results from "./components/Results";
+import Oauth from "./components/Oauth";
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
 // Needed for onTouchTap
@@ -22,6 +22,7 @@ render(
             <Route path="/"         component={Home} />
             <Route path="/form"     component={Form} />
             <Route path="/results"  component={Results} />
+            <Route path="/oauth"    component={Oauth} />
         </Route>
     </Router>, document.getElementById("app-container")
 );
