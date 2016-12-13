@@ -1,38 +1,39 @@
-// This component is directed to after Twitter authentication. It is opened in a new window, and 
-// it begins to fetch the user's data after receiving accessTokens. On success, this window will close
-
-
-
 import React, { Component } from 'react';
+
+// this component is the final step of Twitter Oauth
+// it is meant to opened in a child window
+// It takes the oauth_token from the URL string received from Twitter and sends a POST with token from parent window
 
 export default class Oauth extends Component {
 
-  parentWindowRequest = () => {
-    // CLOSE THIS WINDOW AFTER RECEIVING VERIFIED REQUEST TOKEN AND PASSING IT TO PARENT WINDOW
-    // PARENT WINDOW THEN COMPLETES FLOW WITH VERFIED TOKEN AND RECEIVES ACCESS TOKEN
-    // TAKES ACCESS TOKEN AND CRAWLS TWITTER FEED
-    const fetchHeaders = new Headers();
-    fetchHeaders.append("Content-Type", "application/json");
 
-    const httpOptions = {
-      method: "POST",
-      headers: fetchHeaders,
-      mode: "cors"
-    };
-
-    const fetchReq = new Request("/data", httpOptions);
-    window.opener.fetch(fetchReq, httpOptions)
-      .then(function(response) {
-        response.json().then(function(data) {
-          console.log(data);
-        }, function(err) {
-          console.log(err);
-        })
-      });
+  closeWindow = () => {
+    window.close();
   };
 
   componentWillMount() {
-    this.parentWindowRequest();
+    /**
+     * Get the value of a querystring
+     * @param  {String} field The field to get the value of
+     * @param  {String} url   The URL to get the value from (optional)
+     * @return {String}       The field value
+     */
+    var getQueryString = function ( field, url ) {
+        var href = url ? url : window.location.href;
+        var reg = new RegExp( '[?&]' + field + '=([^&#]*)', 'i' );
+        var string = reg.exec(href);
+        return string ? string[1] : null;
+    };
+
+    var oauthToken = getQueryString("oauth_token");
+    var oauthVerifier = getQueryString("oauth_verifier");
+    // pass verifier tokens into this post request, which is sent from Parent window
+    window.onunload = function (e) {
+      opener.sendPost(oauthToken, oauthVerifier);
+    };
+
+    // then close window
+    this.closeWindow();
   };
 
     render() {

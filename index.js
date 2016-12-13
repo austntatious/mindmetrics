@@ -119,9 +119,11 @@ app.get("/oauth", function(req, res, next) {
   // prevent users from directing to this route - only allow app to direct here
   // also limit IPs 
 
+  // if query has oauth_token, this is callback req from Twitter - send oauth component on wildcard route
   if (req.query.oauth_token) {
-    return next();
+    return next('route');
   }
+
    // STEP 2: Ask twitter for a signed request token
 
   // oAuthToken/Secret used for this this handshake process
@@ -146,15 +148,25 @@ app.get("/oauth", function(req, res, next) {
     res.redirect(redirectURL);
     });
 
-}, function(req,res, next) {
+});
 
-  // fetch accessToken in POST method only 
-  // 
-  // 1) send query token data to next route - don't fetch access token yet
-  // 2) render the blank page from callback and then after attaching querytoken data from server to the parent window obj,
-  // 3) close the window
-  // 4) on child window obj close event, fire a post request to fetch accessToken on server, then being complete Twitter flow
+// app.get("/results/:id", function(req, res) {
+//   // add handlers to find user's profile
+//   console.log("INSIDE GET ROUTE FOR RESULTS");
+//   User.findOne({"uuid" : req.params.id}).then(function(userData) {
+//     console.log("userdata:", userData);
+//     res.json(userData);
+//   }, function(err) {
+//     res.json(err);
+//     console.log("Error finding user data: ", err);
+//   });
+// });             
 
+
+app.post("/data", function(req, res, next) {
+  // this is a completion step from Twitter Oauth 
+  // requests will have requestTokens attached to begin fetching accessTokens and other data
+  
   /**
    * STEP 4: Get the access token and access token secret - finally what we need! :)
    */
@@ -169,54 +181,38 @@ app.get("/oauth", function(req, res, next) {
     data[2]: results
    */
   accessTokenPromise.then(function(data){
-    // After successfully fetching all authentication data, attach to request object and pass request to the next route
-    // This will take the access tokens and send them to the main wildcard route that renders the React app
-    // The React app will then render an empty component which sends a post request from the parent window
-    // and then will close itself upon receiving a response
-    req.accessToken = data[0];
-    req.accessTokenSecret = data[1];
-    req.results = data[2];
-    return next();
+    var accessToken = data[0];
+    var accessTokenSecret = data[1];
+    var results = data[2];
+  // add error handler!
 
-  }).catch(function(err) {
-    console.log("Error in requestTokenPromise: ", err);
+  // on accessToken success, verify credentials
+
+  // save to db
+
+  // after credentials are verified, begin Twitter Crawling
+
+  // format tweets into watson input, count words, and save to db
+
+  // send success response to client
+
+  // on USER SUBMIT, match email to db record
+
+  // format any new text input and append to db record
+
+  // send to Watson
+
+  // save response to DB and send to client 
+
+  // flag record as "completed successfully," to distinguish from incomplete user flows
+
+  res.json({"accessToken": accessToken, "accessTokenSecret": accessTokenSecret});
   });
-});
-  // immediately redirect to authorize/authenticate endpoint with request token to be verified
-  // user verifies request token when logging in and we redirect to our app with verified token
-  // send verified token to receive access token, and verify credentials
-  // then take tokens and send requests for twitter feed
-  // count twitter feed, send count to client async, and format into proper input json for Watson
-  // if user adds Facebook feed, repeat previous steps
-  // if user adds text as well, save to database entry and then send final json to Watson
-  // save response async and send it immediately to client
+  
 
-// app.get("/results/:id", function(req, res) {
-//   // add handlers to find user's profile
-//   console.log("INSIDE GET ROUTE FOR RESULTS");
-//   User.findOne({"uuid" : req.params.id}).then(function(userData) {
-//     console.log("userdata:", userData);
-//     res.json(userData);
-//   }, function(err) {
-//     res.json(err);
-//     console.log("Error finding user data: ", err);
-//   });
-// });             
-
-// start the flow to process data
-app.post("/data", function(req, res, next) {
-  res.json({"hi": "this is working"});
-  console.log("THIS IS FUCKIN WORKING HOLY SHIT");
 });
 
-// index route - this allows for react-router route matching(?)
-// when matching oauth_callback route to react-router, test for oauth query string
-// if no query string then render normal app. if query string present, then execute logic to get accessToken
-// then after getting accessToken, render oauth_callback component which autocloses 
 app.get("/*", function(req, res) {
-  console.log("inside wildcard route");
-  console.log("did we get the req accessToken data? - ", req.accessToken);
-
   res.render("index", {
     env: env
   });

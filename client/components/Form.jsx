@@ -27,6 +27,34 @@ export default class Form extends Component {
     textInput: ""
   }
 
+  componentDidMount() {
+    // register the POST function that will fire on Oauth window close
+
+    const fetchHeaders = new Headers();
+    fetchHeaders.append("Content-Type", "application/json");
+
+    const httpOptions = {
+      method: "POST",
+      headers: fetchHeaders,
+      mode: "cors"
+    };
+    
+    // child window should pass Tokens into this function so that parent can send POST
+    window.sendPost = function(token, verifier) {
+      const fetchReq = new Request("/data" + "?oauth_token=" + token + "&oauth_verifier=" + verifier, httpOptions);
+      window.fetch(fetchReq, httpOptions)
+        .then(function(res) {
+          res.json().then(function(data) {
+            console.log("post to data route worked from parent window", data);
+          }, function(err) {
+            console.log("error: ", err);
+          });
+        }, function(err) {
+          console.log("error in main fetch call:", err);
+        });
+    }
+  }
+
   openTextArea = () => {
     this.setState({showTextArea: true});
   }
@@ -38,30 +66,20 @@ export default class Form extends Component {
   }
 
   connectData = () => {
-    // open new window and initiate request token post & redirect in new window
-    var windowObjReference = window.open("/oauth");
-    // when finished with Authorization flow and receiving Access Token, send credentials to server & close this window
-
-
-    // const fetchHeaders = new Headers();
-    // fetchHeaders.append("Content-Type", "application/json");
-
-    // const httpOptions = {
-    //   method: "POST",
-    //   headers: fetchHeaders,
-    //   mode: "no-cors",
-    // };
-
-    // const fetchReq = new Request("/data", httpOptions);
-    // fetch(fetchReq, httpOptions)
-    //   .then(function(response) {
-    //     response.json().then(function(data) {
-    //       // replace with POST request 
-    //       window.open(data.authorizeUrlString);
-    //     }, function(err) {
-    //       console.log(err);
-    //     })
-    //   });
+    // make width and height dynamic based on parent window
+    var url = "/oauth",
+        title= "Mindmetrics Twitter Authentication",
+        w   = 600,
+        h   = 556,
+        wLeft = window.screenLeft ? window.screenLeft : window.screenX,
+        wTop = window.screenTop ? window.screenTop : window.screenY,
+        left = wLeft + (window.innerWidth / 2) - (w / 2),
+        top = wTop + (window.innerHeight / 2) - (h / 2);
+    var childWindowRef = window.open(
+        url, 
+        title, 
+        'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no,copyhistory=no,width=' + w + ',height=' + h + ', top=' + top + ', left=' + left
+        );
   }
 
   // TODO: edit this so that on submit, loading state immediately overlays over screen 
