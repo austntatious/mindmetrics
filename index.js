@@ -150,6 +150,8 @@ app.get("/oauth", function(req, res, next) {
 
 });
 
+// Route containing user profile so that they can share their info with friends
+// * Add component to allow people to take their own personality profile
 // app.get("/results/:id", function(req, res) {
 //   // add handlers to find user's profile
 //   console.log("INSIDE GET ROUTE FOR RESULTS");
@@ -164,16 +166,12 @@ app.get("/oauth", function(req, res, next) {
 
 
 app.post("/data", function(req, res, next) {
-  // this is a completion step from Twitter Oauth 
-  // requests will have requestTokens attached to begin fetching accessTokens and other data
-  
   /**
-   * STEP 4: Get the access token and access token secret - finally what we need! :)
+   * Get the access token and access token secret, then process feed data
    */
   var accessTokenPromise = oa.getOAuthAccessToken(req.query.oauth_token,
                                                   reqTokenSecrets[req.query.oauth_token],
                                                   req.query.oauth_verifier);
-
   /*
     Similar to access token:
     data[0]: access token
@@ -187,14 +185,27 @@ app.post("/data", function(req, res, next) {
   // add error handler!
 
   // on accessToken success, verify credentials
+  var verifyCredentialsPromise = oa.get('https://api.twitter.com/1.1/account/verify_credentials.json',
+                           accessToken,
+                           accessTokenSecret);
 
-  // save to db
-
-  // after credentials are verified, begin Twitter Crawling
-
-  // format tweets into watson input, count words, and save to db
-
-  // send success response to client
+  verifyCredentialsPromise.then(function(data) {
+    // save credentials to db
+    console.log("credentials are correct:", data[0]);
+    // begin twitter crawl
+    // when twitter crawl is complete
+    // format tweets into watson input
+    // count words while formatting tweets
+    // save tweets db
+    // return word count
+    return "wordcount";
+  }).then(function(data) {
+    // send success response to client with word count
+    res.json({"Twitter crawl successful: ": data});
+  }).catch(function(err) {
+    // if credentials verification throws an error, it will be 401 status code and supplied user credentials are wrong
+    console.log("Error in credentials verification:", err);
+  })
 
   // on USER SUBMIT, match email to db record
 
@@ -206,9 +217,11 @@ app.post("/data", function(req, res, next) {
 
   // flag record as "completed successfully," to distinguish from incomplete user flows
 
-  res.json({"accessToken": accessToken, "accessTokenSecret": accessTokenSecret});
+  console.log("accessTokens received");
+
+  }).catch(function(err) {
+    console.log("Error in accessTokenPromise:", err);
   });
-  
 
 });
 
@@ -218,8 +231,7 @@ app.get("/*", function(req, res) {
   });
 });
 
-// User post submission
-// TODO: nginx causes IP from user to be rewritten to the local address. fix ip forwarding problem
+// Final user post submission - contains email, name, and possibly form text
 app.post("/submit", function(req, res, next) {
   console.log("post submission received, req.body = ", req.body);
   console.log("User-Agent: " + req.headers["user-agent"]);

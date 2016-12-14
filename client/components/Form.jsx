@@ -45,7 +45,8 @@ export default class Form extends Component {
       window.fetch(fetchReq, httpOptions)
         .then(function(res) {
           res.json().then(function(data) {
-            console.log("post to data route worked from parent window", data);
+            console.log("response from POST: ", data);
+            // reset component state to show success from social media data and wordcount
           }, function(err) {
             console.log("error: ", err);
           });
