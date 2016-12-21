@@ -35,7 +35,7 @@ const twitterCredentials = [
       consumer_secret : twitterConsumerSecret,
       access_token_key : "",
       access_token_secret : "",
-      enabled : false
+      enabled : true
     }
   ];
 
@@ -200,39 +200,48 @@ app.post("/data", function(req, res, next) {
                            accessTokenSecret);
 
   verifyCredentialsPromise.then(function(data) {
-    console.log("credentials are correct:", data[0]);
-    // begin twitter crawl, save credentials to global obj 
+    var userData = JSON.parse(data[0])
+    console.log("credentials are correct:", userData);
 
     twitterCredentials[0].access_token_key = accessToken;
     twitterCredentials[0].access_token_secret = accessTokenSecret;
+    console.log("Twitter Credentials: ", twitterCredentials);
 
-    const crawler = new TwitterCrawler(credentials);
-    var twitterHandle = data[0].screen_name; 
+    const crawler = new TwitterCrawler(twitterCredentials);
+    var twitterHandle = userData.screen_name; 
+    console.log("twitterHandle: ", twitterHandle);
 
     crawler.getUser(twitterHandle)
     .then((user) => {
       console.log(
-        "Obtained info for user ${user.name} (${user.id}). "
+        "Obtained info for user " + user.name + user.id
       );
 
       // Crawl tweets
+      // Todo: implement this recursively to get entire user timeline
+      // can this be implemented using Promise.all?
+      // from the verification response, we know the status count of the user
+      // see IBM sample apps for reference about paginating user timeline
       console.log('Obtaining tweets...');
       crawler.getTweets(twitterHandle, { min_tweets: 50, limit : 300 })
         .then((tweets) => {
           console.log(
-            "Obtained ${tweets.length} tweets for user ${user.name} (${user.id})."
+            "Obtained " + tweets.length + " tweets for user " + user.name + user.id
           );
+          console.log("Tweet: ", tweets.slice(-1));
 
           console.log("Crawling finished.");
+
+          // format tweets into watson input
+          // count words while formatting tweets
+          // save watson input to db / **redis-CACHE (cache can be cleared often & faster READs)
+          // return word count
         });
     })
-    .catch(bind(log, 'error'));
+    .catch(function(err) {
+      console.log("Error in getting user: ", err);
+    });
 
-    // when twitter crawl is complete
-    // format tweets into watson input
-    // count words while formatting tweets
-    // save tweets db
-    // return word count
 
   }).then(function(data) {
     // send success response to client with word count
@@ -268,16 +277,20 @@ app.get("/*", function(req, res) {
 
 // Final user post submission - contains email, name, and possibly form text
 app.post("/submit", function(req, res, next) {
+
+  // incoming request meta data
   console.log("post submission received, req.body = ", req.body);
   console.log("User-Agent: " + req.headers["user-agent"]);
   console.log("IP: ", req.connection.remoteAddress);
   console.log("IP with proxy method: ", req.headers["x-forwarded-for"]);
   console.log("req.headers: ", req.headers);
+
   // first asynchronously sends request to IBM API
-  // if error then display error on client side and async save all input except the text response will be empty
+  // 
+  // if error, display error on client side
   // if successful, send response to client and async save all input as well as the IBM response
 
-  // resolver function for promise converter - move all of these to a utils file
+  // resolver function for promise converter - ***move all of these to a utils file
   function resolver(resolve, reject) {
     return function (error, result) {
       return error ? reject(error) : resolve(result);
