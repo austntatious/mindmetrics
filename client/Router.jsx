@@ -8,13 +8,14 @@ import Results from "./components/Results";
 import Oauth from "./components/Oauth";
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
+
 // Needed for onTouchTap
 // Can go away when react 1.0 release
 // Check this repo:
 // https://github.com/zilverline/react-tap-event-plugin
 
-// TO DO: add uuid to new results page so that users can save the page itself(?)
 injectTapEventPlugin();
+// TO DO: add uuid to new results page so that users can save the page itself(?)
 
 render(
     <Router history = { browserHistory }>

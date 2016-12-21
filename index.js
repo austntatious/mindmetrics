@@ -13,7 +13,7 @@ const mongoose    = require("mongoose");
 const session     = require("express-session");
 const MongoStore  = require("connect-mongo")(session);
 const User        = require("./server/models/User");
-const credentials = require('./credentials.json').personality_insights;
+const watsonCredentials = require('./credentials.json').personality_insights;
 const watson      = require('watson-developer-cloud');
 const _           = require("lodash");
 const extend      = _.extend;
@@ -22,12 +22,22 @@ const uuid        = require("node-uuid");
 const oauth       = require('oauth-libre/lib/oauth-promise').OAuth;
 const WebpackDevServer = require("webpack-dev-server");
 const webpackDevConfig = require("./webpack.config.development");
+const TwitterCrawler = require("twitter-crawler");
 
 // Todo: move these to config file and also add multiple twitter app keys to rotate
 const callbackURL = "http://localhost:3001/oauth";
 const twitterConsumerKey = "9euBP7DiTrWo9eNxf1Hl5HRFE";
 const twitterConsumerSecret = "CuU8AnRbNddhtNjPc63QnlgQqI1xYKyB2zQaVUk9DQKJbGFEwC";
 const MONGODB_URI = "mongodb://localhost:27017/personalities";
+const twitterCredentials = [
+    {
+      consumer_key : twitterConsumerKey,
+      consumer_secret : twitterConsumerSecret,
+      access_token_key : "",
+      access_token_secret : "",
+      enabled : false
+    }
+  ];
 
 /**
 *  Express Configuration
@@ -190,15 +200,40 @@ app.post("/data", function(req, res, next) {
                            accessTokenSecret);
 
   verifyCredentialsPromise.then(function(data) {
-    // save credentials to db
     console.log("credentials are correct:", data[0]);
-    // begin twitter crawl
+    // begin twitter crawl, save credentials to global obj 
+
+    twitterCredentials[0].access_token_key = accessToken;
+    twitterCredentials[0].access_token_secret = accessTokenSecret;
+
+    const crawler = new TwitterCrawler(credentials);
+    var twitterHandle = data[0].screen_name; 
+
+    crawler.getUser(twitterHandle)
+    .then((user) => {
+      console.log(
+        "Obtained info for user ${user.name} (${user.id}). "
+      );
+
+      // Crawl tweets
+      console.log('Obtaining tweets...');
+      crawler.getTweets(twitterHandle, { min_tweets: 50, limit : 300 })
+        .then((tweets) => {
+          console.log(
+            "Obtained ${tweets.length} tweets for user ${user.name} (${user.id})."
+          );
+
+          console.log("Crawling finished.");
+        });
+    })
+    .catch(bind(log, 'error'));
+
     // when twitter crawl is complete
     // format tweets into watson input
     // count words while formatting tweets
     // save tweets db
     // return word count
-    return "wordcount";
+
   }).then(function(data) {
     // send success response to client with word count
     res.json({"Twitter crawl successful: ": data});
@@ -262,7 +297,7 @@ app.post("/submit", function(req, res, next) {
   }
 
   // define function to send REST API request for watson personality insights
-  var personality_insights = watson.personality_insights(credentials),
+  var personality_insights = watson.personality_insights(watsonCredentials),
     getProfile = function (parameters) {
       // return a promise that uses toPromise to then fire the resolver callback, which will resolve or reject the promise
       return toPromise(function(callback) { personality_insights.profile(sanitize(parameters), callback)});

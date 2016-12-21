@@ -1,26 +1,14 @@
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
-  name: String,
   uuid: String,
-  password: String,
+  first_name: String,
+  last_name: String,
   session: Object,
-  email: { type: String },
-  birthyear: Date,
-  gender: String,
-  relationshipStatus: String,
-  occupation: String,
-  textInput: String,
-  browserInfo: String,
-  ipAddress: String,
-  watsonData: Object,
-  metaData: String,
-  friends: {id: String,
-            relationship: Number // nature of relationship and closeness (family, spouse, etc)
-            },
-  referral: String // e.g. Google Organic Search, Targeted Ad, Friend referral, School Survey Requirement, Company Survey Requirement - measure self-selection bias
-  // for every person who takes survey, it's possible that each one has actively sought out this survey on their own volition, and this variable could possibly skew
-  // the data
+  email: String,
+  content_items: Object, // formatted object of everything input to Watson, along with appended data like wordcount
+  watson_profile: Object,
+  meta_data: Object, // ip address, browswer info, etc
 }, { timestamps: true });
 
 const User = mongoose.model('User', userSchema);

@@ -17,7 +17,6 @@ Object.assign(env, {
 
 module.exports = {
   target: 'web',
-
   entry: [
     'babel-polyfill',
     './client/Router.jsx'
@@ -31,6 +30,9 @@ module.exports = {
   },
 
   resolve: {
+    alias: { 
+      'react/lib/ReactMount': 'react-dom/lib/ReactMount' 
+    },
     root: path.join(__dirname, ''),
     modulesDirectories: [
       'web_modules',
