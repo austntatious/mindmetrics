@@ -24,14 +24,15 @@ export default class Form extends Component {
   state = {
     showTextArea: false,
     email: "",
-    textInput: "",
     firstName: "",
     lastName: "",
     wordCount: 0,
-    twitterState: 0 // 0 is default, 1 is loading, 2 is loaded 
+    twitterState: 0, // 0 is default, 1 is loading, 2 is loaded 
+    input: {}
   }
 
   componentDidMount() {
+    var self = this;
     // register the POST function that will fire on Oauth window close
     const fetchHeaders = new Headers();
     fetchHeaders.append("Content-Type", "application/json");
@@ -49,6 +50,8 @@ export default class Form extends Component {
         .then(function(res) {
           res.json().then(function(data) {
             console.log("response from POST: ", data);
+            self.setState({input: data["input"]});
+            console.log("this.state: ", self.state);
             // reset component state to show success from social media data and wordcount
           }, function(err) {
             console.log("error: ", err);

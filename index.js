@@ -1,66 +1,33 @@
 "use strict";
 
-const fs = require("fs");
 const path = require("path");
 const Promise = require('bluebird');
 const express = require("express");
 const app     = express();
-const bodyParser = require("body-parser");
-const layouts = require("express-ejs-layouts");
 const webpack = require("webpack");
-
-const mongoose    = require("mongoose");
-const session     = require("express-session");
-const MongoStore  = require("connect-mongo")(session);
-const User        = require("./server/models/User");
-const watsonCredentials = require('./credentials.json').personality_insights;
+const oauth       = require('oauth-libre/lib/oauth-promise').OAuth;
+const watsonCredentials = require('./watson-credentials.json').personality_insights;
 const watson      = require('watson-developer-cloud');
 const _           = require("lodash");
 const extend      = _.extend;
-const data        = require("./data.json");
-const uuid        = require("node-uuid");
-const oauth       = require('oauth-libre/lib/oauth-promise').OAuth;
+const mongoose    = require("mongoose");
+
+// import user model
+const User        = require("./server/models/User");
+
 const WebpackDevServer = require("webpack-dev-server");
 const webpackDevConfig = require("./webpack.config.development");
 const TwitterCrawler = require("twitter-crawler");
-
-// Todo: move these to config file and also add multiple twitter app keys to rotate
-const callbackURL = "http://localhost:3001/oauth";
-const twitterConsumerKey = "9euBP7DiTrWo9eNxf1Hl5HRFE";
-const twitterConsumerSecret = "CuU8AnRbNddhtNjPc63QnlgQqI1xYKyB2zQaVUk9DQKJbGFEwC";
-const MONGODB_URI = "mongodb://localhost:27017/personalities";
-const twitterCredentials = [
-    {
-      consumer_key : twitterConsumerKey,
-      consumer_secret : twitterConsumerSecret,
-      access_token_key : "",
-      access_token_secret : "",
-      enabled : true
-    }
-  ];
+const toPromise = require("./util/callback-to-promise");
+const config    = require("./config/info");
+const twitterCredentials = config.twitterCredentials;
 
 /**
-*  Express Configuration
+*  Bootstrap Express config
 **/
-app.set("layout");
-app.set("view engine", "ejs");
-app.set("view options", {layout: "layout"});
-app.set("views", path.join(process.cwd(), "/server/views"));
-app.use(bodyParser.json({limit: '50mb'}));
-app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
-app.use(session({
-  resave: true,
-  saveUninitialized: true,
-  secret: "THISISASECRET",
-  store: new MongoStore({
-    url: MONGODB_URI,
-    autoReconnect: true
-  })
-}));
 
-app.use(layouts);
-app.use("/client", express.static(path.join(process.cwd(), "/client")));
-app.disable("x-powered-by");
+require("./config/express")(app);
+
 
 /**
 *  Environment Configs - add this to a main config file
@@ -90,7 +57,7 @@ const connectMongo = function () {
     server: { socketOptions: { keepAlive: 1, connectTimeoutMS: 30000 } },
     replset: { socketOptions: { keepAlive: 1, connectTimeoutMS : 30000 } }
   };
-  mongoose.connect(MONGODB_URI, options);
+  mongoose.connect(config.MONGODB_URI, options);
 };
 connectMongo();
 
@@ -111,14 +78,15 @@ mongoose.connection.on('disconnected', connectMongo);
  */
 
  // TODO: how to send to router to use as global variable?
+ // instantiate Oauth object in oauth route file, which will be mounted to main Router
 
 var oa = new oauth(
   'https://api.twitter.com/oauth/request_token',
   'https://api.twitter.com/oauth/access_token',
-  twitterConsumerKey,            // CONSUMER KEY
-  twitterConsumerSecret,         // CONSUMER SECRET
+  twitterCredentials[0].consumer_key,            // CONSUMER KEY
+  twitterCredentials[0].consumer_secret,         // CONSUMER SECRET
   '1.0',
-  callbackURL,
+  config.oauthCallbackUrl,
   'HMAC-SHA1'
 );
 
@@ -145,17 +113,21 @@ app.get("/oauth", function(req, res, next) {
     data[1]: oauth_token_secret
     data[2]: results
    */
-  requestTokenPromise.then(function(data){
-    // Extract data
-    var oauthToken = data[0];
-    var oauthTokenSecret = data[1];
+  requestTokenPromise
+    .then(function(data){
+      // Extract data
+      var oauthToken = data[0];
+      var oauthTokenSecret = data[1];
 
-    // Get the secret oauth request token
-    reqTokenSecrets[oauthToken] = oauthTokenSecret;
+      // Get the secret oauth request token
+      reqTokenSecrets[oauthToken] = oauthTokenSecret;
 
-    // Redirect user to Twitter Auth
-    var redirectURL = "https://api.twitter.com/oauth/authenticate"+"?oauth_token="+oauthToken;
-    res.redirect(redirectURL);
+      // Redirect user to Twitter Auth
+      var redirectURL = "https://api.twitter.com/oauth/authenticate"+"?oauth_token="+oauthToken;
+      res.redirect(redirectURL);
+      })
+    .catch(function(err) {
+      console.log("Error in Oauth requestTokenPromise: ", err);
     });
 
 });
@@ -187,86 +159,83 @@ app.post("/data", function(req, res, next) {
     data[0]: access token
     data[1]: access token secret
     data[2]: results
+
+    Receives accessToken, verfies credentials, and then crawls Twitter feed
    */
-  accessTokenPromise.then(function(data){
-    var accessToken = data[0];
-    var accessTokenSecret = data[1];
-    var results = data[2];
-  // add error handler!
+  accessTokenPromise
+    .then(function(data) {
+      var accessToken = data[0];
+      var accessTokenSecret = data[1];
+      var results = data[2];
+      // add error handler!
 
-  // on accessToken success, verify credentials
-  var verifyCredentialsPromise = oa.get('https://api.twitter.com/1.1/account/verify_credentials.json',
-                           accessToken,
-                           accessTokenSecret);
+      // on accessToken success, verify credentials
+      var verifyCredentialsPromise = oa.get('https://api.twitter.com/1.1/account/verify_credentials.json',
+                               accessToken,
+                               accessTokenSecret);
 
-  verifyCredentialsPromise.then(function(data) {
-    var userData = JSON.parse(data[0])
-    console.log("credentials are correct:", userData);
+      verifyCredentialsPromise
+        .then(function(data) {
 
-    twitterCredentials[0].access_token_key = accessToken;
-    twitterCredentials[0].access_token_secret = accessTokenSecret;
-    console.log("Twitter Credentials: ", twitterCredentials);
+        var userData = JSON.parse(data[0])
+        console.log("credentials are correct:", userData);
 
-    const crawler = new TwitterCrawler(twitterCredentials);
-    var twitterHandle = userData.screen_name; 
-    console.log("twitterHandle: ", twitterHandle);
+        twitterCredentials[0].access_token_key = accessToken;
+        twitterCredentials[0].access_token_secret = accessTokenSecret;
+        console.log("Twitter Credentials: ", twitterCredentials);
 
-    crawler.getUser(twitterHandle)
-    .then((user) => {
-      console.log(
-        "Obtained info for user " + user.name + user.id
-      );
+        const crawler = new TwitterCrawler(twitterCredentials);
+        var twitterHandle = userData.screen_name; 
+        console.log("twitterHandle: ", twitterHandle);
 
-      // Crawl tweets
-      // Todo: implement this recursively to get entire user timeline
-      // can this be implemented using Promise.all?
-      // from the verification response, we know the status count of the user
-      // see IBM sample apps for reference about paginating user timeline
-      console.log('Obtaining tweets...');
-      crawler.getTweets(twitterHandle, { min_tweets: 50, limit : 300 })
-        .then((tweets) => {
-          console.log(
-            "Obtained " + tweets.length + " tweets for user " + user.name + user.id
-          );
-          console.log("Tweet: ", tweets.slice(-1));
+        return crawler
+          .getUser(twitterHandle)
+          .then((user) => {
+            console.log(
+              "Obtained info for user " + user.name + user.id
+            );
 
-          console.log("Crawling finished.");
+          // Crawl tweets
+          // Todo: implement this recursively to get entire user timeline
+          // can this be implemented using Promise.all?
+          // from the verification response, we know the status count of the user
+          // see IBM sample apps for reference about paginating user timeline
+          console.log('Obtaining tweets...');
+          return crawler
+            .getTweets(twitterHandle, { min_tweets: 50, limit : 300 })
+            .then((tweets) => {
+              console.log(
+                "Obtained " + tweets.length + " tweets for user " + user.name + user.id
+              );
+              console.log("Tweet: ", tweets.slice(-1));
 
-          // format tweets into watson input
-          // count words while formatting tweets
-          // save watson input to db / **redis-CACHE (cache can be cleared often & faster READs)
-          // return word count
+              console.log("Crawling finished.");
+
+              // format tweets into watson input
+
+              // count words while formatting tweets
+              // send formatted input to redis as string and generate token to associate to user session
+              // send wordcount to user & userToken to associate redis session 
+              return {"input": "final input data string"};
+            });
+        }).catch(function(err) {
+          console.log("Error in getting user: ", err);
         });
-    })
-    .catch(function(err) {
-      console.log("Error in getting user: ", err);
-    });
 
 
-  }).then(function(data) {
-    // send success response to client with word count
-    res.json({"Twitter crawl successful: ": data});
-  }).catch(function(err) {
-    // if credentials verification throws an error, it will be 401 status code and supplied user credentials are wrong
-    console.log("Error in credentials verification:", err);
-  })
+      }).then(function(data) {
+        // send success response to client with word count & redis token
+        console.log("Finished twitter flow");
+        res.json(data);
 
-  // on USER SUBMIT, match email to db record
-
-  // format any new text input and append to db record
-
-  // send to Watson
-
-  // save response to DB and send to client 
-
-  // flag record as "completed successfully," to distinguish from incomplete user flows
-
-  console.log("accessTokens received");
+      }).catch(function(err) {
+        // if credentials verification throws an error, it will be 401 status code and supplied user credentials are wrong
+        console.log("Error in credentials verification:", err);
+      });
 
   }).catch(function(err) {
     console.log("Error in accessTokenPromise:", err);
   });
-
 });
 
 app.get("/*", function(req, res) {
@@ -285,24 +254,13 @@ app.post("/submit", function(req, res, next) {
   console.log("IP with proxy method: ", req.headers["x-forwarded-for"]);
   console.log("req.headers: ", req.headers);
 
-  // first asynchronously sends request to IBM API
-  // 
-  // if error, display error on client side
-  // if successful, send response to client and async save all input as well as the IBM response
+  // check redis cache for existing uploaded data associated with session / user
+  // if found, append text to data and send to IBM
+  // display error responses to user
+  // send success response to client, flush cache associated with user, and save response to mongo 
 
-  // resolver function for promise converter - ***move all of these to a utils file
-  function resolver(resolve, reject) {
-    return function (error, result) {
-      return error ? reject(error) : resolve(result);
-    };
-  }
-  // convert callback to promise
-  function toPromise(f) {
-    return new Promise(function (resolve, reject) {
-      return f(resolver(resolve, reject));
-    });
-  }
   // sanitize input parameters from text input
+  // add this to helper file
   function sanitize (parameters) {
     return extend(parameters, {
       text: parameters.textInput ? parameters.textInput.replace(/[\s]+/g, ' ') : undefined
@@ -325,7 +283,6 @@ app.post("/submit", function(req, res, next) {
     gender : req.body.gender,
     textInput : req.body.textInput,
     browserInfo: req.headers["user-agent"],
-    watsonData: data
   });
 
   // Personality Insights API needs JSON input unless otherwise specified
@@ -347,18 +304,9 @@ app.post("/submit", function(req, res, next) {
 });
 
 /**
-* Port Configs and start server
-**/
-
-const port = Number(process.env.PORT || 3001);
-
-app.listen(port, function () {
-  console.log("server running at localhost:3001, go refresh and see magic");
-});
-
-/**
 * Webpack configs
 **/
+
 if (!env.production) {
   new WebpackDevServer(webpack(webpackDevConfig), {
     publicPath: "/client/",
@@ -379,3 +327,19 @@ if (!env.production) {
     console.log("webpack dev server listening on localhost:3000");
   });
 }
+
+/**
+* Port Configs and start server -- add this config file
+**/
+
+const port = Number(process.env.PORT || 3001);
+
+
+/**
+* Start the server
+**/ 
+
+app.listen(port, function () {
+  console.log("server running at localhost:3001, go refresh and see magic");
+});
+
