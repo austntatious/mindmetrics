@@ -45,7 +45,7 @@ export default class Form extends Component {
     
     // child window should pass Tokens into this function so that parent can send POST
     window.sendPost = function(token, verifier) {
-      const fetchReq = new Request("/data" + "?oauth_token=" + token + "&oauth_verifier=" + verifier, httpOptions);
+      const fetchReq = new Request("/api/data" + "?oauth_token=" + token + "&oauth_verifier=" + verifier, httpOptions);
       window.fetch(fetchReq, httpOptions)
         .then(function(res) {
           res.json().then(function(data) {
@@ -75,7 +75,7 @@ export default class Form extends Component {
 
   connectData = () => {
     // make width and height dynamic based on parent window
-    var url = "/oauth",
+    var url = "/api/oauth",
         title= "Mindmetrics Twitter Authentication",
         w   = 600,
         h   = 556,
@@ -105,7 +105,7 @@ export default class Form extends Component {
       body: JSON.stringify(userData)
     };
 
-    const fetchReq = new Request("/submit", httpOptions);
+    const fetchReq = new Request("/api/submit", httpOptions);
     fetch(fetchReq, httpOptions)
       .then((response) => {
         response.json().then((data) => {
