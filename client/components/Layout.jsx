@@ -11,7 +11,9 @@ class Layout extends Component {
   render() {
     return (
       <div id='app' className={this.props.classnames} style={this.props.style}>
-        <Header />
+        {
+          this.props.classnames === 'Form' ? <Header mod="is-form" /> : <Header />
+        }
         <section id='content-container'>
           {this.props.children}
         </section>

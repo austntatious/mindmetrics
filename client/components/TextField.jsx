@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 export default class TextField extends Component {
 
   render() {
-    const {mod, name, placeholder, onFocus, rows, cols} = this.props;
+    const {mod, name, placeholder, value, onFocus, rows, cols} = this.props;
     let cls = 'field';
 
     if (mod) {
@@ -22,7 +22,7 @@ export default class TextField extends Component {
                   cols={cols}
                   onFocus={onFocus}
                   onChange={this.props.onChange}
-          />
+        />
       </div>
     );
   }

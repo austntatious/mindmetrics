@@ -28,7 +28,8 @@ export default class Form extends Component {
     lastName: "",
     wordCount: 0,
     twitterState: 0, // 0 is default, 1 is loading, 2 is loaded 
-    input: {}
+    input: {},
+    textInput: ''
   }
 
   componentDidMount() {
@@ -175,20 +176,6 @@ export default class Form extends Component {
             {
               this.state.showTextArea &&
                <div>
-                 <div className="see-result">
-                   <div className="see-result__line"></div>
-                   <InfoMeter proc="97"/>
-                   <Btn type="link" onClick={this.nextPage} mod="is-big is-block">See My Results</Btn>
-                   <p className="section__descr">
-                     By clicking Analyze, you agree to Mindmetrics Terms and Privacy Policy
-                   </p>
-                 </div>
-
-                 <div className="section__separator">
-                   <span>
-                     OR
-                   </span>
-                 </div>
                  <SelectField mod="i-mt-27 i-mb-40" options={options} />
 
                  <TextField mod="i-mt-19" rows="18" name="text" placeholder="This is a dummy text"
@@ -199,10 +186,10 @@ export default class Form extends Component {
 
           <div className="see-result">
             <div className="see-result__line"></div>
-            <InfoMeter proc="97"/>
+            <InfoMeter textValue={this.state.textInput} />
             <Btn type="link" onClick={this.connectData} mod="is-big is-block">See My Results</Btn>
             <p className="section__descr">
-              By clicking Analyze, you agree to Mindmetrics Terms and Privacy Policy
+              By clicking Analyze, you agree to Mindmetrics <a href="#">Terms and Privacy Policy</a>
             </p>
           </div>
         </section>

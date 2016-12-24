@@ -102,6 +102,21 @@ a {
     z-index: 100;
   });
 
+  &.is-form {
+
+    .header__right {
+      display: none;
+    }
+
+    .header__left {
+      width: 100%;
+    }
+
+    .logo {
+      margin: 0 auto;
+    }
+  }
+
   &__wrap {
     padding-top: 13px;
     padding-bottom: 13px;
@@ -173,7 +188,7 @@ a {
 
     .tablet({
       position: absolute;
-      top: 40px;
+      top: 50%;
       left: 50%;
       transform: translate(-50%,-50%)
     });

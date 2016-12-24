@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import classnames from 'classnames';
 
 import Hamburger from './Hamburger';
 import Nav from './Nav';
@@ -47,10 +48,11 @@ export default class Header extends Component {
     this.setState({open: !this.state.open});
   }
 
+
   render() {
 
     return (
-      <header className="header">
+      <header className={classnames("header", this.props.mod)}>
         <div className="header__wrap container">
           <div className="header__left">
             <MobileMenu open={this.state.open} />
