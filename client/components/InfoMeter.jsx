@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 
+const METER_GRADES = { one: 200, two: 400, three: 600, four: 800, five: 1000 };
+
 export default class InfoMeter extends Component {
 
   render() {
-    const METER_GRADES = { one: 200, two: 400, three: 600, four: 800, five: 1000 };
 
     const textValue = this.props.textValue;
     let wordsCount = textValue.split(' ').length;
@@ -38,6 +39,14 @@ export default class InfoMeter extends Component {
                 <div className="info-meter__percent is-eighty"></div>
               </div>
             : wordsCount <= METER_GRADES.five ?
+              <div className="info-meter__scale">
+                <div className="info-meter__percent is-hundred"></div>
+                <div className="info-meter__percent is-hundred"></div>
+                <div className="info-meter__percent is-hundred"></div>
+                <div className="info-meter__percent is-hundred"></div>
+                <div className="info-meter__percent is-hundred"></div>
+              </div>
+            : wordsCount > METER_GRADES.five ?
               <div className="info-meter__scale">
                 <div className="info-meter__percent is-hundred"></div>
                 <div className="info-meter__percent is-hundred"></div>
