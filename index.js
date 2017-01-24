@@ -9,11 +9,14 @@ const Promise = require('bluebird');
 const express = require("express");
 const app     = express();
 const webpack = require("webpack");
-const watsonCredentials = require('./watson-credentials.json').personality_insights;
+const redis   = require("redis");
+const redisClient  = redis.createClient();
 const watson      = require('watson-developer-cloud');
 const _           = require("lodash");
 const extend      = _.extend;
 const mongoose    = require("mongoose");
+const watsonCredentials = require('./watson-credentials.json').personality_insights;
+
 
 // import user model
 const User        = require("./server/models/User");
@@ -54,7 +57,7 @@ if (env.production) {
  **/
 
 const connectMongo = function () {
-  console.log('connect-to-mongodb');
+  console.log("Initialize MongoDB connection");
   const options = {
     server: { socketOptions: { keepAlive: 1, connectTimeoutMS: 30000 } },
     replset: { socketOptions: { keepAlive: 1, connectTimeoutMS : 30000 } }
@@ -63,11 +66,27 @@ const connectMongo = function () {
 };
 connectMongo();
 
+// todo: deal with reconnections and errors gracefully 
 mongoose.connection.on('error', console.log.bind(console, 'mongoose-connection-error:'));
-mongoose.connection.on('open', console.log.bind(console,'connect-to-mongodb'));
+mongoose.connection.on('open', console.log.bind(console,'Connected to MongoDB'));
 // retry connection on disconnection
 mongoose.connection.on('disconnected', connectMongo);
 
+/**
+*  Connect to Redis
+**/
+// todo: add Redis connect URI
+
+redisClient.on("connect", function () {
+    console.log("Connected to Redis");
+});
+
+redisClient.on("error", function (err) {
+    console.log("Error " + err);
+});
+
+// export client for use on API methods
+module.exports = redisClient;
 
 /**
 * Initialize routes

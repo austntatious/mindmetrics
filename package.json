@@ -61,6 +61,7 @@
     "react-mixin": "^2.0.2",
     "react-router": "^2.4.0",
     "react-tap-event-plugin": "^2.0.1",
+    "redis": "^2.6.5",
     "style-loader": "^0.13.1",
     "twit": "^2.2.5",
     "twitter-crawler": "^1.0.3",
