@@ -28,8 +28,8 @@ export default class Form extends Component {
     lastName: "",
     wordCount: 0,
     twitterState: 0, // 0 is default, 1 is loading, 2 is loaded 
-    input: {},
-    textInput: ''
+    textInputWc: 0,
+    uuid: 0
   }
 
   componentDidMount() {
@@ -51,7 +51,10 @@ export default class Form extends Component {
         .then(function(res) {
           res.json().then(function(data) {
             console.log("response from POST: ", data);
-            self.setState({input: data["input"]});
+            self.setState({
+              wordCount: data["wordCount"],
+              uuid: data["uuid"]
+              });
             console.log("this.state: ", self.state);
             // reset component state to show success from social media data and wordcount
           }, function(err) {
@@ -70,7 +73,14 @@ export default class Form extends Component {
 
   setField = (name) => {
     return (e) => {
-      this.setState({[name]: e.target.value});
+        let s = e.target.value;
+        s = s.replace(/(^\s*)|(\s*$)/gi,"");//exclude  start and end white-space
+        s = s.replace(/[ ]{2,}/gi," ");//2 or more space to 1
+        s = s.replace(/\n /,"\n"); // exclude newline with a start spacing
+        let wc = s.split(' ').length
+        this.setState({
+          [name]: wc
+        }); 
     };
   }
 
@@ -179,14 +189,14 @@ export default class Form extends Component {
                  <SelectField mod="i-mt-27 i-mb-40" options={options} />
 
                  <TextField mod="i-mt-19" rows="18" name="text" placeholder="This is a dummy text"
-                            onChange={this.setField("textInput")}/>
+                            onChange={this.setField("textInputWc")}/>
                </div>
             }
           </div>
 
           <div className="see-result">
             <div className="see-result__line"></div>
-            <InfoMeter textValue={this.state.textInput} />
+            <InfoMeter wordCount={this.state.wordCount + this.state.textInputWc} />
             <Btn type="link" onClick={this.connectData} mod="is-big is-block">See My Results</Btn>
             <p className="section__descr">
               By clicking Analyze, you agree to Mindmetrics <a href="#">Terms and Privacy Policy</a>

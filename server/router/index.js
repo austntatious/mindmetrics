@@ -6,7 +6,7 @@ module.exports = function (app) {
   app.use("/api",  require("./api"));
   // app.use("/auth", require("./auth"));
 
-  // Routes
+  // Routes - render React app
   app.use("/", require("./routes"));
 
 };

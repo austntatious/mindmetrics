@@ -3,13 +3,16 @@
 const express = require("express");
 const router = express.Router();
 const oauth       = require("oauth-libre/lib/oauth-promise").OAuth;
-// move relative paths to absolute paths
+// todo: change relative paths to absolute paths
 const config    = require("../../config/info");
 const twitterCredentials = config.twitterCredentials;
 const TwitterCrawler = require("twitter-crawler");
+const pi_input = require('personality-insights-input');
+// import Redis obj from index
+const redisClient = require("../../index");
+const redis       = require("redis");
 
 // Extending router with api methods
-
 
 /*
  STEP 1 - init the OAuth Client!
@@ -120,10 +123,7 @@ function twitterOauthAccessToken(req, res, next) {
             );
 
           // Crawl tweets
-          // Todo: implement this recursively to get entire user timeline
-          // can this be implemented using Promise.all?
-          // from the verification response, we know the status count of the user
-          // see IBM sample apps for reference about paginating user timeline
+          // Todo: implement this recursively to get entire user timeline; we know total tweet count from credentials verification
           console.log("Obtaining tweets...");
           return crawler
             .getTweets(twitterHandle, { min_tweets: 50, limit : 300 })
@@ -132,15 +132,40 @@ function twitterOauthAccessToken(req, res, next) {
                 "Obtained " + tweets.length + " tweets for user " + user.name + user.id
               );
               console.log("Tweet: ", tweets.slice(-1));
-
               console.log("Crawling finished.");
 
-              // format tweets into watson input
+              // save tweets in original form(?)
 
-              // count words while formatting tweets
-              // send formatted input to redis as string and generate token to associate to user session
-              // send wordcount to user & userToken to associate redis session 
-              return {"input": "final input data string"};
+              var tweetWords = tweets.reduce(function(prev, currTweet) {
+                function countWords(s){
+                  s = s.replace(/(^\s*)|(\s*$)/gi,"");//exclude  start and end white-space
+                  s = s.replace(/[ ]{2,}/gi," ");//2 or more space to 1
+                  s = s.replace(/\n /,"\n"); // exclude newline with a start spacing
+                  return s.split(' ').length; 
+                }
+
+                var totalWords = countWords(currTweet.text) + prev;
+                return totalWords;
+              }, 0);
+
+              console.log("total words in tweets:", tweetWords);
+  
+              // todo: format tweets async
+              var tweetsFormatted = JSON.stringify(pi_input.fromTweets(tweets));
+
+              // send formatted input to redis as string and generate token to associate to user session - do this async!!!
+              var uuid = Math.floor(Math.random() * 1000000);
+              redisClient.hset(uuid, "tweets", tweetsFormatted, redis.print);
+
+              // change this to promise
+              redisClient.hgetall(uuid, function (err, obj) {
+                console.dir("Saved redis hash:", obj.tweets);
+              });
+              
+              // store string to user's hash. each keyvalue pair corresponds to a different data input - text input, twitter, fb, etc
+
+              // finally, send wordcount to user & userToken to associate redis session 
+              return {"uuid": uuid, "wordCount": tweetWords};
             });
         }).catch(function(err) {
           console.log("Error in getting user: ", err);
@@ -163,9 +188,73 @@ function twitterOauthAccessToken(req, res, next) {
 
 }
 
-// route for all oauth requests
+// Final user post submission - contains email, name, and possibly form text   
+function submitData(req, res, next) {    
+     
+   // incoming request meta data   
+   console.log("post submission received, req.body = ", req.body);   
+   console.log("User-Agent: " + req.headers["user-agent"]);    
+   console.log("IP: ", req.connection.remoteAddress);    
+   console.log("IP with proxy method: ", req.headers["x-forwarded-for"]);    
+   console.log("req.headers: ", req.headers);    
+   
+   /**/  
+   // check redis cache for existing uploaded data associated with session / user    
+   // if found, append data to current text input and send to IBM
+   // submit Req will have email, name, and possibly form text data    
+   // display error responses to user    
+   // send success response to client, flush cache associated with user, and save response to mongo    
+   /**/
+
+   // sanitize input parameters from text input    
+   // add this to helper file    
+   // function sanitize (parameters) {    
+   //   return extend(parameters, {   
+   //     text: parameters.textInput ? parameters.textInput.replace(/[\s]+/g, ' ') : undefined    
+   //   });   
+   // }   
+     
+   // // define function to send REST API request for watson personality insights   
+   // var personality_insights = watson.personality_insights(watsonCredentials),    
+   //   getProfile = function (parameters) {    
+   //     // return a promise that uses toPromise to then fire the resolver callback, which will resolve or reject the promise    
+   //     return toPromise(function(callback) { personality_insights.profile(sanitize(parameters), callback)});   
+   //   };    
+     
+   // add mock data.json as mock API response data   
+   // const user = new User({   
+   //   name : req.body.name,   
+   //   uuid: uuid.v1(),    
+   //   email : req.body.email,   
+   //   birthyear: req.body.birthyear,    
+   //   gender : req.body.gender,   
+   //   textInput : req.body.textInput,   
+   //   browserInfo: req.headers["user-agent"],   
+   // });   
+     
+   // Personality Insights API needs JSON input unless otherwise specified   
+   // getProfile(user)
+   // .then(function(results) {    
+   //   res.json(results);   
+   //   user.watsonData = results;   
+   // user.save().then(function(saved) {    
+   //   res.json(saved); // delete this after testing   
+   //   console.log("Saved new user data:", saved);   
+   // }, function(err) {    
+   //   res.json(err);    
+   //   console.log("Error saving new user:", err);   
+   // });   
+   // }, function(err) {   
+   //   console.log("error from getProfile", err);   
+   //   res.json("ERROR:", err);   
+   // });    
+   // ADD ERROR HANDLING   
+ }   
+
+// route for all oauth requests and data submissions
 router.get("/oauth", twitterOauthRequestToken);
 router.post("/data", twitterOauthAccessToken);
+router.post("/submit", submitData);
 
 
 module.exports = router;

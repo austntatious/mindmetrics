@@ -1,44 +1,56 @@
 import React, { Component } from 'react';
 
-const METER_GRADES = { one: 200, two: 400, three: 600, four: 800, five: 1000 };
+const METER_GRADES = { one: 100, two: 300, three: 600, four: 1200, five: 3000 };
 
 export default class InfoMeter extends Component {
 
   render() {
 
-    const textValue = this.props.textValue;
-    let wordsCount = textValue.split(' ').length;
+    let wordCount = this.props.wordCount;
 
     return (
       <div className="info-meter">
         <div className="info-meter__text">
-          <span>{wordsCount}</span> / 1000 - Connect more stuff, dude!
+          <span>{wordCount} words detected - </span>
+          {
+            wordCount < METER_GRADES.two ?
+              "Very Weak Analysis"
+            : wordCount <= METER_GRADES.three ?
+              "Weak Analysis"
+            : wordCount <= METER_GRADES.four ?
+              "OK Analysis"
+            : wordCount <= METER_GRADES.five ?
+              "Strong Analysis"
+            : wordCount > METER_GRADES.five ?
+              "Very Strong Analysis"
+            : null
+          }
         </div>
         <div className="info-meter__scale">
           {
-            wordsCount <= METER_GRADES.one ?
+            wordCount <= METER_GRADES.one ?
               <div className="info-meter__scale">
                 <div className="info-meter__percent is-twenty"></div>
               </div>
-            : wordsCount <= METER_GRADES.two ?
+            : wordCount <= METER_GRADES.two ?
               <div className="info-meter__scale">
                 <div className="info-meter__percent is-forty"></div>
                 <div className="info-meter__percent is-forty"></div>
               </div>
-            : wordsCount <= METER_GRADES.three ?
+            : wordCount <= METER_GRADES.three ?
               <div className="info-meter__scale">
                 <div className="info-meter__percent is-sixty"></div>
                 <div className="info-meter__percent is-sixty"></div>
                 <div className="info-meter__percent is-sixty"></div>
               </div>
-            : wordsCount <= METER_GRADES.four ?
+            : wordCount <= METER_GRADES.four ?
               <div className="info-meter__scale">
                 <div className="info-meter__percent is-eighty"></div>
                 <div className="info-meter__percent is-eighty"></div>
                 <div className="info-meter__percent is-eighty"></div>
                 <div className="info-meter__percent is-eighty"></div>
               </div>
-            : wordsCount <= METER_GRADES.five ?
+            : wordCount <= METER_GRADES.five ?
               <div className="info-meter__scale">
                 <div className="info-meter__percent is-hundred"></div>
                 <div className="info-meter__percent is-hundred"></div>
@@ -46,7 +58,7 @@ export default class InfoMeter extends Component {
                 <div className="info-meter__percent is-hundred"></div>
                 <div className="info-meter__percent is-hundred"></div>
               </div>
-            : wordsCount > METER_GRADES.five ?
+            : wordCount > METER_GRADES.five ?
               <div className="info-meter__scale">
                 <div className="info-meter__percent is-hundred"></div>
                 <div className="info-meter__percent is-hundred"></div>

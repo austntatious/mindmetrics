@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 export default class TextField extends Component {
-
   render() {
     const {mod, name, placeholder, value, onFocus, rows, cols} = this.props;
     let cls = 'field';
