@@ -41,7 +41,7 @@ class Home extends Component {
         {this.context.mobile === 'small' ? null :
           <section className="section is-about-you">
             <div className="section__wrap container">
-              <SectionDescription title="What your words say about you"
+              <SectionDescription title="What Your Words Say About You"
                                   text="Your writing is a sample of how you think. Studying the patterns we've found in the way certain people of certain personalities use words, we can use your writing to determine using data, what kind of personality you have exactly."
                                   href="#"
                 />
@@ -51,8 +51,8 @@ class Home extends Component {
         <section className="section is-data">
           <div className="section__wrap container">
             <SectionDescription mod="is-small"
-                                title="Data driven and scientific"
-                                titleMobile="How it Works?"
+                                title="Data Driven and Scientific"
+                                titleMobile="How it Works"
                                 text="Using data science and natural language processing, we're able to predict your personality based on the most popular personality model used in the psychology community, the Five Factor Personality model."
                                 href="#"
                                 ico="is-man-green"
@@ -62,8 +62,8 @@ class Home extends Component {
         <section className="section is-ease-use">
           <div className="section__wrap container">
             <SectionDescription mod="is-small"
-                                title="Easy to use"
-                                titleMobile="Easy to use"
+                                title="Easy to Use"
+                                titleMobile="Easy to Use"
                                 text="Faster than any other personality analysis out there. Just choose where you want us to analyze, your twitter, Facebook, or copy and paste your blog. We'll have it analyzed in seconds."
                                 href="#"
                                 linkcolor="is-orange"
