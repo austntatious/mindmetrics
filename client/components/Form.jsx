@@ -145,10 +145,13 @@ export default class Form extends Component {
 
           <div className="section__info">
             <Title size="2">
-              Your info
+              Set up and Analyze
             </Title>
             <p className="section__sub-title">
-              Small text Small text Small text
+              Mindmetrics is the easiest way to get your personality analyzed accurately.
+            </p>
+            <p className="section__sub-title"> 
+            Set up your profile and get your personality report instantly.
             </p>
           </div>
 
@@ -199,7 +202,7 @@ export default class Form extends Component {
             <InfoMeter wordCount={this.state.wordCount + this.state.textInputWc} />
             <Btn type="link" onClick={this.connectData} mod="is-big is-block">See My Results</Btn>
             <p className="section__descr">
-              By clicking Analyze, you agree to Mindmetrics <a href="#">Terms and Privacy Policy</a>
+              By clicking Analyze, you agree to Mindmetrics <a href="#">Terms</a> and <a href="#">Privacy</a>
             </p>
           </div>
         </section>

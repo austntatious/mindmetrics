@@ -17,7 +17,9 @@ class Layout extends Component {
         <section id='content-container'>
           {this.props.children}
         </section>
-        <Footer />
+        {
+          this.props.classnames !== "Form" ? <Footer /> : null
+        }
       </div>
     );
   }
