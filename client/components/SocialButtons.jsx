@@ -41,7 +41,7 @@ export default class SocialButtons extends Component {
 
     var connectionButtonMap = {
       0: 'Connect to %sm%',
-      1: 'Connecting %sm%...',
+      1: 'Connecting to %sm%...',
       2: 'Connected to %sm%'
     };
 
