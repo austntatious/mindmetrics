@@ -6,23 +6,43 @@ const _           = require("lodash");
 export default class SocialButtons extends Component {
 
   render() {
-    var connections = [
+    var connections = this.props.connections || [
       {
         name: 'Facebook',
         icon: 'is-fb',
         status: [0,1,2][0]
       },
       {
+        name: 'Facebook',
+        icon: 'is-fb',
+        status: [0,1,2][1]
+      },
+      {
+        name: 'Facebook',
+        icon: 'is-fb',
+        status: [0,1,2][2]
+      },
+      {
+        name: 'Twitter',
+        icon: 'is-tw',
+        status: [0,1,2][0]
+      },
+      {
+        name: 'Twitter',
+        icon: 'is-tw',
+        status: [0,1,2][1]
+      },
+      {
         name: 'Twitter',
         icon: 'is-tw',
         status: [0,1,2][2]
-      }
+      },
     ];
 
     var connectionButtonMap = {
-      0: 'Connect',
-      1: 'Connecting',
-      2: 'Connected'
+      0: 'Connect to %sm%',
+      1: 'Connecting %sm%...',
+      2: 'Connected to %sm%'
     };
 
 
@@ -31,10 +51,10 @@ export default class SocialButtons extends Component {
         {
           _.map(connections, (c, i) => {
             return (
-              <div className="social-button" key={i} style={{paddingBottom: 30, marginBottom:30}}>
+              <div className={'social-button social-' + c.name.toLowerCase() + ' social-status-' + c.status} key={i} style={{}}>
                 <SocialButtonsEl mod={'is-social is-' + c.name.toLowerCase() + ' status-' + c.status}>
                   <Icon ico={c.icon} />
-                  {connectionButtonMap[c.status]} to {c.name}
+                  {connectionButtonMap[c.status].replace('%sm%', c.name)}
                 </SocialButtonsEl>
                 {
                   // <div className="clearfix">
