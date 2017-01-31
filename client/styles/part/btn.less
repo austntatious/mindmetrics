@@ -103,13 +103,17 @@
     color: #666;
     margin-bottom:30;
 
-    &.status-0:hover, &.status-1, &.status-2{
+    &.status-0:hover, &.status-1{
       // unconnected and hovered, connecting, conneted
       &.is-facebook{
         border-color: #365899;
+        background-color: #365899;
+        color: #fff;
       }
       &.is-twitter{
         border-color: #1b95e0;
+        background-color: #1b95e0;
+        color: #fff;
       }
     }
 
@@ -117,31 +121,24 @@
       // unconnected
 
       // override it when it's unloaded
-      border-color: #f5f5f5;
+      &.is-facebook{
+        border-color: #365899;
+      }
+      &.is-twitter{
+        border-color: #1b95e0;
+      }
     }
     &.status-1{
       // connecting
+
       // todo: set up loader icon
-      &.is-facebook{
-        background-color: #fff;
-      }
-      &.is-twitter{
-        background-color: #fff;
-      }
     }
 
     &.status-2{
       // connected
-      // todo: set up connecting and connected sm icons
-
-      color: #fff;
-
-      &.is-facebook{
-        background-color: #365899;
-      }
-      &.is-twitter{
-        background-color: #1b95e0;
-      }
+      
+      border-color: #f5f5f5;
+      background-color: #f5f5f5;
     }
 
     i {
