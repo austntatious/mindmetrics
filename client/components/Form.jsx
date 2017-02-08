@@ -27,13 +27,33 @@ export default class Form extends Component {
     firstName: "",
     lastName: "",
     wordCount: 0,
-    twitterState: 0, // 0 is default, 1 is loading, 2 is loaded
+    twitterState: 0,
     textInputWc: 0,
-    uuid: 0
+    uuid: 0,
+
+    // 0 is default, 1 is loading, 2 is loaded
+    connections: {
+      facebook: {
+        name: 'facebook',
+        title: 'Facebook',
+        icon: 'is-fb',
+        status: 0
+      },
+      twitter: {
+        name: 'twitter',
+        title: 'Twitter',
+        icon: 'is-tw',
+        status: 0
+      }
+    }
   }
 
   componentDidMount() {
     var self = this;
+
+    // todo: Component currently assumes that users are not connected with their SM accounts when component loads first.
+    //  Update connections in the state with the user's associated connection statuses
+
     // register the POST function that will fire on Oauth window close
     const fetchHeaders = new Headers();
     fetchHeaders.append("Content-Type", "application/json");
@@ -43,7 +63,7 @@ export default class Form extends Component {
       headers: fetchHeaders,
       mode: "cors"
     };
-    
+
     // child window should pass Tokens into this function so that parent can send POST
     window.sendPost = function(token, verifier) {
       const fetchReq = new Request("/api/data" + "?oauth_token=" + token + "&oauth_verifier=" + verifier, httpOptions);
@@ -69,6 +89,7 @@ export default class Form extends Component {
     }
   }
 
+
   openTextArea = () => {
     this.setState({showTextArea: true});
   }
@@ -82,14 +103,30 @@ export default class Form extends Component {
         let wc = s.split(' ').length
         this.setState({
           [name]: wc
-        }); 
+        });
     };
   }
 
-  connectData = () => {
-    this.setState({
-              twitterState: 1
-              });
+  onConnect = (connection) => {
+    // only continue if status is unconnected (0)
+    if (connection.status != 0) return;
+
+    var connectMap = {
+      twitter: 'onConnectTwitter',
+      facebook: 'onConnectFacebook'
+    }
+
+    // Call the corresponding SM connecting function
+    this[connectMap[connection.name]](connection);
+  }
+
+  onConnectTwitter = (connection) => {
+    // Set the state to be loading and rerender
+    this.state.connections.twitter.connection = 1;
+    this.forceUpdate();
+
+    // todo: set it to 2, once loaded
+
     // make width and height dynamic based on parent window
     var url = "/api/oauth",
         title= "Mindmetrics Twitter Authentication",
@@ -100,14 +137,18 @@ export default class Form extends Component {
         left = wLeft + (window.innerWidth / 2) - (w / 2),
         top = wTop + (window.innerHeight / 2) - (h / 2);
     var childWindowRef = window.open(
-        url, 
-        title, 
+        url,
+        title,
         'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no,copyhistory=no,width=' + w + ',height=' + h + ', top=' + top + ', left=' + left
         );
   }
 
-  // TODO: edit this so that on submit, loading state immediately overlays over screen 
-  // on error, flash to screen. on success, move page to results 
+  onConnectFacebook = (connection) => {
+    console.log(connection)
+  }
+
+  // TODO: edit this so that on submit, loading state immediately overlays over screen
+  // on error, flash to screen. on success, move page to results
   submitData = () => {
     const {email, textInput} = this.state;
     let userData = {email, textInput};
@@ -142,7 +183,7 @@ export default class Form extends Component {
   validateEmail = () => {
     return EMAIL_REGEX.test(this.state.email);
   }
-  
+
   render() {
     return (
       <Layout classnames='Form'>
@@ -155,7 +196,7 @@ export default class Form extends Component {
             <p className="section__sub-title">
               Mindmetrics is the easiest way to get your personality analyzed accurately.
             </p>
-            <p className="section__sub-title"> 
+            <p className="section__sub-title">
             Set up your profile and get your personality report instantly.
             </p>
           </div>
@@ -177,7 +218,7 @@ export default class Form extends Component {
             <Title size="3">
               Data
             </Title>
-            <SocialButtons connectStatus={this.state.twitterState} onClick={this.connectData} />
+            <SocialButtons connections={this.state.connections} onConnect={this.onConnect} />
           </div>
 
           <div className="section__separator">

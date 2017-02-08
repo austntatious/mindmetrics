@@ -4,22 +4,8 @@ import Icon from './Icon';
 const _           = require("lodash");
 
 export default class SocialButtons extends Component {
-
   render() {
-    // todo: add Facebook to connectStatus state/props
-    var connectStatus = this.props.connectStatus;
-    var connections = this.props.connections || [
-      {
-        name: 'Facebook',
-        icon: 'is-fb',
-        status: 0
-      },
-      {
-        name: 'Twitter',
-        icon: 'is-tw',
-        status: connectStatus
-      },
-    ];
+    var connections = this.props.connections;
 
     var connectionButtonMap = {
       0: 'Connect to %sm%',
@@ -31,39 +17,13 @@ export default class SocialButtons extends Component {
     return (
       <div className="social-buttons" style={{width:'100%'}}>
         {
-          _.map(connections, (c, i) => {
+          _.map(connections, (c) => {
             return (
-              <div className={'social-button social-' + c.name.toLowerCase() + ' social-status-' + c.status} key={i} style={{}}>
-                <SocialButtonsEl mod={'is-social is-' + c.name.toLowerCase() + ' status-' + c.status} onClick={this.props.onClick}>
+              <div className={'social-button social-' + c.name + ' social-status-' + c.status} key={c.name}>
+                <SocialButtonsEl mod={'is-social is-' + c.name + ' status-' + c.status} onClick={this.props.onConnect.bind(null, c)}>
                   <Icon ico={c.icon} />
-                  {connectionButtonMap[c.status].replace('%sm%', c.name)}
+                  {connectionButtonMap[c.status].replace('%sm%', c.title)}
                 </SocialButtonsEl>
-                {
-                  // <div className="clearfix">
-                  //   <div style={{marginBottom: 15}}>
-                  //     {connectionHeaderMap[c.status]} to {c.name} <br/>
-                  //     {
-                  //       // <p>Your {c.name} friends have become part of your network on MindMetrics. We will never post to {c.name} or message your friends without your permission.</p>
-                  //     }
-                  //   </div>
-                  //   <div style={{}}>
-                  //     {
-                  //       {
-                  //         0: (
-                  //
-                  //         ),
-                  //         2: (
-                  //           <span className={'is-social is-connected is-' + c.name.toLowerCase()}>
-                  //             {connectionButtonMap[c.status]} to {c.name}
-                  //           </span>
-                  //         )
-                  //       }[c.status]
-                  //
-                  //     }
-                  //
-                  //   </div>
-                  // </div>
-                }
               </div>
             )
           })
