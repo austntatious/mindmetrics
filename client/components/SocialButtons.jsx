@@ -6,36 +6,18 @@ const _           = require("lodash");
 export default class SocialButtons extends Component {
 
   render() {
+    // todo: add Facebook to connectStatus state/props
+    var connectStatus = this.props.connectStatus;
     var connections = this.props.connections || [
       {
         name: 'Facebook',
         icon: 'is-fb',
-        status: [0,1,2][0]
-      },
-      {
-        name: 'Facebook',
-        icon: 'is-fb',
-        status: [0,1,2][1]
-      },
-      {
-        name: 'Facebook',
-        icon: 'is-fb',
-        status: [0,1,2][2]
+        status: 0
       },
       {
         name: 'Twitter',
         icon: 'is-tw',
-        status: [0,1,2][0]
-      },
-      {
-        name: 'Twitter',
-        icon: 'is-tw',
-        status: [0,1,2][1]
-      },
-      {
-        name: 'Twitter',
-        icon: 'is-tw',
-        status: [0,1,2][2]
+        status: connectStatus
       },
     ];
 
@@ -52,7 +34,7 @@ export default class SocialButtons extends Component {
           _.map(connections, (c, i) => {
             return (
               <div className={'social-button social-' + c.name.toLowerCase() + ' social-status-' + c.status} key={i} style={{}}>
-                <SocialButtonsEl mod={'is-social is-' + c.name.toLowerCase() + ' status-' + c.status}>
+                <SocialButtonsEl mod={'is-social is-' + c.name.toLowerCase() + ' status-' + c.status} onClick={this.props.onClick}>
                   <Icon ico={c.icon} />
                   {connectionButtonMap[c.status].replace('%sm%', c.name)}
                 </SocialButtonsEl>
@@ -86,18 +68,6 @@ export default class SocialButtons extends Component {
             )
           })
         }
-        {
-          // <div className="social-button">
-          // </div>
-          // <SocialButtonsEl mod="is-social is-facebook" connect="true">
-          //   <Icon ico="is-fb" />
-          //   Conntect Facebook
-          // </SocialButtonsEl>
-          // <SocialButtonsEl mod="is-social is-twitter" connect="true">
-          //   <Icon ico="is-tw" />
-          //   Conntect Twitter
-          // </SocialButtonsEl>
-        }
       </div>
     );
   }
@@ -107,12 +77,11 @@ class SocialButtonsEl extends Component {
 
   render() {
     const {mod, connect} = this.props;
-    let mark = <span className="mark"><i className="ico is-check-mark"></i></span>;
 
     return (
 
       <div className="social-buttons__el">
-        <Btn mod={mod}>
+        <Btn mod={mod} onClick={this.props.onClick}>
           {this.props.children}
         </Btn>
       </div>

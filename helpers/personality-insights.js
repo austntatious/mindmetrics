@@ -6,7 +6,7 @@
 
 
 var
-  credentials = require('../credentials.json').personality_insights,
+  credentials = require('../watson-credentials.json').personality_insights,
   watson      = require('watson-developer-cloud'),
   _           = require('underscore'),
   extend      = _.extend,
@@ -56,7 +56,7 @@ var sanitize = function (parameters) {
   return extend(parameters, {
       text: parameters.text ? parameters.text.replace(/[\s]+/g, ' ') : undefined
     });
-  };
+};
 
 var profileFromTweets = function (parameters) {
     return function (tweets) {

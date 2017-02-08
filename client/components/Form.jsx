@@ -27,7 +27,7 @@ export default class Form extends Component {
     firstName: "",
     lastName: "",
     wordCount: 0,
-    twitterState: 0, // 0 is default, 1 is loading, 2 is loaded 
+    twitterState: 0, // 0 is default, 1 is loading, 2 is loaded
     textInputWc: 0,
     uuid: 0
   }
@@ -53,8 +53,10 @@ export default class Form extends Component {
             console.log("response from POST: ", data);
             self.setState({
               wordCount: data["wordCount"],
-              uuid: data["uuid"]
+              uuid: data["uuid"],
+              twitterState: 2
               });
+            // todo: allow state updates to account for error cases
             console.log("this.state: ", self.state);
             // reset component state to show success from social media data and wordcount
           }, function(err) {
@@ -85,6 +87,9 @@ export default class Form extends Component {
   }
 
   connectData = () => {
+    this.setState({
+              twitterState: 1
+              });
     // make width and height dynamic based on parent window
     var url = "/api/oauth",
         title= "Mindmetrics Twitter Authentication",
@@ -103,7 +108,7 @@ export default class Form extends Component {
 
   // TODO: edit this so that on submit, loading state immediately overlays over screen 
   // on error, flash to screen. on success, move page to results 
-  nextPage = () => {
+  submitData = () => {
     const {email, textInput} = this.state;
     let userData = {email, textInput};
     const fetchHeaders = new Headers();
@@ -172,7 +177,7 @@ export default class Form extends Component {
             <Title size="3">
               Data
             </Title>
-            <SocialButtons />
+            <SocialButtons connectStatus={this.state.twitterState} onClick={this.connectData} />
           </div>
 
           <div className="section__separator">
@@ -200,7 +205,7 @@ export default class Form extends Component {
           <div className="see-result">
             <div className="see-result__line"></div>
             <InfoMeter wordCount={this.state.wordCount + this.state.textInputWc} />
-            <Btn type="link" onClick={this.connectData} mod="is-big is-block">See My Results</Btn>
+            <Btn type="link" onClick={this.submitData} mod="is-big is-block">See My Results</Btn>
             <p className="section__descr">
               By clicking Analyze, you agree to Mindmetrics <a href="#">Terms</a> and <a href="#">Privacy</a>
             </p>

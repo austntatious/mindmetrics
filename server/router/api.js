@@ -11,6 +11,8 @@ const pi_input = require('personality-insights-input');
 // import Redis obj from index
 const redisClient = require("../../index");
 const redis       = require("redis");
+const personality_insights = require("../../helpers/personality-insights");
+// var profileFromTweets = personality_insights.profile_from_tweets;
 
 // Extending router with api methods
 
@@ -147,11 +149,9 @@ function twitterOauthAccessToken(req, res, next) {
                 var totalWords = countWords(currTweet.text) + prev;
                 return totalWords;
               }, 0);
-
-              console.log("total words in tweets:", tweetWords);
   
               // todo: format tweets async
-              var tweetsFormatted = JSON.stringify(pi_input.fromTweets(tweets));
+              var tweetsFormatted = JSON.stringify(tweets);
 
               // send formatted input to redis as string and generate token to associate to user session - do this async!!!
               var uuid = Math.floor(Math.random() * 1000000);
@@ -206,21 +206,7 @@ function submitData(req, res, next) {
    // send success response to client, flush cache associated with user, and save response to mongo    
    /**/
 
-   // sanitize input parameters from text input    
-   // add this to helper file    
-   // function sanitize (parameters) {    
-   //   return extend(parameters, {   
-   //     text: parameters.textInput ? parameters.textInput.replace(/[\s]+/g, ' ') : undefined    
-   //   });   
-   // }   
-     
-   // // define function to send REST API request for watson personality insights   
-   // var personality_insights = watson.personality_insights(watsonCredentials),    
-   //   getProfile = function (parameters) {    
-   //     // return a promise that uses toPromise to then fire the resolver callback, which will resolve or reject the promise    
-   //     return toPromise(function(callback) { personality_insights.profile(sanitize(parameters), callback)});   
-   //   };    
-     
+
    // add mock data.json as mock API response data   
    // const user = new User({   
    //   name : req.body.name,   
@@ -249,6 +235,8 @@ function submitData(req, res, next) {
    //   res.json("ERROR:", err);   
    // });    
    // ADD ERROR HANDLING   
+   console.log("End of submission route");
+
  }   
 
 // route for all oauth requests and data submissions
