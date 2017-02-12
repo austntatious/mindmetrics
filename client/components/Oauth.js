@@ -18,6 +18,7 @@ export default class Oauth extends Component {
      * @param  {String} url   The URL to get the value from (optional)
      * @return {String}       The field value
      */
+    var source = "twitter";
     var getQueryString = function ( field, url ) {
         var href = url ? url : window.location.href;
         var reg = new RegExp( '[?&]' + field + '=([^&#]*)', 'i' );
@@ -29,7 +30,7 @@ export default class Oauth extends Component {
     var oauthVerifier = getQueryString("oauth_verifier");
     // pass verifier tokens into this post request, which is sent from Parent window
     window.onunload = function (e) {
-      opener.sendPost(oauthToken, oauthVerifier);
+      opener.sendPost(oauthToken, oauthVerifier, source);
     };
 
     // then close window

@@ -19,7 +19,7 @@ export default class SocialButtons extends Component {
         {
           _.map(connections, (c) => {
             return (
-              <div className={'social-button social-' + c.name + ' social-status-' + c.status} key={c.name}>
+              <div className={'social-button social-' + c.name + ' social-status-' + c.status} key={Math.random()}>
                 <SocialButtonsEl mod={'is-social is-' + c.name + ' status-' + c.status} onClick={this.props.onConnect.bind(null, c)}>
                   <Icon ico={c.icon} />
                   {connectionButtonMap[c.status].replace('%sm%', c.title)}

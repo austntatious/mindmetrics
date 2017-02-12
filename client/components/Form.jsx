@@ -8,6 +8,7 @@ import SelectField from './SelectField';
 import Btn from './Btn';
 import InfoMeter from './InfoMeter';
 import { Link } from "react-router";
+var _ = require("lodash");
 
 let options = [
   {id: 1, value: 'default', label: 'Blog'},
@@ -65,17 +66,18 @@ export default class Form extends Component {
     };
 
     // child window should pass Tokens into this function so that parent can send POST
-    window.sendPost = function(token, verifier) {
+    window.sendPost = function(token, verifier, target) {
       const fetchReq = new Request("/api/data" + "?oauth_token=" + token + "&oauth_verifier=" + verifier, httpOptions);
       window.fetch(fetchReq, httpOptions)
         .then(function(res) {
           res.json().then(function(data) {
             console.log("response from POST: ", data);
-            self.setState({
-              wordCount: data["wordCount"],
-              uuid: data["uuid"],
-              twitterState: 2
-              });
+            var newState = _.extend({}, self.state);
+            newState.wordCount = data["wordCount"];
+            newState.uuid = data["uuid"];
+            newState.connections[target].status = 2;
+
+            self.setState(newState);
             // todo: allow state updates to account for error cases
             console.log("this.state: ", self.state);
             // reset component state to show success from social media data and wordcount
