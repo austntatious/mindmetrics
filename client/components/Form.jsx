@@ -122,7 +122,7 @@ export default class Form extends Component {
 
   onConnectTwitter = (connection) => {
     // Set the state to be loading and rerender
-    this.state.connections.twitter.connection = 1;
+    this.state.connections.twitter.status = 1;
     this.forceUpdate();
 
     // todo: set it to 2, once loaded
