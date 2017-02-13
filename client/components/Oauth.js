@@ -18,6 +18,8 @@ export default class Oauth extends Component {
      * @param  {String} url   The URL to get the value from (optional)
      * @return {String}       The field value
      */
+
+    // todo: change this based on which social feed we're calling
     var source = "twitter";
     var getQueryString = function ( field, url ) {
         var href = url ? url : window.location.href;

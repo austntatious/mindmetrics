@@ -28,7 +28,7 @@ export default class Form extends Component {
     firstName: "",
     lastName: "",
     wordCount: 0,
-    twitterState: 0,
+    textInput: "",
     textInputWc: 0,
     uuid: 0,
 
@@ -98,15 +98,20 @@ export default class Form extends Component {
 
   setField = (name) => {
     return (e) => {
-        let s = e.target.value;
-        s = s.replace(/(^\s*)|(\s*$)/gi,"");//exclude  start and end white-space
-        s = s.replace(/[ ]{2,}/gi," ");//2 or more space to 1
-        s = s.replace(/\n /,"\n"); // exclude newline with a start spacing
-        let wc = s.split(' ').length
-        this.setState({
-          [name]: wc
-        });
+      this.setState({[name]: e.target.value});
     };
+  }
+
+  wordCounter = (e) => {
+      let s = e.target.value;
+      s = s.replace(/(^\s*)|(\s*$)/gi,""); // exclude  start and end white-space
+      s = s.replace(/[ ]{2,}/gi," ");      // 2 or more space to 1
+      s = s.replace(/\n /,"\n");           // exclude newline with a start spacing
+      let wc = s.split(' ').length;
+      this.setState({
+        textInputWc: wc,
+        textInput: s
+      });
   }
 
   onConnect = (connection) => {
@@ -146,14 +151,22 @@ export default class Form extends Component {
   }
 
   onConnectFacebook = (connection) => {
-    console.log(connection)
+    // FB.api(
+    //   '/me',
+    //   'GET',
+    //   {"fields":"id,name,posts,context"},
+    //   function(response) {
+    //       // Insert your code here
+    //   }
+    // );
+    console.log(connection);
   }
 
   // TODO: edit this so that on submit, loading state immediately overlays over screen
   // on error, flash to screen. on success, move page to results
   submitData = () => {
-    const {email, textInput} = this.state;
-    let userData = {email, textInput};
+    const {email, textInput, firstName, lastName, uuid} = this.state;
+    let userData = {email, textInput, firstName, lastName, uuid};
     const fetchHeaders = new Headers();
     fetchHeaders.append("Content-Type", "application/json");
 
@@ -169,16 +182,17 @@ export default class Form extends Component {
       .then((response) => {
         response.json().then((data) => {
           let id = data.uuid;
-          this.context.router.push({
-            pathname: "/user/" + id,
-            query: null,
-            state: null
-          }, function (err) {
-            console.log("error", err);
-          });
+          // this.context.router.push({
+          //   pathname: "/user/" + id,
+          //   query: null,
+          //   state: null
+          // });
+          console.log("inside response json in fetch req");
         }).catch(function (err) {
-          console.log("FETCH ERROR", err);
+          console.log("Error in json", err);
         });
+      }).catch(function (err) {
+        console.log("Fetch error: ", err);
       });
   }
 
@@ -211,8 +225,8 @@ export default class Form extends Component {
                        onChange={this.setField("email")}/>
 
             <div className="input-group">
-              <TextInput mod="is-small" name="first name" placeholder="First name"/>
-              <TextInput mod="is-small" name="last name" placeholder="Last name"/>
+              <TextInput mod="is-small" name="first name" placeholder="First name" onChange={this.setField("firstName")}/>
+              <TextInput mod="is-small" name="last name" placeholder="Last name" onChange={this.setField("lastName")}/>
             </div>
           </div>
 
@@ -240,7 +254,7 @@ export default class Form extends Component {
                  <SelectField mod="i-mt-27 i-mb-40" options={options} />
 
                  <TextField mod="i-mt-19" rows="18" name="text" placeholder="This is a dummy text"
-                            onChange={this.setField("textInputWc")}/>
+                            onChange={this.wordCounter}/>
                </div>
             }
           </div>

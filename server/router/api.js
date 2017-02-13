@@ -234,7 +234,8 @@ function submitData(req, res, next) {
    //   console.log("error from getProfile", err);   
    //   res.json("ERROR:", err);   
    // });    
-   // ADD ERROR HANDLING   
+   // ADD ERROR HANDLING
+  res.json({"do": "something"});  
    console.log("End of submission route");
 
  }   
