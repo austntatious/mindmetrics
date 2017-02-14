@@ -52,9 +52,6 @@ export default class Form extends Component {
   componentDidMount() {
     var self = this;
 
-    // todo: Component currently assumes that users are not connected with their SM accounts when component loads first.
-    //  Update connections in the state with the user's associated connection statuses
-
     // register the POST function that will fire on Oauth window close
     const fetchHeaders = new Headers();
     fetchHeaders.append("Content-Type", "application/json");
@@ -66,7 +63,7 @@ export default class Form extends Component {
     };
 
     // child window should pass Tokens into this function so that parent can send POST
-    window.sendPost = function(token, verifier, target) {
+    window.sendPost = function(token, verifier) {
       const fetchReq = new Request("/api/data" + "?oauth_token=" + token + "&oauth_verifier=" + verifier, httpOptions);
       window.fetch(fetchReq, httpOptions)
         .then(function(res) {
@@ -75,7 +72,7 @@ export default class Form extends Component {
             var newState = _.extend({}, self.state);
             newState.wordCount = data["wordCount"];
             newState.uuid = data["uuid"];
-            newState.connections[target].status = 2;
+            newState.connections.twitter.status = 2;
 
             self.setState(newState);
             // todo: allow state updates to account for error cases
@@ -87,8 +84,45 @@ export default class Form extends Component {
         }, function(err) {
           console.log("error in main fetch call:", err);
         });
-      // set social button state to "loading"
+      
     }
+
+    // Init Facebook SDK
+    window.fbAsyncInit = function() {
+
+      FB.init({
+        appId      : '1800563613547983',
+        cookie     : true,  // enable cookies to allow the server to access
+                          // the session
+        xfbml      : true,  // parse social plugins on this page
+        version    : 'v2.8' // use version 2.8
+      });
+
+      // Now that we've initialized the JavaScript SDK, we call
+      // FB.getLoginStatus().  This function gets the state of the
+      // person visiting this page and can return one of three states to
+      // the callback you provide.  They can be:
+      //
+      // 1. Logged into your app ('connected')
+      // 2. Logged into Facebook, but not your app ('not_authorized')
+      // 3. Not logged into Facebook and can't tell if they are logged into
+      //    your app or not.
+      //
+      // These three cases are handled in the callback function.
+      FB.getLoginStatus(function(response) {
+        this.statusChangeCallback(response);
+      }.bind(this));
+    }.bind(this);
+
+    // Load the SDK asynchronously
+    (function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_US/sdk.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk')); 
+
   }
 
 
@@ -150,16 +184,63 @@ export default class Form extends Component {
         );
   }
 
+  // Here we run a very simple test of the Graph API after login is
+  // successful.  See statusChangeCallback() for when this call is made.
+  testAPI() {
+    var self = this;
+    console.log('Welcome!  Fetching your information.... ');
+    FB.api('/me', function(response) {
+    console.log('Successful login for: ' + response.name);
+
+    var newState = _.extend({}, self.state);
+    newState.connections.facebook.status = 2;
+    self.setState(newState);
+    });
+  }
+
+  // This is called with the results from from FB.getLoginStatus().
+  statusChangeCallback(response) {
+    console.log('statusChangeCallback');
+    console.log(response);
+    // The response object is returned with a status field that lets the
+    // app know the current login status of the person.
+    // Full docs on the response object can be found in the documentation
+    // for FB.getLoginStatus().
+    if (response.status === 'connected') {
+      // Logged into your app and Facebook.
+      this.testAPI();
+    } else if (response.status === 'not_authorized') {
+      // The person is logged into Facebook, but not your app.
+      console.log('Facebook: Please log ' + 'into this app.');
+    } else {
+      // The person is not logged into Facebook, so we're not sure if
+      // they are logged into this app or not.
+      console.log('Please log ' + 'into Facebook.');
+    }
+  }
+
+  // This function is called when someone finishes with the Login
+  // Button.  See the onlogin handler attached to it in the sample
+  // code below.
+  checkLoginState() {
+    FB.getLoginStatus(function(response) {
+      this.statusChangeCallback(response);
+    }.bind(this));
+  } 
+
   onConnectFacebook = (connection) => {
-    // FB.api(
-    //   '/me',
-    //   'GET',
-    //   {"fields":"id,name,posts,context"},
-    //   function(response) {
-    //       // Insert your code here
-    //   }
-    // );
-    console.log(connection);
+    this.state.connections.facebook.status = 1;
+    this.forceUpdate();
+
+    function handleFbClick() {
+      FB.getLoginStatus(function(response) {
+        if (response.status === 'connected') {
+          console.log('Logged in.');
+        } else {
+          FB.login(this.checkLoginState());
+        }
+      });
+    }
   }
 
   // TODO: edit this so that on submit, loading state immediately overlays over screen

@@ -4,6 +4,7 @@ import Icon from './Icon';
 const _           = require("lodash");
 
 export default class SocialButtons extends Component {
+
   render() {
     var connections = this.props.connections;
 
@@ -20,7 +21,8 @@ export default class SocialButtons extends Component {
           _.map(connections, (c) => {
             return (
               <div className={'social-button social-' + c.name + ' social-status-' + c.status} key={Math.random()}>
-                <SocialButtonsEl mod={'is-social is-' + c.name + ' status-' + c.status} onClick={this.props.onConnect.bind(null, c)}>
+                <SocialButtonsEl mod={'is-social is-' + c.name + ' status-' + c.status} 
+                onClick={this.props.onConnect.bind(null, c)}>
                   <Icon ico={c.icon} />
                   {connectionButtonMap[c.status].replace('%sm%', c.title)}
                 </SocialButtonsEl>
@@ -36,10 +38,8 @@ export default class SocialButtons extends Component {
 class SocialButtonsEl extends Component {
 
   render() {
-    const {mod, connect} = this.props;
-
+    const {mod} = this.props;
     return (
-
       <div className="social-buttons__el">
         <Btn mod={mod} onClick={this.props.onClick}>
           {this.props.children}
