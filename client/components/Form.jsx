@@ -109,9 +109,7 @@ export default class Form extends Component {
       //    your app or not.
       //
       // These three cases are handled in the callback function.
-      FB.getLoginStatus(function(response) {
-        this.statusChangeCallback(response);
-      }.bind(this));
+
     }.bind(this);
 
     // Load the SDK asynchronously
@@ -186,10 +184,14 @@ export default class Form extends Component {
 
   // Here we run a very simple test of the Graph API after login is
   // successful.  See statusChangeCallback() for when this call is made.
-  testAPI() {
+  testAPI(id) {
+  
     var self = this;
     console.log('Welcome!  Fetching your information.... ');
-    FB.api('/me', function(response) {
+
+    // change fields to an options object
+    FB.api('/' + id, {fields: "id,name,email,friends"}, function(response) {
+    console.log("Full Facebook API response: ", response);
     console.log('Successful login for: ' + response.name);
 
     var newState = _.extend({}, self.state);
@@ -198,49 +200,49 @@ export default class Form extends Component {
     });
   }
 
-  // This is called with the results from from FB.getLoginStatus().
-  statusChangeCallback(response) {
-    console.log('statusChangeCallback');
-    console.log(response);
+  // This function is called when someone finishes with the Login
+  // Button.  See the onlogin handler attached to it in the sample
+  // code below.
+  checkLoginState(res) {
+    var newState = _.extend({}, this.state);
     // The response object is returned with a status field that lets the
     // app know the current login status of the person.
     // Full docs on the response object can be found in the documentation
     // for FB.getLoginStatus().
-    if (response.status === 'connected') {
+    if (res.status === 'connected') {
       // Logged into your app and Facebook.
-      this.testAPI();
-    } else if (response.status === 'not_authorized') {
+      console.log("Logged in. Facebook response:", res);
+      this.testAPI(res.authResponse.userID);
+    } else if (res.status === 'not_authorized') {
       // The person is logged into Facebook, but not your app.
       console.log('Facebook: Please log ' + 'into this app.');
+      newState.connections.facebook.status = 0;
+      this.setState(newState);
     } else {
       // The person is not logged into Facebook, so we're not sure if
       // they are logged into this app or not.
       console.log('Please log ' + 'into Facebook.');
+  
+      newState.connections.facebook.status = 0;
+      this.setState(newState);
     }
-  }
-
-  // This function is called when someone finishes with the Login
-  // Button.  See the onlogin handler attached to it in the sample
-  // code below.
-  checkLoginState() {
-    FB.getLoginStatus(function(response) {
-      this.statusChangeCallback(response);
-    }.bind(this));
   } 
+
+  handleFbClick() {
+    var self = this;
+    FB.login(function(response){
+      self.checkLoginState(response);
+    }, {
+      scope: "public_profile,email,user_friends",
+      return_scopes: true
+    });
+  }
 
   onConnectFacebook = (connection) => {
     this.state.connections.facebook.status = 1;
     this.forceUpdate();
 
-    function handleFbClick() {
-      FB.getLoginStatus(function(response) {
-        if (response.status === 'connected') {
-          console.log('Logged in.');
-        } else {
-          FB.login(this.checkLoginState());
-        }
-      });
-    }
+    this.handleFbClick();
   }
 
   // TODO: edit this so that on submit, loading state immediately overlays over screen

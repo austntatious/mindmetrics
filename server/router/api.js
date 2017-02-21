@@ -138,14 +138,6 @@ function twitterOauthAccessToken(req, res, next) {
 
               // save tweets in original form(?)
 
-              var tweetWords = tweets.reduce(function(prev, currTweet) {
-                function countWords(s){
-                  s = s.replace(/(^\s*)|(\s*$)/gi,"");//exclude  start and end white-space
-                  s = s.replace(/[ ]{2,}/gi," ");//2 or more space to 1
-                  s = s.replace(/\n /,"\n"); // exclude newline with a start spacing
-                  return s.split(' ').length; 
-                }
-
                 var totalWords = countWords(currTweet.text) + prev;
                 return totalWords;
               }, 0);
@@ -165,6 +157,16 @@ function twitterOauthAccessToken(req, res, next) {
               // store string to user's hash. each keyvalue pair corresponds to a different data input - text input, twitter, fb, etc
 
               // finally, send wordcount to user & userToken to associate redis session 
+
+              // wordcount
+              var tweetWords = tweets.reduce(function(prev, currTweet) {
+                function countWords(s){
+                  s = s.replace(/(^\s*)|(\s*$)/gi,"");//exclude  start and end white-space
+                  s = s.replace(/[ ]{2,}/gi," ");//2 or more space to 1
+                  s = s.replace(/\n /,"\n"); // exclude newline with a start spacing
+                  return s.split(' ').length; 
+                }
+
               return {"uuid": uuid, "wordCount": tweetWords};
             });
         }).catch(function(err) {
@@ -201,6 +203,7 @@ function submitData(req, res, next) {
    /**/  
    // check redis cache for existing uploaded data associated with session / user    
    // if found, append data to current text input and send to IBM
+   // create array of final text to submit to IBM
    // submit Req will have email, name, and possibly form text data    
    // display error responses to user    
    // send success response to client, flush cache associated with user, and save response to mongo    
@@ -236,7 +239,7 @@ function submitData(req, res, next) {
    // });    
    // ADD ERROR HANDLING
   res.json({"do": "something"});  
-   console.log("End of submission route");
+  console.log("End of submission route");
 
  }   
 
