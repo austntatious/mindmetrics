@@ -94,7 +94,7 @@ class Trait extends Component{
               {percentage}
             </Progress>
           </div>
-          {this.renderDetails()}
+          { this.props.data.children ? this.renderDetails() : null }
           { this.props.data.children ?
             this.context.mobile ?
             <Btn onClick={this.toggleOpen} mod="is-plus"></Btn>
