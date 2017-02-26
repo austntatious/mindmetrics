@@ -4,4 +4,4 @@ dist
 *.idea
 npm-debug.log
 assets.json
-**/info.js
+/config/info.js
