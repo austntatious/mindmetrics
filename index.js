@@ -4,18 +4,19 @@
 * Module Dependencies 
 **/
 
+const fs   = require("fs");
 const path = require("path");
-const Promise = require('bluebird');
+const Promise = require("bluebird");
 const express = require("express");
 const app     = express();
 const webpack = require("webpack");
 const redis   = require("redis");
 const redisClient  = redis.createClient();
-const watson      = require('watson-developer-cloud');
+const watson      = require("watson-developer-cloud");
 const _           = require("lodash");
 const extend      = _.extend;
 const mongoose    = require("mongoose");
-const watsonCredentials = require('./watson-credentials.json').personality_insights;
+const watsonCredentials = require("./watson-credentials.json").personality_insights;
 
 
 // import user model
@@ -66,11 +67,11 @@ const connectMongo = function () {
 };
 connectMongo();
 
-// todo: deal with reconnections and errors gracefully 
-mongoose.connection.on('error', console.log.bind(console, 'mongoose-connection-error:'));
-mongoose.connection.on('open', console.log.bind(console,'Connected to MongoDB'));
+// todo: deal with reconnections and errors gracefully ***
+mongoose.connection.on("error", console.log.bind(console, "mongoose-connection-error:"));
+mongoose.connection.on("open", console.log.bind(console,"Connected to MongoDB"));
 // retry connection on disconnection
-mongoose.connection.on('disconnected', connectMongo);
+mongoose.connection.on("disconnected", console.log.bind(console, "Disconnected from MongoDB"));
 
 /**
 *  Connect to Redis
