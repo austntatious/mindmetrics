@@ -62,7 +62,7 @@ module.exports = {
       loader: "url?limit=100000&name=[name].[ext]"
       },
       { test: /\.js$/,
-        // exclude: /node_modules/,
+        exclude: /node_modules/,
         loader: "babel",
         query: {
           presets:['react', 'es2015', 'stage-1']
