@@ -1,7 +1,7 @@
 "use strict";
 
 /**
-* Module Dependencies 
+* Module Dependencies
 **/
 
 const fs   = require("fs");
@@ -34,18 +34,11 @@ require("./config/express")(app);
 
 /**
 *  Environment Configs - add this to a main config file
-**/ 
+**/
 
 const env = {
   production: process.env.NODE_ENV === "production"
 };
-
-// send different bundle on production environment
-if (env.production) {
-  Object.assign(env, {
-    assets: JSON.parse(fs.readFileSync(path.join(process.cwd(), "assets.json")))
-  });
-}
 
 /**
   Connect to MongoDB.
@@ -118,7 +111,7 @@ module.exports = redisClient;
 * Initialize routes
 **/
 
-require("./server/router/index")(app);    
+require("./server/router/index")(app);
 
 /**
 * Webpack configs
@@ -134,7 +127,7 @@ if (!env.production) {
     historyApiFallback: true,
     headers: {
       "Access-Control-Allow-Origin": "http://localhost:3001",
-      "Access-Control-Allow-Headers": "X-Requested-With"  
+      "Access-Control-Allow-Headers": "X-Requested-With"
     }
   }).listen(3000, "localhost", function (err) {
     if (err) {
@@ -154,7 +147,7 @@ const port = Number(process.env.PORT || 3001);
 
 /**
 * Start the server
-**/ 
+**/
 
 app.listen(port, function () {
   console.log("server running at localhost:3001, go refresh and see magic");

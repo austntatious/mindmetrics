@@ -4,10 +4,12 @@
 
 const express = require("express");
 const router = express.Router();
+const assets = require('../../assets.json');
 
-const env = {
-  production: process.env.NODE_ENV === "production"
-};
+const env = Object.assign({}, process.env, {
+  production: process.env.NODE_ENV === "production",
+  assets: {main: "null.js"}
+});
 
 // Route containing user profile so that they can share their info with friends
 // * Add component to allow people to take their own personality profile
@@ -21,11 +23,12 @@ const env = {
 //     res.json(err);
 //     console.log("Error finding user data: ", err);
 //   });
-// });          
+// });
 
 router.get("/*", function(req, res) {
   res.render("index", {
-    env: env
+    env: env,
+    assets: assets
   });
 });
 
