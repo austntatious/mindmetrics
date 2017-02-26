@@ -48,18 +48,29 @@ const env = {
   plenty of time in most operating environments.
  **/
 
-const connectMongo = function () {
+var gracefulDbExit = function() { 
+  mongoose.disconnect(function () {
+    console.log('Mongoose default connection with DB is disconnected through app termination!');
+    process.exit(0);
+  });
+}
+
+// If the Node process ends, close the Mongoose connection
+process.on('SIGINT', gracefulDbExit).on('SIGTERM', gracefulDbExit);
+
+try {
   console.log("Initialize MongoDB connection");
-  const options = {
+  const mongoOptions = {
     server: { socketOptions: { keepAlive: 1, connectTimeoutMS: 30000 } },
     replset: { socketOptions: { keepAlive: 1, connectTimeoutMS : 30000 } }
   };
-  mongoose.connect(config.MONGODB_URI, options);
-};
-connectMongo();
+  mongoose.connect(config.MONGODB_URI, mongoOptions);
+} catch (err) {
+  console.log("Mongo connection failed" , err.message);
+}
 
 // todo: deal with reconnections and errors gracefully ***
-mongoose.connection.on("error", console.log.bind(console, "mongoose-connection-error:"));
+mongoose.connection.on("error", console.log.bind(console, "Mongoose-connection-error:"));
 mongoose.connection.on("open", console.log.bind(console,"Connected to MongoDB"));
 // retry connection on disconnection
 mongoose.connection.on("disconnected", console.log.bind(console, "Disconnected from MongoDB"));
@@ -67,7 +78,7 @@ mongoose.connection.on("disconnected", console.log.bind(console, "Disconnected f
 /**
 *  Connect to Redis
 **/
-// todo: add Redis connect URI
+
 // ADD error handling and warning when Redis doesn't connect correctly
 var redisOptions = {
   url: config.REDIS_URI,
