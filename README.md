@@ -30,7 +30,7 @@ https://docs.mongodb.com/manual/installation/#tutorials
 
 ## Quickstart
 
-All configuration options and connection URIs are located in `./config`. When getting errors, be sure to check that your connection URI is correct. 
+All configuration options and connection URIs are located in `./config`. When getting errors, be sure to check that your connection URI is correct. Also, remember to copy example.info.js in `./config` and create a separate `info.js` file with your actual conneciton URIs and token secrets. 
 
 #### Development
 To run the project in development:
