@@ -13,7 +13,7 @@ $ npm install
 
 **NOTE:** Make sure you both have Mongo & Redis installed locally AND have it running, otherwise the project won't start properly.
 
-- node v5+ & npm v2+
+- node v6+ & npm v3+
 - MongoDB v3.2.10
 - Redis v3.2.0
 

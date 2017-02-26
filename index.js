@@ -11,7 +11,6 @@ const express = require("express");
 const app     = express();
 const webpack = require("webpack");
 const redis   = require("redis");
-const redisClient  = redis.createClient();
 const watson      = require("watson-developer-cloud");
 const _           = require("lodash");
 const extend      = _.extend;
@@ -77,6 +76,27 @@ mongoose.connection.on("disconnected", console.log.bind(console, "Disconnected f
 *  Connect to Redis
 **/
 // todo: add Redis connect URI
+
+const redisClient  = redis.createClient({
+  url: config.REDIS_URI,
+  retry_strategy: function (options) {
+      if (options.error && options.error.code === 'ECONNREFUSED') {
+          // End reconnecting on a specific error and flush all commands with a individual error
+          return new Error('The server refused the connection');
+      }
+      if (options.total_retry_time > 1000 * 60 * 60) {
+          // End reconnecting after a specific timeout and flush all commands with a individual error
+          return new Error('Retry time exhausted');
+      }
+      if (options.times_connected > 10) {
+          // End reconnecting with built in error
+          console.log("Number of retries (10) exhausted.");
+          return undefined;
+      }
+      // reconnect after
+      return Math.min(options.attempt * 100, 3000);
+  }
+});
 
 redisClient.on("connect", function () {
     console.log("Connected to Redis");

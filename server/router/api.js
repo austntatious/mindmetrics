@@ -138,6 +138,15 @@ function twitterOauthAccessToken(req, res, next) {
 
               // save tweets in original form(?)
 
+              // wordcount
+              var tweetWords = tweets.reduce(function(prev, currTweet) {
+                function countWords(s) {
+                  s = s.replace(/(^\s*)|(\s*$)/gi,"");//exclude  start and end white-space
+                  s = s.replace(/[ ]{2,}/gi," ");//2 or more space to 1
+                  s = s.replace(/\n /,"\n"); // exclude newline with a start spacing
+                  return s.split(' ').length; 
+                }
+
                 var totalWords = countWords(currTweet.text) + prev;
                 return totalWords;
               }, 0);
@@ -157,15 +166,6 @@ function twitterOauthAccessToken(req, res, next) {
               // store string to user's hash. each keyvalue pair corresponds to a different data input - text input, twitter, fb, etc
 
               // finally, send wordcount to user & userToken to associate redis session 
-
-              // wordcount
-              var tweetWords = tweets.reduce(function(prev, currTweet) {
-                function countWords(s){
-                  s = s.replace(/(^\s*)|(\s*$)/gi,"");//exclude  start and end white-space
-                  s = s.replace(/[ ]{2,}/gi," ");//2 or more space to 1
-                  s = s.replace(/\n /,"\n"); // exclude newline with a start spacing
-                  return s.split(' ').length; 
-                }
 
               return {"uuid": uuid, "wordCount": tweetWords};
             });
