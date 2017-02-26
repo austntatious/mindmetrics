@@ -49,6 +49,7 @@ module.exports = {
       __PRODUCTION__: env.production,
       __CURRENT_ENV__: '\'' + (NODE_ENV) + '\''
     }),
+    // remove extract text plugin (?)
     new ExtractTextPlugin("main.css")
   ],
 

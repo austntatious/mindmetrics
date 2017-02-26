@@ -20,7 +20,6 @@ const watsonCredentials = require("./watson-credentials.json").personality_insig
 
 // import user model
 const User        = require("./server/models/User");
-
 const WebpackDevServer = require("webpack-dev-server");
 const webpackDevConfig = require("./webpack.config.development");
 const toPromise = require("./util/callback-to-promise");
@@ -76,8 +75,8 @@ mongoose.connection.on("disconnected", console.log.bind(console, "Disconnected f
 *  Connect to Redis
 **/
 // todo: add Redis connect URI
-
-const redisClient  = redis.createClient({
+// ADD error handling and warning when Redis doesn't connect correctly
+var redisOptions = {
   url: config.REDIS_URI,
   retry_strategy: function (options) {
       if (options.error && options.error.code === 'ECONNREFUSED') {
@@ -96,7 +95,13 @@ const redisClient  = redis.createClient({
       // reconnect after
       return Math.min(options.attempt * 100, 3000);
   }
-});
+}
+
+if (config.REDIS_PASS) {
+  redisOptions.password = config.REDIS_PASS
+}
+
+const redisClient  = redis.createClient(redisOptions);
 
 redisClient.on("connect", function () {
     console.log("Connected to Redis");
