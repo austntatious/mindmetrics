@@ -4,7 +4,7 @@
 module.exports = {
   oauthCallbackUrl : "http://localhost:3001/oauth",
   MONGODB_URI : "mongodb://localhost:27017/personalities",
-  REDIS_URI: "redis://localhost:6379",
+  REDIS_URI: "",
   REDIS_PASS: "",
   twitterCredentials : [
       {

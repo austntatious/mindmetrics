@@ -9,7 +9,7 @@ export default class SocialButtons extends Component {
     var connections = this.props.connections;
 
     var connectionButtonMap = {
-      0: 'Connect to %sm%',
+      0: 'Connect %sm%',
       1: 'Connecting to %sm%...',
       2: 'Connected to %sm%'
     };

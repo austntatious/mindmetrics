@@ -1,6 +1,9 @@
 "use strict";
 
 const express = require("express");
+
+// import user model
+const User        = require("../models/User");
 const router = express.Router();
 const oauth       = require("oauth-libre/lib/oauth-promise").OAuth;
 // todo: change relative paths to absolute paths
@@ -154,16 +157,21 @@ function twitterOauthAccessToken(req, res, next) {
               // todo: format tweets async
               var tweetsFormatted = JSON.stringify(tweets);
 
-              // send formatted input to redis as string and generate token to associate to user session - do this async!!!
+              // save formatted tweets to Mongo
               var uuid = Math.floor(Math.random() * 1000000);
-              redisClient.hset(uuid, "tweets", tweetsFormatted, redis.print);
 
-              // change this to promise
-              redisClient.hgetall(uuid, function (err, obj) {
-                console.dir("Saved redis hash:", obj.tweets);
+              const newUser = new User({
+                formattedTweets: tweetsFormatted
               });
-              
-              // store string to user's hash. each keyvalue pair corresponds to a different data input - text input, twitter, fb, etc
+
+              newUser.save()
+                .then(function(saved) {
+                  console.log("Mongo saved new record!  ", saved);  
+                }).catch(function(err) {
+                  console.log("Error saving mongo record: ", err);
+                });
+
+              // send new Mongo record data to client
 
               // finally, send wordcount to user & userToken to associate redis session 
 
@@ -196,9 +204,7 @@ function submitData(req, res, next) {
    // incoming request meta data   
    console.log("post submission received, req.body = ", req.body);   
    console.log("User-Agent: " + req.headers["user-agent"]);    
-   console.log("IP: ", req.connection.remoteAddress);    
-   console.log("IP with proxy method: ", req.headers["x-forwarded-for"]);    
-   console.log("req.headers: ", req.headers);    
+   console.log("IP with proxy method: ", req.headers["x-forwarded-for"]);     
    
    /**/  
    // check redis cache for existing uploaded data associated with session / user    
@@ -212,11 +218,10 @@ function submitData(req, res, next) {
 
    // add mock data.json as mock API response data   
    // const user = new User({   
-   //   name : req.body.name,   
+   //   firstName : req.body.firstName,
+   //   lastName: req.body.lastName,   
    //   uuid: uuid.v1(),    
-   //   email : req.body.email,   
-   //   birthyear: req.body.birthyear,    
-   //   gender : req.body.gender,   
+   //   email : req.body.email,    
    //   textInput : req.body.textInput,   
    //   browserInfo: req.headers["user-agent"],   
    // });   

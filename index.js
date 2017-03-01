@@ -6,7 +6,9 @@
 
 const fs   = require("fs");
 const path = require("path");
+var mongoose    = require("mongoose");
 const Promise = require("bluebird");
+mongoose.Promise = require("bluebird");
 const express = require("express");
 const app     = express();
 const webpack = require("webpack");
@@ -14,12 +16,8 @@ const redis   = require("redis");
 const watson      = require("watson-developer-cloud");
 const _           = require("lodash");
 const extend      = _.extend;
-const mongoose    = require("mongoose");
 const watsonCredentials = require("./watson-credentials.json").personality_insights;
 
-
-// import user model
-const User        = require("./server/models/User");
 const WebpackDevServer = require("webpack-dev-server");
 const webpackDevConfig = require("./webpack.config.development");
 const toPromise = require("./util/callback-to-promise");
@@ -74,49 +72,6 @@ mongoose.connection.on("error", console.log.bind(console, "Mongoose-connection-e
 mongoose.connection.on("open", console.log.bind(console,"Connected to MongoDB"));
 // retry connection on disconnection
 mongoose.connection.on("disconnected", console.log.bind(console, "Disconnected from MongoDB"));
-
-/**
-*  Connect to Redis
-**/
-
-// ADD error handling and warning when Redis doesn't connect correctly
-var redisOptions = {
-  url: config.REDIS_URI,
-  retry_strategy: function (options) {
-      if (options.error && options.error.code === 'ECONNREFUSED') {
-          // End reconnecting on a specific error and flush all commands with a individual error
-          return new Error('The server refused the connection');
-      }
-      if (options.total_retry_time > 1000 * 60 * 60) {
-          // End reconnecting after a specific timeout and flush all commands with a individual error
-          return new Error('Retry time exhausted');
-      }
-      if (options.times_connected > 10) {
-          // End reconnecting with built in error
-          console.log("Number of retries (10) exhausted.");
-          return undefined;
-      }
-      // reconnect after
-      return Math.min(options.attempt * 100, 3000);
-  }
-}
-
-if (config.REDIS_PASS) {
-  redisOptions.password = config.REDIS_PASS
-}
-
-const redisClient  = redis.createClient(redisOptions);
-
-redisClient.on("connect", function () {
-    console.log("Connected to Redis");
-});
-
-redisClient.on("error", function (err) {
-    console.log("Error " + err);
-});
-
-// export client for use on API methods
-module.exports = redisClient;
 
 /**
 * Initialize routes

@@ -15,13 +15,9 @@ $ npm install
 
 - node v6+ & npm v3+
 - MongoDB v3.2.10
-- Redis v3.2.0
 
 #### Installation Guide for Node & NPM
 https://nodejs.org/en/download/
-
-#### Installation Guide for Redis
-https://redis.io/topics/quickstart
 
 #### Installation Guide for MongoDB
 https://docs.mongodb.com/manual/installation/#tutorials

@@ -8,6 +8,7 @@ var express  = require("express"),
   // cookieParser = require("cookie-parser"),
   morgan     = require("morgan"),
   layouts = require("express-ejs-layouts");
+  // add winston for debug and general logging
   
 module.exports = function (app) {
 
