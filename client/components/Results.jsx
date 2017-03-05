@@ -79,7 +79,6 @@ export default class StaticResults extends Component {
     }
 
   render() {
-        console.log(this.state);
         const {activeTab} = this.state;
         const {likely, unlikely} = this.getConsumptionPreferences(DATA);
         return (

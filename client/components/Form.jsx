@@ -281,7 +281,6 @@ export default class Form extends Component {
 
   validateEmail = () => {
     return EMAIL_REGEX.test(this.state.email);
-      console.log(this.state.email)
   }
 
   render() {
