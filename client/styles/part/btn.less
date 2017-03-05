@@ -5,6 +5,7 @@
   cursor: pointer;
   color: #00729A;
   box-sizing: border-box;
+  user-select: none;
 
   &:hover {
     color: darken(#00729A, 15%)
@@ -12,6 +13,14 @@
 
   &.is-orange {
     color: #f39209;
+  }
+
+  &.is-disable {
+    opacity: .5;
+
+    &:hover {
+      background-color: @orange!important;
+    }
   }
 
   &.is-big {

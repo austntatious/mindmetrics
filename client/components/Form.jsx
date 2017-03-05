@@ -141,7 +141,7 @@ export default class Form extends Component {
       s = s.replace(/\n /,"\n");           // exclude newline with a start spacing
       let wc = s.split(' ').length;
       this.setState({
-        textInputWc: wc,
+        textInputWc: s == '' ? 0 : wc,
         textInput: s
       });
   }
@@ -281,6 +281,7 @@ export default class Form extends Component {
 
   validateEmail = () => {
     return EMAIL_REGEX.test(this.state.email);
+      console.log(this.state.email)
   }
 
   render() {
@@ -304,12 +305,20 @@ export default class Form extends Component {
             <Title size="3">
               Profile
             </Title>
-            <TextInput check={this.validateEmail()} name="email" placeholder="name@example.com"
-                       onChange={this.setField("email")}/>
+            <TextInput check={this.validateEmail()}
+                       error={this.state.email.length > 4 && !this.validateEmail()}
+                       onChange={this.setField("email")}
+                       name="email" placeholder="name@example.com"/>
 
             <div className="input-group">
-              <TextInput mod="is-small" name="first name" placeholder="First name" onChange={this.setField("firstName")}/>
-              <TextInput mod="is-small" name="last name" placeholder="Last name" onChange={this.setField("lastName")}/>
+              <TextInput mod="is-small"
+                         name="first name"
+                         placeholder="First name"
+                         onChange={this.setField("firstName")}/>
+              <TextInput mod="is-small"
+                         name="last name"
+                         placeholder="Last name"
+                         onChange={this.setField("lastName")}/>
             </div>
           </div>
 
@@ -317,7 +326,8 @@ export default class Form extends Component {
             <Title size="3">
               Data
             </Title>
-            <SocialButtons connections={this.state.connections} onConnect={this.onConnect} />
+            <SocialButtons connections={this.state.connections}
+                           onConnect={this.onConnect} />
           </div>
 
           <div className="section__separator">
@@ -345,7 +355,11 @@ export default class Form extends Component {
           <div className="see-result">
             <div className="see-result__line"></div>
             <InfoMeter wordCount={this.state.wordCount + this.state.textInputWc} />
-            <Btn type="link" onClick={this.submitData} mod="is-big is-block">See My Results</Btn>
+            <Btn onClick={this.validateEmail() ? this.submitData : null}
+                 disable={!this.validateEmail() ? true : null}
+                 mod="is-big is-block">
+              See My Results
+            </Btn>
             <p className="section__descr">
               By clicking Analyze, you agree to Mindmetrics <a href="#">Terms</a> and <a href="#">Privacy</a>
             </p>

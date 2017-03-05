@@ -12,7 +12,6 @@ mongoose.Promise = require("bluebird");
 const express = require("express");
 const app     = express();
 const webpack = require("webpack");
-const redis   = require("redis");
 const watson      = require("watson-developer-cloud");
 const _           = require("lodash");
 const extend      = _.extend;

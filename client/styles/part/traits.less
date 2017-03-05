@@ -8,6 +8,27 @@
   .mobile({
     border-bottom: none
   });
+
+  &.personality {
+
+    .progress__line::after {
+      background-color: #EDC951;
+    }
+  }
+
+  &.needs {
+
+    .progress__line::after {
+      background-color: #CC333F;
+    }
+  }
+
+  &.values {
+
+    .progress__line::after {
+      background-color: #00A0B0;
+    }
+  }
 }
 
 .trait {
@@ -53,10 +74,11 @@
   }
 
   &__left {
+    padding-left: 15px;
     padding-right: 40px;
 
     .r1100({
-      padding-left: 40px;
+      padding-left: 65px;
     });
 
 
@@ -66,7 +88,7 @@
     });
 
     .mobile({
-      padding-left: 40px;
+      padding-left: 68px;
     });
   }
 
@@ -82,10 +104,11 @@
 
   &__num {
     position: absolute;
-    top: -30px;
+    top: -5px;
     left: -50px;
     color: #E3E3E3;
-    font-size: 60px;
+    font-size: 58px;
+    line-height: 58px;
     font-weight: bold;
 
     .r1100({
@@ -94,7 +117,7 @@
 
     .tablet({
       top: -5px;
-      left: 70px;
+      left: 50px;
     });
 
     .mobile({
@@ -164,15 +187,16 @@
 
   .btn {
     position: absolute;
-    left: 10px;
+    left: 25px;
     bottom: -30px;
 
     .r1100({
-      left: 50px;
+      left: 75px;
     });
 
     .tablet({
       left: 50%;
+      transform: translate(-50%);
       bottom: 0;
     });
 
