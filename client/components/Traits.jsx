@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import classnames from 'classnames'
 
 import Btn from './Btn';
 import Title from './Title';
@@ -123,7 +124,7 @@ export default class Traits extends Component {
     });
 
     return (
-      <div className="traits">
+      <div className={classnames("traits", this.props.mod)}>
         {traits}
       </div>
     );

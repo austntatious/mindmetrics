@@ -13,7 +13,6 @@ const TwitterCrawler = require("twitter-crawler");
 const pi_input = require('personality-insights-input');
 // import Redis obj from index
 const redisClient = require("../../index");
-const redis       = require("redis");
 const personality_insights = require("../../helpers/personality-insights");
 // var profileFromTweets = personality_insights.profile_from_tweets;
 

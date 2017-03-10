@@ -103,7 +103,7 @@ export default class StaticResults extends Component {
                       active={this.state.activeTab}
                       onChange={this.setActiveTab}/>
 
-                <Traits list={DATA[activeTab]} />
+                <Traits mod={this.state.activeTab} list={DATA[activeTab]} />
                 <TellFriends/>
             </Layout>
         );
