@@ -17,12 +17,14 @@ let options = [
 
 const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
+
 export default class Form extends Component {
   static contextTypes = {
     router: React.PropTypes.object.isRequired
   }
 
   state = {
+    id: 0,
     showTextArea: false,
     email: "",
     firstName: "",
@@ -30,7 +32,7 @@ export default class Form extends Component {
     wordCount: 0,
     textInput: "",
     textInputWc: 0,
-    uuid: 0,
+    validInputs: 0,  // 4 fields should be valid for submit button to be working - 1st name, last name, email, and wordcount minimum
 
     // 0 is default, 1 is loading, 2 is loaded
     connections: {
@@ -71,8 +73,8 @@ export default class Form extends Component {
             console.log("response from POST: ", data);
             var newState = _.extend({}, self.state);
             newState.wordCount = data["wordCount"];
-            newState.uuid = data["uuid"];
             newState.connections.twitter.status = 2;
+            newState.id = data["id"];
 
             self.setState(newState);
             // todo: allow state updates to account for error cases
@@ -164,8 +166,6 @@ export default class Form extends Component {
     this.state.connections.twitter.status = 1;
     this.forceUpdate();
 
-    // todo: set it to 2, once loaded
-
     // make width and height dynamic based on parent window
     var url = "/api/oauth",
         title= "Mindmetrics Twitter Authentication",
@@ -241,7 +241,6 @@ export default class Form extends Component {
   onConnectFacebook = (connection) => {
     this.state.connections.facebook.status = 1;
     this.forceUpdate();
-
     this.handleFbClick();
   }
 
@@ -264,7 +263,7 @@ export default class Form extends Component {
     fetch(fetchReq, httpOptions)
       .then((response) => {
         response.json().then((data) => {
-          let id = data.uuid;
+          // let id = data.uuid;
           // this.context.router.push({
           //   pathname: "/user/" + id,
           //   query: null,
@@ -279,8 +278,17 @@ export default class Form extends Component {
       });
   }
 
-  validateEmail = () => {
-    return EMAIL_REGEX.test(this.state.email);
+  validateInput = (input) => {
+    switch(input) {
+      case "email": 
+        if(EMAIL_REGEX.test(this.state.email)) {
+          this.state.validInputs += 1;
+          console.log("inside email regex if statement");
+          return true;
+        }
+      case "name":
+
+    }
   }
 
   render() {
@@ -304,12 +312,12 @@ export default class Form extends Component {
             <Title size="3">
               Profile
             </Title>
-            <TextInput check={this.validateEmail()} name="email" placeholder="name@example.com"
+            <TextInput check={this.validateInput("email")} onBlur={this.validateInput("email")} name="email" placeholder="name@example.com"
                        onChange={this.setField("email")}/>
 
             <div className="input-group">
-              <TextInput mod="is-small" name="first name" placeholder="First name" onChange={this.setField("firstName")}/>
-              <TextInput mod="is-small" name="last name" placeholder="Last name" onChange={this.setField("lastName")}/>
+              <TextInput check={this.validateInput("name")} mod="is-small" name="first name" placeholder="First name" onChange={this.setField("firstName")}/>
+              <TextInput check={this.validateInput("name")} mod="is-small" name="last name" placeholder="Last name" onChange={this.setField("lastName")}/>
             </div>
           </div>
 
@@ -345,6 +353,10 @@ export default class Form extends Component {
           <div className="see-result">
             <div className="see-result__line"></div>
             <InfoMeter wordCount={this.state.wordCount + this.state.textInputWc} />
+          {/** 
+          on submit button click, validate all name inputs, and display errors if not already displayed
+          **/}
+
             <Btn type="link" onClick={this.submitData} mod="is-big is-block">See My Results</Btn>
             <p className="section__descr">
               By clicking Analyze, you agree to Mindmetrics <a href="#">Terms</a> and <a href="#">Privacy</a>

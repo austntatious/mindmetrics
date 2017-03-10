@@ -153,20 +153,20 @@ function twitterOauthAccessToken(req, res, next) {
                 var totalWords = countWords(currTweet.text) + prev;
                 return totalWords;
               }, 0);
-  
-              // todo: format tweets async
+
               var tweetsFormatted = JSON.stringify(tweets);
 
               // save formatted tweets to Mongo
-              var uuid = Math.floor(Math.random() * 1000000);
 
               const newUser = new User({
                 formattedTweets: tweetsFormatted
               });
 
-              newUser.save()
+              return newUser.save()
                 .then(function(saved) {
-                  console.log("Mongo saved new record!  ", saved);  
+                  console.log("Mongo saved new record!  ", saved);
+                  // send response back for next promise to send as json response
+                  return {"id": saved._id, "wordCount": tweetWords};
                 }).catch(function(err) {
                   console.log("Error saving mongo record: ", err);
                 });
@@ -174,8 +174,6 @@ function twitterOauthAccessToken(req, res, next) {
               // send new Mongo record data to client
 
               // finally, send wordcount to user & userToken to associate redis session 
-
-              return {"uuid": uuid, "wordCount": tweetWords};
             });
         }).catch(function(err) {
           console.log("Error in getting user: ", err);

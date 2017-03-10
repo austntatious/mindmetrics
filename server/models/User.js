@@ -1,10 +1,8 @@
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
-  uuid: String,
   first_name: String,
   last_name: String,
-  session: Object,
   email: String,
   content_items: Object, // formatted object of everything input to Watson, along with appended data like wordcount
   watson_profile: Object,

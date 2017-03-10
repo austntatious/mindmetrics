@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 export default class TextInput extends Component {
 
   render() {
-    const {mod, name, placeholder, check, onFocus} = this.props;
+    const {mod, name, placeholder, check, onBlur, inputValid} = this.props;
     let cls = 'input',
         mark = <span className="mark"><i className="ico is-check-mark"></i></span>;
 
@@ -20,7 +20,7 @@ export default class TextInput extends Component {
                placeholder={placeholder}
                className="input__el"
                name={name}
-               onFocus={onFocus}
+               onBlur={onBlur}
                onChange={this.props.onChange}               
                />
 
