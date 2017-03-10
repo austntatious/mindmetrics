@@ -32,7 +32,14 @@ export default class Form extends Component {
     wordCount: 0,
     textInput: "",
     textInputWc: 0,
-    validInputs: 0,  // 4 fields should be valid for submit button to be working - 1st name, last name, email, and wordcount minimum
+    validInputs: {
+      email: 0,
+      firstName: 0,
+      lastName: 0
+    },  // 4 fields should be valid for submit button to be working - 1st name, last name, email, and wordcount minimum
+        // 2 is a valid and loaded input status
+        // 1 is invalid and loaded
+        // 0 is neutral
 
     // 0 is default, 1 is loading, 2 is loaded
     connections: {
@@ -279,15 +286,28 @@ export default class Form extends Component {
   }
 
   validateInput = (input) => {
-    switch(input) {
-      case "email": 
-        if(EMAIL_REGEX.test(this.state.email)) {
-          this.state.validInputs += 1;
-          console.log("inside email regex if statement");
-          return true;
-        }
-      case "name":
+      return (e) => {
+      var currentTarget = e.currentTarget;
+      switch(input) {
+        case "email": 
+          setTimeout(function() {
+            if (!currentTarget.contains(document.activeElement)) {
+                console.log("component blurred");
+              }
+            }, 0);
 
+          if(EMAIL_REGEX.test(this.state.email) && this.state.email.length > 4) {
+              this.state.validInputs.email = 2;
+              console.log("inside if statement for email regex");
+            } else {
+              console.log("inside else statement. email doesn't pass regex test");
+              this.state.validInputs.email = 1;
+            }
+
+          break;
+        case "name":
+          console.log("inside name validate input. input is: ", input);
+      }
     }
   }
 
@@ -312,10 +332,10 @@ export default class Form extends Component {
             <Title size="3">
               Profile
             </Title>
-            <TextInput check={this.validateEmail()}
-                       error={this.state.email.length > 4 && !this.validateEmail()}
+            <TextInput onBlur={this.validateInput("email")}
                        onChange={this.setField("email")}
-                       name="email" placeholder="name@example.com"/>
+                       name="email" placeholder="name@example.com"
+                       error={this.state.validInputs.email}/>
 
             <div className="input-group">
               <TextInput mod="is-small"
@@ -363,10 +383,10 @@ export default class Form extends Component {
             <div className="see-result__line"></div>
             <InfoMeter wordCount={this.state.wordCount + this.state.textInputWc} />
           {/** 
-          on submit button click, validate all name inputs, and display errors if not already displayed
+          on submit button click, validate all name inputs, and display errors/warnings if not already displayed
           **/}
-            <Btn onClick={this.validateEmail() ? this.submitData : null}
-                 disable={!this.validateEmail() ? true : null}
+            <Btn onClick={this.submitData}
+                 disable={!this.validateInput("email") ? true : null}
                  mod="is-big is-block">
               See My Results
             </Btn>

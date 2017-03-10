@@ -26,7 +26,7 @@ export default class TextInput extends Component {
                />
 
         { check && mark }
-        { error && cross }
+        { error === 1 ? cross : null }
       </div>
     );
   }
