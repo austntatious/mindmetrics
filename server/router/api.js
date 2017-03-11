@@ -168,6 +168,7 @@ function twitterOauthAccessToken(req, res, next) {
                   return {"id": saved._id, "wordCount": tweetWords};
                 }).catch(function(err) {
                   console.log("Error saving mongo record: ", err);
+                  return err;
                 });
 
               // send new Mongo record data to client
@@ -176,6 +177,7 @@ function twitterOauthAccessToken(req, res, next) {
             });
         }).catch(function(err) {
           console.log("Error in getting user: ", err);
+          res.json(err);
         });
 
 
@@ -187,9 +189,11 @@ function twitterOauthAccessToken(req, res, next) {
       }).catch(function(err) {
         // if credentials verification throws an error, it will be 401 status code and supplied user credentials are wrong
         console.log("Error in credentials verification:", err);
+        res.json(err);
       });
 
   }).catch(function(err) {
+    res.json(err);
     console.log("Error in accessTokenPromise:", err);
   });
 
@@ -204,12 +208,9 @@ function submitData(req, res, next) {
    console.log("IP with proxy method: ", req.headers["x-forwarded-for"]);     
    
    /**/  
-   // check redis cache for existing uploaded data associated with session / user    
-   // if found, append data to current text input and send to IBM
-   // create array of final text to submit to IBM
-   // submit Req will have email, name, and possibly form text data    
-   // display error responses to user    
-   // send success response to client, flush cache associated with user, and save response to mongo    
+   // inspect request data
+   // check mongo for existing ID number
+   // if no ID number, create new record   
    /**/
 
 

@@ -44,7 +44,7 @@ export default class Form extends Component {
     // 0 is default, 1 is loading, 2 is loaded
     connections: {
       facebook: {
-        name: 'facebook',
+        name: 'facebook', 
         title: 'Facebook',
         icon: 'is-fb',
         status: 0
@@ -254,8 +254,8 @@ export default class Form extends Component {
   // TODO: edit this so that on submit, loading state immediately overlays over screen
   // on error, flash to screen. on success, move page to results
   submitData = () => {
-    const {email, textInput, firstName, lastName, uuid} = this.state;
-    let userData = {email, textInput, firstName, lastName, uuid};
+    const {email, textInput, firstName, lastName, id} = this.state;
+    let userData = {email, textInput, firstName, lastName, id};
     const fetchHeaders = new Headers();
     fetchHeaders.append("Content-Type", "application/json");
 
