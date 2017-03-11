@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 export default class TextInput extends Component {
 
   render() {
-    const {mod, name, placeholder, check, error, onFocus, onBlur} = this.props;
+    const {mod, name, placeholder, check, errors, onFocus, onBlur} = this.props;
     let cls = 'input',
         mark = <span className="mark"><i className="ico is-check-mark"></i></span>,
         cross = <span className="mark"><i className="ico is-cross-red"></i></span>;
@@ -22,11 +22,11 @@ export default class TextInput extends Component {
                className="input__el"
                name={name}
                onBlur={onBlur}
-               onChange={this.props.onChange}               
+               onChange={this.props.onChange}
                />
 
         { check && mark }
-        { error === 1 ? cross : null }
+        { errors > 0 ? cross : null }
       </div>
     );
   }

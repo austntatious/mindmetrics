@@ -16,7 +16,24 @@ let options = [
 ];
 
 const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+const wcMin = 10;
 
+var validateInputTextBasic = function(data) {
+  var
+    errors  = [],
+    name    = data.name,
+    value   = data.value,
+    length  = value.length;
+
+  if (length < data.min) {
+    errors.push(name + ' must be at least 4 characters long');
+  }
+  if (length > data.max) {
+    errors.push(name + ' cannot be greater than 255 characters long');
+  }
+
+  return errors;
+}
 
 export default class Form extends Component {
   static contextTypes = {
@@ -26,17 +43,71 @@ export default class Form extends Component {
   state = {
     id: 0,
     showTextArea: false,
-    email: "",
-    firstName: "",
-    lastName: "",
+    inputs: {
+      email: {
+        value: '',
+        errors: [],
+        validate: function(value) {
+          // Start of with basic checks
+          var errors = validateInputTextBasic({
+            name: 'Email',
+            min: 4,
+            max: 50,
+            value: value
+          });
+
+          if(!EMAIL_REGEX.test(value)) {
+            errors.push('Email must be of valid format: someone@example.com');
+          }
+
+          return errors;
+        }
+      },
+      firstName: {
+        value: '',
+        errors: [],
+        validate: function(value) {
+          // Start of with basic checks
+          var errors = validateInputTextBasic({
+            name: 'First Name',
+            min: 2,
+            max: 12,
+            value: value
+          });
+
+          return errors;
+        }
+      },
+      lastName: {
+        value: '',
+        errors: [],
+        validate: function(value) {
+          // Start of with basic checks
+          var errors = validateInputTextBasic({
+            name: 'Last Name',
+            min: 2,
+            max: 12,
+            value: value
+          });
+
+          return errors;
+        }
+      }
+
+    },
+    validationErrors: [],
+
+    // email: "",
+    // firstName: "",
+    // lastName: "",
     wordCount: 0,
     textInput: "",
     textInputWc: 0,
-    validInputs: {
-      email: 0,
-      firstName: 0,
-      lastName: 0
-    },  // 4 fields should be valid for submit button to be working - 1st name, last name, email, and wordcount minimum
+    // validInputs: {
+    //   email: 0,
+    //   firstName: 0,
+    //   lastName: 0
+    // },  // 4 inputs should be valid for submit button to be working - 1st name, last name, email, and wordcount minimum
         // 2 is a valid and loaded input status
         // 1 is invalid and loaded
         // 0 is neutral
@@ -93,7 +164,7 @@ export default class Form extends Component {
         }, function(err) {
           console.log("error in main fetch call:", err);
         });
-      
+
     }
 
     // Init Facebook SDK
@@ -128,7 +199,7 @@ export default class Form extends Component {
       js = d.createElement(s); js.id = id;
       js.src = "//connect.facebook.net/en_US/sdk.js";
       fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk')); 
+    }(document, 'script', 'facebook-jssdk'));
 
   }
 
@@ -137,21 +208,16 @@ export default class Form extends Component {
     this.setState({showTextArea: true});
   }
 
-  setField = (name) => {
-    return (e) => {
-      this.setState({[name]: e.target.value});
-    };
-  }
-
   wordCounter = (e) => {
       let s = e.target.value;
       s = s.replace(/(^\s*)|(\s*$)/gi,""); // exclude  start and end white-space
       s = s.replace(/[ ]{2,}/gi," ");      // 2 or more space to 1
       s = s.replace(/\n /,"\n");           // exclude newline with a start spacing
-      let wc = s.split(' ').length;
+      let wc = _.filter(s.split(' ')).length;
       this.setState({
-        textInputWc: s == '' ? 0 : wc,
-        textInput: s
+        textInputWc: wc,
+        textInput: s,
+        textInputUpdated: true
       });
   }
 
@@ -192,12 +258,12 @@ export default class Form extends Component {
   // Here we run a very simple test of the Graph API after login is
   // successful.  See statusChangeCallback() for when this call is made.
   testAPI(id) {
-  
+
     var self = this;
     console.log('Welcome!  Fetching your information.... ');
 
-    // change fields to an options object
-    FB.api('/' + id, {fields: "id,name,email,friends"}, function(response) {
+    // change inputs to an options object
+    FB.api('/' + id, {inputs: "id,name,email,friends"}, function(response) {
     console.log("Full Facebook API response: ", response);
     console.log('Successful login for: ' + response.name);
 
@@ -229,11 +295,11 @@ export default class Form extends Component {
       // The person is not logged into Facebook, so we're not sure if
       // they are logged into this app or not.
       console.log('Please log ' + 'into Facebook.');
-  
+
       newState.connections.facebook.status = 0;
       this.setState(newState);
     }
-  } 
+  }
 
   handleFbClick() {
     var self = this;
@@ -256,6 +322,17 @@ export default class Form extends Component {
   submitData = () => {
     const {email, textInput, firstName, lastName, id} = this.state;
     let userData = {email, textInput, firstName, lastName, id};
+    // Generate a final set of errors before continuing (in case user skipped something)
+    this.state.validationErrors = this.validateFields();
+    // Rerender to refresh validation summaries
+    this.forceUpdate();
+    
+    // If there's an error, rerender the page with new validation errors
+    if (this.state.validationErrors.length > 0) {
+      // Skip posting to server
+      return;
+    }
+
     const fetchHeaders = new Headers();
     fetchHeaders.append("Content-Type", "application/json");
 
@@ -285,33 +362,116 @@ export default class Form extends Component {
       });
   }
 
-  validateInput = (input) => {
-      return (e) => {
-      var currentTarget = e.currentTarget;
-      switch(input) {
-        case "email": 
-          setTimeout(function() {
-            if (!currentTarget.contains(document.activeElement)) {
-                console.log("component blurred");
-              }
-            }, 0);
 
-          if(EMAIL_REGEX.test(this.state.email) && this.state.email.length > 4) {
-              this.state.validInputs.email = 2;
-              console.log("inside if statement for email regex");
-            } else {
-              console.log("inside else statement. email doesn't pass regex test");
-              this.state.validInputs.email = 1;
-            }
 
-          break;
-        case "name":
-          console.log("inside name validate input. input is: ", input);
-      }
+  onInputChange = (inputName, e) => {
+    var input = this.state.inputs[inputName];
+    input.updated = true;
+    input.value = e.currentTarget.value;
+    this.forceUpdate();
+  }
+
+  onInputFocus = (inputName) => {
+
+  }
+
+  onInputBlur = (inputName, e) => {
+    var self = this,
+        inputs = this.state.inputs,
+        input = inputs[inputName];
+
+    // Skip validation, if the user is skipping over field (eg: switching to a another input)
+    if (!input.updated) {
+      return;
     }
+
+    this.afterInputIsBlurred(e.currentTarget, function() {
+      // First, update this input's validation errors
+      // input.errors = self.validateField(input);
+
+      // Update all the validation errors so far, and rerender
+      self.setState({
+        validationErrors: self.validateFields({softCheck: true})
+      });
+
+    });
+
+  }
+
+  validateField = (input, value) => {
+    return input.validate(input.value);
+  }
+
+  validateFields = (options) => {
+    var self = this;
+    options || (options = {});
+
+    // Validate every field. This is used in this.submitData before continuing
+    // Edge case: user clicks submit before entering anything
+    // => this requires a full cycle of validation, since none were triggered by usual user inputs
+
+    // First, validate each field (in case user never onBlured/triggered their validation)
+    _.each(this.state.inputs, function(input) {
+      // Skip this field, if softCheck is on
+      if (options.softCheck && !input.updated) {
+        return;
+      }
+      input.errors = self.validateField(input);
+    });
+
+    // Next, gather validationErrors
+    var validationErrors = this.getValidationErrors(this.state.inputs);
+
+    // Determine if the length of the words are valid too, whether from text or api
+    // From text. TODO: from APIs
+    if (!options.softCheck && (this.state.textInputWc < wcMin) || (1001 /*replace with count summation from api data*/) < wcMin) {
+      validationErrors = validationErrors.concat('There should be at least ' + wcMin + ' words for a good analysis.')
+    }
+
+    // options.rerender && validationErrors.length > 0 && this.forceUpdate();
+
+    // Simply return the errors. The caller should determine whether there should be a rerender
+    return validationErrors;
+  }
+
+  getValidationErrors = (inputs) => {
+    return _.reduce(inputs, function(errors, input) {
+      return errors.concat(input.errors);
+    }, []);
+  }
+
+  afterInputIsBlurred = (currentTarget, cb) => {
+    setTimeout(function() {
+      if (!currentTarget.contains(document.activeElement)) {
+        // input is blurred. Call the callback
+        cb && cb();
+      }
+    }, 0);
+  }
+
+  renderValidationErrors = () => {
+    // Everything is already validated. Show inputs' errors
+    var validationErrors = this.state.validationErrors;
+
+    if (validationErrors.length == 0) {
+      return null;
+    }
+
+    return (
+      <div className='validation-errors bg-danger'>
+        {
+          _.map(validationErrors, function(error, i) {
+            return <div className='validation-error' key={i}>{error}</div>
+          })
+        }
+      </div>
+    )
   }
 
   render() {
+    var
+      inputs = this.state.inputs;
+
     return (
       <Layout classnames='Form'>
         <section className="section is-personal-info">
@@ -332,20 +492,33 @@ export default class Form extends Component {
             <Title size="3">
               Profile
             </Title>
-            <TextInput onBlur={this.validateInput("email")}
-                       onChange={this.setField("email")}
-                       name="email" placeholder="name@example.com"
-                       error={this.state.validInputs.email}/>
+            <TextInput
+              onBlur        = {this.onInputBlur.bind(null, 'email')}
+              onInputFocus  = {this.onInputFocus.bind(null, 'email')}
+              onChange      = {this.onInputChange.bind(null, 'email')}
+              name          = 'email'
+              placeholder   = 'name@example.com'
+              errors        = {inputs.email.errors.length}/>
 
             <div className="input-group">
-              <TextInput mod="is-small"
-                         name="first name"
-                         placeholder="First name"
-                         onChange={this.setField("firstName")}/>
-              <TextInput mod="is-small"
-                         name="last name"
-                         placeholder="Last name"
-                         onChange={this.setField("lastName")}/>
+              <TextInput
+                mod           = 'is-small'
+                onBlur        = {this.onInputBlur.bind(null, 'firstName')}
+                onInputFocus  = {this.onInputFocus.bind(null, 'firstName')}
+                onChange      = {this.onInputChange.bind(null, 'firstName')}
+                name          = 'firstName'
+                placeholder   = 'First Name'
+                errors        = {inputs.firstName.errors.length}
+              />
+              <TextInput
+                mod           = 'is-small'
+                onBlur        = {this.onInputBlur.bind(null, 'lastName')}
+                onInputFocus  = {this.onInputFocus.bind(null, 'lastName')}
+                onChange      = {this.onInputChange.bind(null, 'lastName')}
+                name          = 'lastName'
+                placeholder   = 'Last Name'
+                errors        = {inputs.lastName.errors.length}
+              />
             </div>
           </div>
 
@@ -382,11 +555,13 @@ export default class Form extends Component {
           <div className="see-result">
             <div className="see-result__line"></div>
             <InfoMeter wordCount={this.state.wordCount + this.state.textInputWc} />
-          {/** 
-          on submit button click, validate all name inputs, and display errors/warnings if not already displayed
-          **/}
+          {}
+
+            {
+              this.renderValidationErrors()
+            }
             <Btn onClick={this.submitData}
-                 disable={!this.validateInput("email") ? true : null}
+                 disable={this.state.validationErrors.length > 0}
                  mod="is-big is-block">
               See My Results
             </Btn>
