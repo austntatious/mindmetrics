@@ -21,9 +21,24 @@ import Traits from './Traits';
 
 import {Tabs, TabDescr} from './Tabs';
 
-const USER = { name: 'Your name', ico: '/client/img/user-ico-1.png', descr: '123123 words analysed. ', emphasis: 'Very Strong Analysis'};
-
 import DATA from '../../personality-data.json';
+
+// TODO: move to a util function since strength of word analysis is used on form page as well
+const METER_GRADES = { one: 100, two: 300, three: 600, four: 1200, five: 3000 };
+
+let wordCount = DATA.word_count;
+
+const USER = {
+    name: 'Your name',
+    ico: '/client/img/user-ico-1.png',
+    descr: wordCount + " words analyzed ",
+    emphasis: wordCount <= METER_GRADES.two ?
+        "Very Weak Analysis" : (wordCount > METER_GRADES.two) && (wordCount <= METER_GRADES.three) ?
+            "Weak Analysis" : (wordCount > METER_GRADES.three) && (wordCount <= METER_GRADES.four) ?
+                "OK Analysis": (wordCount > METER_GRADES.four) && (wordCount <= METER_GRADES.five) ?
+                    "Strong Analysis": wordCount > METER_GRADES.five ?
+                        "Very Strong Analysis": null
+}
 window.data = DATA;
 
 import TextSummary from '../text-summary';
