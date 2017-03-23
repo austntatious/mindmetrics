@@ -6,13 +6,10 @@ const express = require("express");
 const User        = require("../models/User");
 const router = express.Router();
 const oauth       = require("oauth-libre/lib/oauth-promise").OAuth;
-// todo: change relative paths to absolute paths
 const config    = require("../../config/info");
 const twitterCredentials = config.twitterCredentials;
 const TwitterCrawler = require("twitter-crawler");
 const pi_input = require('personality-insights-input');
-// import Redis obj from index
-const redisClient = require("../../index");
 const personality_insights = require("../../helpers/personality-insights");
 // var profileFromTweets = personality_insights.profile_from_tweets;
 
@@ -25,7 +22,7 @@ const personality_insights = require("../../helpers/personality-insights");
  // TODO: how to send to router to use as global variable?
  // instantiate Oauth object in oauth route file, which will be mounted to main Router
 
-var oa = new oauth(
+let oa = new oauth(
   "https://api.twitter.com/oauth/request_token",
   "https://api.twitter.com/oauth/access_token",
   twitterCredentials[0].consumer_key,            // CONSUMER KEY
@@ -61,15 +58,15 @@ function twitterOauthRequestToken(req, res, next) {
   requestTokenPromise
     .then(function(data){
       // Extract data
-      var oauthToken = data[0];
-      var oauthTokenSecret = data[1];
+      let oauthToken = data[0];
+      let oauthTokenSecret = data[1];
 
       // Get the secret oauth request token and save to hash
       reqTokenSecrets[oauthToken] = oauthTokenSecret;
       console.log("inside requestTokenPromise resolver. reqTokenSecrets: ", reqTokenSecrets);
 
       // Redirect user to Twitter Auth
-      var redirectURL = "https://api.twitter.com/oauth/authenticate"+"?oauth_token="+oauthToken;
+      let redirectURL = "https://api.twitter.com/oauth/authenticate"+"?oauth_token="+oauthToken;
       res.redirect(redirectURL);
       })
     .catch(function(err) {
@@ -78,11 +75,11 @@ function twitterOauthRequestToken(req, res, next) {
     console.log("end of Request Token function");
 }
 
-function twitterOauthAccessToken(req, res, next) {
+function twitterOauthAccessToken(req, res) {
   /**
    * Get the access token and access token secret, then process feed data
    */
-  var accessTokenPromise = oa.getOAuthAccessToken(req.query.oauth_token,
+  let accessTokenPromise = oa.getOAuthAccessToken(req.query.oauth_token,
                                                   reqTokenSecrets[req.query.oauth_token],
                                                   req.query.oauth_verifier);
   /*
@@ -91,24 +88,24 @@ function twitterOauthAccessToken(req, res, next) {
     data[1]: access token secret
     data[2]: results
 
-    Receives accessToken, verfies credentials, and then crawls Twitter feed
+    Receives accessToken, verifies credentials, and then crawls Twitter feed
    */
   accessTokenPromise
     .then(function(data) {
-      var accessToken = data[0];
-      var accessTokenSecret = data[1];
-      var results = data[2];
-      // add error handler!
+      let accessToken = data[0];
+      let accessTokenSecret = data[1];
+      let results = data[2];
+      // todo: add error handler!
 
       // on accessToken success, verify credentials
-      var verifyCredentialsPromise = oa.get("https://api.twitter.com/1.1/account/verify_credentials.json",
+      let verifyCredentialsPromise = oa.get("https://api.twitter.com/1.1/account/verify_credentials.json",
                                accessToken,
                                accessTokenSecret);
 
       verifyCredentialsPromise
         .then(function(data) {
 
-        var userData = JSON.parse(data[0])
+        let userData = JSON.parse(data[0]);
         console.log("credentials are correct:", userData);
 
         twitterCredentials[0].access_token_key = accessToken;
@@ -116,21 +113,21 @@ function twitterOauthAccessToken(req, res, next) {
         console.log("Twitter Credentials: ", twitterCredentials);
 
         const crawler = new TwitterCrawler(twitterCredentials);
-        var twitterHandle = userData.screen_name; 
-        console.log("twitterHandle: ", twitterHandle);
+        let twitterHandle = userData.screen_name;
+        console.log("twitter handle: ", twitterHandle);
 
         return crawler
           .getUser(twitterHandle)
           .then((user) => {
             console.log(
-              "Obtained info for user " + user.name + user.id
+              "Obtained info for user " + user.name + " " + user.id
             );
 
           // Crawl tweets
-          // Todo: implement this recursively to get entire user timeline; we know total tweet count from credentials verification
+
           console.log("Obtaining tweets...");
           return crawler
-            .getTweets(twitterHandle, { min_tweets: 50, limit : 300 })
+            .getTweets({screen_name: twitterHandle, trim_user: true} , { limit : 300 })
             .then((tweets) => {
               console.log(
                 "Obtained " + tweets.length + " tweets for user " + user.name + user.id
@@ -138,10 +135,7 @@ function twitterOauthAccessToken(req, res, next) {
               console.log("Tweet: ", tweets.slice(-1));
               console.log("Crawling finished.");
 
-              // save tweets in original form(?)
-
-              // wordcount
-              var tweetWords = tweets.reduce(function(prev, currTweet) {
+              let tweetWords = tweets.reduce(function(prev, currTweet) {
                 function countWords(s) {
                   s = s.replace(/(^\s*)|(\s*$)/gi,""); //exclude  start and end white-space
                   s = s.replace(/[ ]{2,}/gi," ");      //2 or more space to 1
@@ -149,22 +143,26 @@ function twitterOauthAccessToken(req, res, next) {
                   return s.split(' ').length; 
                 }
 
-                var totalWords = countWords(currTweet.text) + prev;
-                return totalWords;
+                return countWords(currTweet.text) + prev;
               }, 0);
 
-              var tweetsFormatted = JSON.stringify(tweets);
-
-              // save formatted tweets to Mongo
-
               const newUser = new User({
-                formattedTweets: tweetsFormatted
+                  social_media: {
+                      twitter: {
+                          user_info: userData,
+                          credentials: twitterCredentials,
+                          crawled_tweets: tweets
+                      }
+                  }
               });
 
               return newUser.save()
-                .then(function(saved) {
-                  console.log("Mongo saved new record!  ", saved);
-                  // send response back for next promise to send as json response
+                  .then(function(saved) {
+                  console.log(
+                      "Mongo saved new record! Id: ", saved._id, "Saved tweet text: ",
+                      saved.social_media.twitter.crawled_tweets.slice(-1)[0].text
+                      );
+
                   return {"id": saved._id, "wordCount": tweetWords};
                 }).catch(function(err) {
                   console.log("Error saving mongo record: ", err);
@@ -172,17 +170,13 @@ function twitterOauthAccessToken(req, res, next) {
                 });
 
               // send new Mongo record data to client
-
-              // finally, send wordcount to user & userToken to associate redis session 
             });
         }).catch(function(err) {
           console.log("Error in getting user: ", err);
           res.json(err);
         });
 
-
       }).then(function(data) {
-        // send success response to client with word count & redis token
         console.log("Finished twitter flow");
         res.json(data);
 
@@ -200,7 +194,7 @@ function twitterOauthAccessToken(req, res, next) {
 }
 
 // Final user post submission - contains email, name, and possibly form text   
-function submitData(req, res, next) {    
+function submitData(req, res) {
      
    // incoming request meta data   
    console.log("post submission received, req.body = ", req.body);   
@@ -209,9 +203,54 @@ function submitData(req, res, next) {
    
    /**/  
    // inspect request data
+   // user actions:
+   // 1) adds twitter feed then clicks submit: use ID and add all new data to Mongo document
+    // - queries mongo with current ID, if no ID found, return error
+    // - if ID found, update document with new data and send formatted input to IBM API
+    // - save IBM response to mongo & send to client
+
+   // 2) doesn't add twitter and just submits with textInput 
    // check mongo for existing ID number
-   // if no ID number, create new record   
+   // if no ID number, create new record
+    // send formatted input to IBM API
+    // save response to mongo & send to client
    /**/
+
+   if(req.body.id) {
+       User.findByIdAndUpdate(req.body.id, {
+           firstName: req.body.firstName,
+           lastName: req.body.lastName,
+           email: req.body.email,
+           metadata: {
+               browserInfo: req.headers["user-agent"],
+               ip: req.headers["x-forwarded-for"]
+           }
+       }).then(function(updated) {
+           console.log("Updated Mongo doc: ", updated);
+
+           //
+       }).catch(function(err) {
+           console.log("error in updating mongo doc: ", err);
+       });
+   }
+
+   let user = new User({
+       firstName: req.body.firstName,
+       lastName: req.body.lastName,
+       email: req.body.email,
+       metadata: {
+           browserInfo: req.headers["user-agent"],
+           ip: req.headers["x-forwarded-for"]
+       }
+   });
+   // save doc
+    // format input
+    // send to IBM
+    // save to mongo (async)
+    //
+
+
+
 
 
    // add mock data.json as mock API response data   

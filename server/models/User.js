@@ -4,9 +4,19 @@ const userSchema = new mongoose.Schema({
   first_name: String,
   last_name: String,
   email: String,
-  content_items: Object, // formatted object of everything input to Watson, along with appended data like wordcount
+  content_items: Object, // formatted object of everything input to Watson, along with appended data like wordcount, tweets, and input text
   watson_profile: Object,
-  meta_data: Object, // ip address, browswer info, etc
+  social_media: {
+    twitter: {
+      crawled_tweets: Array,
+      user_info: Object,
+      credentials: Array
+    }
+  },
+  metadata: {
+    browserInfo: String,
+    ip: String
+    } // ip address, browswer info, etc
 }, { timestamps: true });
 
 const User = mongoose.model('User', userSchema);
