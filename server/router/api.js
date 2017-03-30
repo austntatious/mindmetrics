@@ -10,8 +10,11 @@ const config    = require("../../config/info");
 const twitterCredentials = config.twitterCredentials;
 const TwitterCrawler = require("twitter-crawler");
 const pi_input = require('personality-insights-input');
-const personality_insights = require("../../helpers/personality-insights");
-// var profileFromTweets = personality_insights.profile_from_tweets;
+const personalityHelper = require("../../helpers/personality-insights");
+const profileFromTweets = personalityHelper.profileFromTweets;
+const profileFromText = personalityHelper.profileFromText;
+
+// todo: abstract tweets and text to the same function to prepare input for ibm api
 
 // Extending router with api methods
 
@@ -216,73 +219,53 @@ function submitData(req, res) {
     // save response to mongo & send to client
    /**/
 
-   if(req.body.id) {
-       User.findByIdAndUpdate(req.body.id, {
-           firstName: req.body.firstName,
-           lastName: req.body.lastName,
-           email: req.body.email,
-           metadata: {
-               browserInfo: req.headers["user-agent"],
-               ip: req.headers["x-forwarded-for"]
-           }
-       }).then(function(updated) {
-           console.log("Updated Mongo doc: ", updated);
-
-           //
-       }).catch(function(err) {
-           console.log("error in updating mongo doc: ", err);
-       });
-   }
-
-   let user = new User({
-       firstName: req.body.firstName,
-       lastName: req.body.lastName,
-       email: req.body.email,
-       metadata: {
-           browserInfo: req.headers["user-agent"],
-           ip: req.headers["x-forwarded-for"]
-       }
-   });
+   // if(req.body.id) {
+   //     User.findByIdAndUpdate(req.body.id, {
+   //         firstName: req.body.firstName,
+   //         lastName: req.body.lastName,
+   //         email: req.body.email,
+   //         metadata: {
+   //             browserInfo: req.headers["user-agent"],
+   //             ip: req.headers["x-forwarded-for"]
+   //         }
+   //     }).then(function(updated) {
+   //         console.log("Updated Mongo doc: ", updated);
+   //
+   //         //
+   //     }).catch(function(err) {
+   //         console.log("error in updating mongo doc: ", err);
+   //     });
+   // }
+   //
+   // let user = new User({
+   //     firstName: req.body.firstName,
+   //     lastName: req.body.lastName,
+   //     email: req.body.email,
+   //     metadata: {
+   //         browserInfo: req.headers["user-agent"],
+   //         ip: req.headers["x-forwarded-for"]
+   //     }
+   // });
    // save doc
     // format input
     // send to IBM
     // save to mongo (async)
     //
 
+   profileFromText(req.body)
+       .then(function(data) {
+           console.log("response from IBM: ", data);
+           data.uuid = Math.floor(Math.random() * 100000000);
+           res.json(data)
+               .then(console.log("SUCCESS"))
+               .catch(console.log("Error:", error));
+       })
+       .catch(function(err){
+           console.log("Error in profilefromText promise: ", err)
+       });
 
 
-
-
-   // add mock data.json as mock API response data   
-   // const user = new User({   
-   //   firstName : req.body.firstName,
-   //   lastName: req.body.lastName,   
-   //   uuid: uuid.v1(),    
-   //   email : req.body.email,    
-   //   textInput : req.body.textInput,   
-   //   browserInfo: req.headers["user-agent"],   
-   // });   
-     
-   // Personality Insights API needs JSON input unless otherwise specified   
-   // getProfile(user)
-   // .then(function(results) {    
-   //   res.json(results);   
-   //   user.watsonData = results;   
-   // user.save().then(function(saved) {    
-   //   res.json(saved); // delete this after testing   
-   //   console.log("Saved new user data:", saved);   
-   // }, function(err) {    
-   //   res.json(err);    
-   //   console.log("Error saving new user:", err);   
-   // });   
-   // }, function(err) {   
-   //   console.log("error from getProfile", err);   
-   //   res.json("ERROR:", err);   
-   // });    
-   // ADD ERROR HANDLING
-  res.json({"do": "something"});  
   console.log("End of submission route");
-
  }   
 
 // route for all oauth requests and data submissions

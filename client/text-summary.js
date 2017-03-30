@@ -75,6 +75,7 @@ var TextSummary = function () {
     }
 
     function getCircumplexAdjective(p1, p2, order) {
+        console.log("Inside get CircumplexAdjective function");
         // Sort the personality traits in the order the JSON file stored it.
         var ordered = [p1, p2].sort(function (o1, o2) {
             var i1 = 'EANOC'.indexOf(o1.id.charAt(0)),
@@ -378,6 +379,7 @@ var TextSummary = function () {
      * @return A String containing the text summary.
      */
     function getSummary(tree) {
+        console.log("Tree :", tree);
         return assemble(tree).map(function (paragraph) {
             return paragraph.join(" ");
         }).join("\n");
@@ -394,4 +396,4 @@ var TextSummary = function () {
     return self;
 };
 
-export default new TextSummary();
+export default TextSummary;

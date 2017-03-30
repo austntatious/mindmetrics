@@ -5,66 +5,75 @@
 **/
 
 
-var
-  credentials = require('../watson-credentials.json').personality_insights,
-  watson      = require('watson-developer-cloud'),
-  _           = require('underscore'),
-  extend      = _.extend,
-  to_promise  = require('../util/callback-to-promise'),
-  pi_input    = require('personality-insights-input');
+/**
+ * Copyright 2015 IBM Corp. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
+const PersonalityInsightsV3 = require('watson-developer-cloud/personality-insights/v3');
+const personalityInsights = new PersonalityInsightsV3({
+    // If unspecified here, the PERSONALITY_INSIGHTS_USERNAME and
+    // PERSONALITY_INSIGHTS_PASSWORD env properties will be checked
+    // After that, the SDK will fall back to the bluemix-provided
+    // VCAP_SERVICES environment property
+    username: 'b8a35e4f-8640-4ff5-97ee-1e2cd9f3b064',
+    password: 'v2dItkxPAvS7',
+    version_date: '2016-10-19',
+});
 
-var
-  personality_insights = watson.personality_insights(credentials),
-  getProfile = function (parameters) {
-    return to_promise(function(callback) {
-      personality_insights.profile(sanitize(parameters), function(err,response) {
-        var v3_credentials = extend(credentials, {version_date: "2016-10-19", version: "v3"});
-        if (parameters.source_type === 'twitter') {
-          const items = parameters.contentItems.map(function (item) {
-            delete item['userid'];
-            delete item['sourceid'];
-            return item;
-          });
-          parameters.contentItems = items;
-        }
-        var v3_parameters = extend(parameters, {consumption_preferences: true});
-        var personality_insights_v3 = new watson.PersonalityInsightsV3(v3_credentials);
-        personality_insights_v3.profile(sanitize(v3_parameters), function(cperr, cpresponse) {
-          if (!cperr && cpresponse) {
-            if (response) {
-              response.consumption_preferences = cpresponse.consumption_preferences;
-            }
-          } else {
-            if (cperr) {
-              console.log(cperr);
-            }
-            if (response) {
-              response.consumption_preferences = [];
-            }
-          }
-          if (response) {
-            response.raw_v3_response = cpresponse;
-          }
-          callback(err, response)
-        });
-      });
-    });
-  };
-
-var sanitize = function (parameters) {
-  return extend(parameters, {
-      text: parameters.text ? parameters.text.replace(/[\s]+/g, ' ') : undefined
-    });
+const parentId = function(tweet) {
+    if (tweet.in_reply_to_screen_name != null) {
+        return tweet.in_reply_to_user_id;
+    } else if (tweet.retweeted && (tweet.current_user_retweet != null)) {
+        return tweet.current_user_retweet.id_str;
+    }
 };
 
-var profileFromTweets = function (parameters) {
-    return function (tweets) {
-      return getProfile(extend(parameters, pi_input.fromTweets(tweets)));
+const toContentItem = (tweet) => {
+    return {
+        id: tweet.id_str,
+        language: tweet.lang,
+        contenttype: 'text/plain',
+        content: tweet.text.replace('[^(\\x20-\\x7F)]*',''),
+        created: Date.parse(tweet.created_at),
+        reply: tweet.in_reply_to_screen_name != null,
+        parentid: parentId(tweet)
     };
-  };
+};
+
+const getProfile = (params) =>
+    new Promise((resolve, reject) => {
+        if (params.language) {
+            params.headers = {
+                'Content-Language': params.language,
+            };
+        }
+        return personalityInsights.profile(params, (err, profile) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(profile);
+            }
+        });
+    });
+
+const profileFromTweets = (params) => (tweets) => {
+    params.content_items = tweets.map(toContentItem);
+    return getProfile(params);
+};
 
 module.exports = {
-  profile : getProfile,
-  profile_from_tweets : profileFromTweets,
+    profileFromText: getProfile,
+    profileFromTweets,
 };

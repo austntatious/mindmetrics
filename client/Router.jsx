@@ -4,7 +4,7 @@ import App from "./App";
 import { render } from "react-dom";
 import React from "react";
 import Form from "./components/Form";
-import Results from "./components/Results";
+import Results from "./components/results";
 import Oauth from "./components/Oauth";
 import injectTapEventPlugin from 'react-tap-event-plugin';
 

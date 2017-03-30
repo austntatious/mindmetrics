@@ -9,6 +9,8 @@ import Btn from './Btn';
 import InfoMeter from './InfoMeter';
 import { Link } from "react-router";
 var _ = require("lodash");
+const extend = _.extend;
+const clone = _.clone;
 
 let options = [
   {id: 1, value: 'default', label: 'Blog'},
@@ -277,7 +279,7 @@ export default class Form extends Component {
   // Button.  See the onlogin handler attached to it in the sample
   // code below.
   checkLoginState(res) {
-    var newState = _.extend({}, this.state);
+    let newState = _.extend({}, this.state);
     // The response object is returned with a status field that lets the
     // app know the current login status of the person.
     // Full docs on the response object can be found in the documentation
@@ -315,7 +317,7 @@ export default class Form extends Component {
     this.state.connections.facebook.status = 1;
     this.forceUpdate();
     this.handleFbClick();
-  }
+  };
 
   // TODO: edit this so that on submit, loading state immediately overlays over screen
   // on error, flash to screen. on success, move page to results
@@ -326,6 +328,7 @@ export default class Form extends Component {
     this.state.validationErrors = this.validateFields();
     // Rerender to refresh validation summaries
     this.forceUpdate();
+    let self = this;
     
     // If there's an error, rerender the page with new validation errors
     if (this.state.validationErrors.length > 0) {
@@ -333,39 +336,71 @@ export default class Form extends Component {
       return;
     }
 
-    const fetchHeaders = new Headers();
-    fetchHeaders.append("Content-Type", "application/json");
+      function defaultProfileOptions(options) {
+          var defaults = extend({
+              source_type: 'text',
+              // accept_language: globalState.userLocale || OUTPUT_LANG,
+              include_raw: false,
+              consumption_preferences: true
+          }, options || {});
 
-    const httpOptions = {
-      method: "POST",
-      headers: fetchHeaders,
-      mode: "cors",
-      body: JSON.stringify(userData)
-    };
+          // if (defaults.source_type !== 'twitter') {
+          //     defaults = extend({
+          //         language: globalState.userLocale || OUTPUT_LANG
+          //     }, defaults);
+          // }
+          return defaults;
+      }
 
-    const fetchReq = new Request("/api/submit", httpOptions);
-    fetch(fetchReq, httpOptions)
-      .then((response) => {
-        response.json().then((data) => {
-          // let id = data.uuid;
-          // this.context.router.push({
-          //   pathname: "/user/" + id,
-          //   query: null,
-          //   state: null
-          // });
-          console.log("inside response json in fetch req");
-        }).catch(function (err) {
-          console.log("Error in json", err);
-        });
-      }).catch(function (err) {
-        console.log("Fetch error: ", err);
-      });
-  }
+      function getProfileForText(text, options) {
+          getProfile(text, extend(options || {}, {source_type: 'text'}));
+      }
+
+      function getProfile(data, options) {
+          options = defaultProfileOptions(options);
+
+          const payload = clone(options);
+          payload.text = data;
+
+          const fetchHeaders = new Headers();
+          fetchHeaders.append("Content-Type", "application/json");
+
+          const httpOptions = {
+              method: "POST",
+              headers: fetchHeaders,
+              mode: "cors",
+              body: JSON.stringify(payload)
+          };
+
+          const fetchReq = new Request("/api/submit", httpOptions);
+
+          fetch(fetchReq, httpOptions)
+              .then((response) => {
+                  response.json().then((data) => {
+                      let id = data.uuid;
+                      console.log("Fetch response - id :", id);
+                      self.context.router.push({
+                          pathname: "/results/" + id,
+                          query: null,
+                          state: data
+                      });
+                      console.log("inside response json in fetch req");
+                  }).catch(function (err) {
+                      console.log("Error in json", err);
+                  });
+              }).catch(function (err) {
+              console.log("Fetch error: ", err);
+          });
+
+      }
+
+      getProfileForText(this.state.textInput);
+  };
 
 
 
   onInputChange = (inputName, e) => {
-    var input = this.state.inputs[inputName];
+    let input = this.state.inputs[inputName];
     input.updated = true;
     input.value = e.currentTarget.value;
     this.forceUpdate();
@@ -376,7 +411,7 @@ export default class Form extends Component {
   }
 
   onInputBlur = (inputName, e) => {
-    var self = this,
+    let self = this,
         inputs = this.state.inputs,
         input = inputs[inputName];
 

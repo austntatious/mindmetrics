@@ -18,31 +18,12 @@ import Copyright from './Copyright';
 import UserLikes from './UserLikes';
 import TellFriends from './TellFriends';
 import Traits from './Traits';
-
 import {Tabs, TabDescr} from './Tabs';
-
-import DATA from '../../personality-data.json';
+import testData from '../../personality-data.json';
+import TextSummary from '../text-summary';
 
 // TODO: move to a util function since strength of word analysis is used on form page as well
 const METER_GRADES = { one: 100, two: 300, three: 600, four: 1200, five: 3000 };
-
-let wordCount = DATA.word_count;
-
-const USER = {
-    name: 'Your name',
-    ico: '/client/img/user-ico-1.png',
-    descr: wordCount + " words analyzed ",
-    emphasis: wordCount <= METER_GRADES.two ?
-        "Very Weak Analysis" : (wordCount > METER_GRADES.two) && (wordCount <= METER_GRADES.three) ?
-            "Weak Analysis" : (wordCount > METER_GRADES.three) && (wordCount <= METER_GRADES.four) ?
-                "OK Analysis": (wordCount > METER_GRADES.four) && (wordCount <= METER_GRADES.five) ?
-                    "Strong Analysis": wordCount > METER_GRADES.five ?
-                        "Very Strong Analysis": null
-}
-window.data = DATA;
-
-import TextSummary from '../text-summary';
-window.summary = TextSummary;
 
 
 const TABS = [
@@ -69,18 +50,16 @@ const TABS = [
 
 const COLORS = scaleOrdinal().range(["#EDC951","#CC333F","#00A0B0"]);
 
-// this component will render differently when called by the webapp formcontainer or by a direct URL link.
-// when called by formcontainer, it should push the route with the UUID that we send back from server as the pathname
-// when called from direct URL link, we should pull the ID parameter and query the database in componentWillMount
-
 export default class StaticResults extends Component {
     static contextTypes = {
         mobile: React.PropTypes.oneOf(['small', 'tablet', false])
-    }
+    };
 
     state = {
-        activeTab: "personality"
-    }
+        activeTab: "personality",
+        // personalityData: this.props.location.state
+        personalityData: testData
+    };
 
     setActiveTab = (activeTab) => {
         this.setState({activeTab});
@@ -93,13 +72,36 @@ export default class StaticResults extends Component {
       return {likely, unlikely};
     }
 
+    componentDidMount() {
+        // console.log(window.summary.getSummary(this.state.personalityData));
+        // console.log(this.state.personalityData);
+    }
+
   render() {
+      window.summary = TextSummary;
+      const textSummary = new TextSummary({ version: 'v3'});
+      const wordCount = this.state.personalityData.word_count;
+      window.data = this.state.personalityData;
+
+      const USER = {
+          name: 'Your name',
+          ico: '/client/img/user-ico-1.png',
+          descr: wordCount + " words analyzed ",
+          emphasis: wordCount <= METER_GRADES.two ?
+              "Very Weak Analysis" : (wordCount > METER_GRADES.two) && (wordCount <= METER_GRADES.three) ?
+                  "Weak Analysis" : (wordCount > METER_GRADES.three) && (wordCount <= METER_GRADES.four) ?
+                      "OK Analysis": (wordCount > METER_GRADES.four) && (wordCount <= METER_GRADES.five) ?
+                          "Strong Analysis": wordCount > METER_GRADES.five ?
+                              "Very Strong Analysis": null
+      };
         const {activeTab} = this.state;
-        const {likely, unlikely} = this.getConsumptionPreferences(DATA);
+        const {likely, unlikely} = this.getConsumptionPreferences(this.state.personalityData);
+
+
         return (
             <Layout classnames='Results'>
                 <User ico={USER.ico} name={USER.name} descr={USER.descr} emphasis={USER.emphasis}
-                      summary={TextSummary.assembleTraits(DATA.personality)[0]}
+                      summary={textSummary.getSummary(this.state.personalityData)}
                       likely={likely} unlikely={unlikely} />
 
  
@@ -118,7 +120,7 @@ export default class StaticResults extends Component {
                       active={this.state.activeTab}
                       onChange={this.setActiveTab}/>
 
-                <Traits mod={this.state.activeTab} list={DATA[activeTab]} />
+                <Traits mod={this.state.activeTab} list={this.state.personalityData[activeTab]} />
                 <TellFriends/>
             </Layout>
         );

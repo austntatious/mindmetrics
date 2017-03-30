@@ -22,7 +22,7 @@ module.exports = function (app) {
   // configure HTTP logger based on environment
   app.use(morgan("dev"));
 
-  app.use(bodyParser.json({limit: "50mb"}));
+  app.use(bodyParser.json({limit: "50mb", extended: true}));
   app.use(bodyParser.urlencoded({limit: "50mb", extended: true}));
 
   // Add cookies or figure out proper session handling for users
