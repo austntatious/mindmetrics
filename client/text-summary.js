@@ -401,9 +401,8 @@ var TextSummary = function () {
      * @return A String containing the text summary.
      */
     function getSummary(tree) {
-        return assemble(tree).map(function (paragraph) {
-            return paragraph.join(" ");
-        }).join("\n");
+        // return the array and put into description section
+        return assemble(tree);
     }
 
     /* Text-Summary API */

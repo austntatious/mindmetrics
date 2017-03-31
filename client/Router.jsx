@@ -4,7 +4,7 @@ import App from "./App";
 import { render } from "react-dom";
 import React from "react";
 import Form from "./components/Form";
-import Results from "./components/results";
+import Results from "./components/Results";
 import Oauth from "./components/Oauth";
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
@@ -22,7 +22,7 @@ render(
         <Route                      component={App}>
             <Route path="/"         component={Home} />
             <Route path="/form"     component={Form} />
-            <Route path="/results/:id"  component={Results} />
+            <Route path="/results"  component={Results} />
             <Route path="/oauth"    component={Oauth} />
         </Route>
     </Router>, document.getElementById("app-container")

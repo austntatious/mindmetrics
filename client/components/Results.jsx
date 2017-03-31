@@ -19,33 +19,11 @@ import UserLikes from './UserLikes';
 import TellFriends from './TellFriends';
 import Traits from './Traits';
 import {Tabs, TabDescr} from './Tabs';
-// import testData from '../../personality-data-anshu.json';
+import testData from '../../personality-data-anshu.json';
 import TextSummary from '../text-summary';
 
 // TODO: move to a util function since strength of word analysis is used on form page as well
 const METER_GRADES = { one: 100, two: 300, three: 600, four: 1200, five: 3000 };
-
-
-const TABS = [
-    {
-        id: "personality",
-        title: 'Personality',
-        ico: 'client/img/ico-personality.svg',
-        descr: 'This is the graph representation of your personality traits, values, and needs. This is the graph representation of your personality traits, values, and needs. This is the graph representation of your personality traits, values, and needs. '
-    },
-    {
-        id: "needs",
-        title: 'Needs',
-        ico: 'client/img/ico-needs.svg',
-        descr: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam consequatur fuga fugiat molestiae nulla obcaecati perferendis quo soluta, suscipit. Amet distinctio dolore esse ex minus quaerat vitae! Deserunt dolorum, sequi?'
-    },
-    {
-        id: "values",
-        title: 'Values',
-        ico: 'client/img/ico-values.svg',
-        descr: 'Ab consequuntur culpa cum cupiditate distinctio ea excepturi expedita facilis fugiat, harum illo, impedit in iusto magnam nulla odio officiis placeat praesentium quam quasi quia quis recusandae rem repudiandae sequi soluta suscipit temporibus totam unde vero.'
-    }
-];
 
 const COLORS = scaleOrdinal().range(["#EDC951","#CC333F","#00A0B0"]);
 
@@ -57,7 +35,7 @@ export default class StaticResults extends Component {
     state = {
         activeTab: "personality",
         // personalityData: this.props.location.state
-        personalityData: window.personalityData
+        personalityData: testData
     };
 
     setActiveTab = (activeTab) => {
@@ -95,11 +73,33 @@ export default class StaticResults extends Component {
         const {activeTab} = this.state;
         const {likely, unlikely} = this.getConsumptionPreferences(this.state.personalityData);
 
+        let summarySentences = textSummary.getSummary(this.state.personalityData);
+
+      const TABS = [
+          {
+              id: "personality",
+              title: 'Personality',
+              ico: 'client/img/ico-personality.svg',
+              descr: summarySentences[1]
+          },
+          {
+              id: "needs",
+              title: 'Needs',
+              ico: 'client/img/ico-needs.svg',
+              descr: "Your base needs relate to your fundamendal drives in life. For you: " + summarySentences[2]
+          },
+          {
+              id: "values",
+              title: 'Values',
+              ico: 'client/img/ico-values.svg',
+              descr: summarySentences[3]
+          }
+      ];
 
         return (
             <Layout classnames='Results'>
                 <User ico={USER.ico} name={USER.name} descr={USER.descr} emphasis={USER.emphasis}
-                      summary={textSummary.getSummary(this.state.personalityData)}
+                      summary={summarySentences[0]}
                       likely={likely} unlikely={unlikely} />
 
  
