@@ -22,7 +22,7 @@ render(
         <Route                      component={App}>
             <Route path="/"         component={Home} />
             <Route path="/form"     component={Form} />
-            <Route path="/results"  component={Results} />
+            <Route path="/results/:id"  component={Results} />
             <Route path="/oauth"    component={Oauth} />
         </Route>
     </Router>, document.getElementById("app-container")

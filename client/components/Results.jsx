@@ -19,7 +19,7 @@ import UserLikes from './UserLikes';
 import TellFriends from './TellFriends';
 import Traits from './Traits';
 import {Tabs, TabDescr} from './Tabs';
-import testData from '../../personality-data-anshu.json';
+// import testData from '../../personality-data-anshu.json';
 import TextSummary from '../text-summary';
 
 // TODO: move to a util function since strength of word analysis is used on form page as well
@@ -35,7 +35,7 @@ export default class StaticResults extends Component {
     state = {
         activeTab: "personality",
         // personalityData: this.props.location.state
-        personalityData: testData
+        personalityData: window.personalityData
     };
 
     setActiveTab = (activeTab) => {
