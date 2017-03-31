@@ -75,19 +75,22 @@ var TextSummary = function () {
     }
 
     function getCircumplexAdjective(p1, p2, order) {
-        console.log("Inside get CircumplexAdjective function");
+        console.log("get circumplex adj, p1 param: ", p1);
+        console.log("get circumplex adj, p2 param: ", p2);
+        console.log("get circumplex adj, order param: ", order);
         // Sort the personality traits in the order the JSON file stored it.
         var ordered = [p1, p2].sort(function (o1, o2) {
             var i1 = 'EANOC'.indexOf(o1.id.charAt(0)),
                 i2 = 'EANOC'.indexOf(o2.id.charAt(0));
 
             return i1 < i2 ? -1 : 1;
-        }),
+        });
 
             // Assemble the identifier as the JSON file stored it.
-            identifier = ordered[0].id.concat(ordered[0].percentile > 0.5 ? '_plus_' : '_minus_').concat(ordered[1].id).concat(ordered[1].percentile > 0.5 ? '_plus' : '_minus'),
-            traitMult = self.circumplexData[identifier][0],
-            sentence = "%s";
+            var identifier = ordered[0].id.concat(ordered[0].percentile > 0.5 ? '_plus_' : '_minus_').concat(ordered[1].id).concat(ordered[1].percentile > 0.5 ? '_plus' : '_minus');
+            console.log("identifier: ", identifier);
+            var traitMult = self.circumplexData[identifier][0];
+            var sentence = "%s";
 
         if (traitMult.perceived_negatively) {
             switch (order) {
@@ -107,10 +110,16 @@ var TextSummary = function () {
     }
 
     function getFacetInfo(f) {
-        var data = self.facetsData[f.id.replace('_', '-').replace(' ', '-')],
+        console.log("self inside getFacetInfo: ", self);
+        console.log("f inside facetInfo: ", f);
+        if(f.id === "Authority-challenging") {
+            f.id = "Liberalism"
+        }
+
+        let data = self.facetsData[f.id.replace('_', '-').replace(' ', '-')],
             t,
             d;
-
+        console.log("after data declaration. data: ", data);
         if (f.percentile > 0.5) {
             t = data.HighTerm.toLowerCase();
             d = data.HighDescription.toLowerCase();
@@ -159,6 +168,12 @@ var TextSummary = function () {
 
         // Sort the Big 5 based on how extreme the number is.
         personalityTree.forEach(function (p) {
+
+            // Todo: find a better way to interchange Emotional Range with Neuroticism
+            if (p.name === "Emotional range") {
+                p.name = "Neuroticism"
+            }
+
             big5elements.push({
                 id: p.name,
                 percentile: p.percentile
@@ -170,18 +185,23 @@ var TextSummary = function () {
         relevantBig5 = big5elements.filter(function (item) {
             return Math.abs(0.5 - item.percentile) > 0.18;
         });
+
+        console.log("relevantBig5 adj: ", relevantBig5);
         if (relevantBig5.length < 2) {
+            console.log("relevant big 5 adj length < 2");
             // Even if no Big 5 attribute is interesting, you get 1 adjective.
             relevantBig5 = [big5elements[0], big5elements[1]];
         }
 
         switch (relevantBig5.length) {
             case 2:
+                console.log("switch case 2");
                 // Report 1 adjective.
                 adj = getCircumplexAdjective(relevantBig5[0], relevantBig5[1], 0);
                 sentences.push(format(tphrase('%s'), adj) + '.');
                 break;
             case 3:
+                console.log("switch case 3");
                 // Report 2 adjectives.
                 adj1 = getCircumplexAdjective(relevantBig5[0], relevantBig5[1], 0);
                 adj2 = getCircumplexAdjective(relevantBig5[1], relevantBig5[2], 1);
@@ -189,6 +209,7 @@ var TextSummary = function () {
                 break;
             case 4:
             case 5:
+                console.log("switch case 5");
                 // Report 3 adjectives.
                 adj1 = getCircumplexAdjective(relevantBig5[0], relevantBig5[1], 0);
                 adj2 = getCircumplexAdjective(relevantBig5[1], relevantBig5[2], 1);
@@ -233,6 +254,7 @@ var TextSummary = function () {
                 i += 1;
             }
         }
+
         info = getFacetInfo(facetElements[i]);
         sentences.push(format(tphrase('And you are %s'), info.term) + ': ' + info.description + '.');
 
@@ -379,7 +401,6 @@ var TextSummary = function () {
      * @return A String containing the text summary.
      */
     function getSummary(tree) {
-        console.log("Tree :", tree);
         return assemble(tree).map(function (paragraph) {
             return paragraph.join(" ");
         }).join("\n");

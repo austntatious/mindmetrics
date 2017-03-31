@@ -19,7 +19,7 @@ import UserLikes from './UserLikes';
 import TellFriends from './TellFriends';
 import Traits from './Traits';
 import {Tabs, TabDescr} from './Tabs';
-import testData from '../../personality-data.json';
+// import testData from '../../personality-data-anshu.json';
 import TextSummary from '../text-summary';
 
 // TODO: move to a util function since strength of word analysis is used on form page as well
@@ -47,7 +47,6 @@ const TABS = [
     }
 ];
 
-
 const COLORS = scaleOrdinal().range(["#EDC951","#CC333F","#00A0B0"]);
 
 export default class StaticResults extends Component {
@@ -58,16 +57,16 @@ export default class StaticResults extends Component {
     state = {
         activeTab: "personality",
         // personalityData: this.props.location.state
-        personalityData: testData
+        personalityData: window.personalityData
     };
 
     setActiveTab = (activeTab) => {
         this.setState({activeTab});
-    }
+    };
 
     getConsumptionPreferences(data) {
       const preferencesList = data.consumption_preferences[0].consumption_preferences;
-      const likely = preferencesList.filter((i) => i.score >= 0.5);
+      const likely = preferencesList.filter((i) => i.score > 0.5);
       const unlikely = preferencesList.filter((i) => i.score < 0.5);
       return {likely, unlikely};
     }
@@ -78,14 +77,13 @@ export default class StaticResults extends Component {
     }
 
   render() {
-      window.summary = TextSummary;
       const textSummary = new TextSummary({ version: 'v3'});
+
       const wordCount = this.state.personalityData.word_count;
-      window.data = this.state.personalityData;
 
       const USER = {
-          name: 'Your name',
-          ico: '/client/img/user-ico-1.png',
+          name: this.state.personalityData.userName,
+          ico: '',
           descr: wordCount + " words analyzed ",
           emphasis: wordCount <= METER_GRADES.two ?
               "Very Weak Analysis" : (wordCount > METER_GRADES.two) && (wordCount <= METER_GRADES.three) ?

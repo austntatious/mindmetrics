@@ -47,9 +47,9 @@ export default class User extends Component {
                             </Title>
 
                             <p className="how-to-read__text">
-                                This is the graph representation of your peThis is the graph representation of your pe
-                                This is the graph representation of your pe This is the graph representation of your pe
-                                This is the graph representation of your pe This is the graph representation of your pe
+                                The scores you see are all percentiles. They are comparing one person to a broader population.
+                                For example, a 90% on Extraversion does not mean that the person is 90% extroverted.
+                                It means that for that single trait, the person is more extroverted than 90% of the people in the population.
                             </p>
                         </div>
                     </div>

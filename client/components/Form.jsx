@@ -8,7 +8,7 @@ import SelectField from './SelectField';
 import Btn from './Btn';
 import InfoMeter from './InfoMeter';
 import { Link } from "react-router";
-var _ = require("lodash");
+let _ = require("lodash");
 const extend = _.extend;
 const clone = _.clone;
 
@@ -40,7 +40,7 @@ var validateInputTextBasic = function(data) {
 export default class Form extends Component {
   static contextTypes = {
     router: React.PropTypes.object.isRequired
-  }
+  };
 
   state = {
     id: 0,
@@ -171,7 +171,6 @@ export default class Form extends Component {
 
     // Init Facebook SDK
     window.fbAsyncInit = function() {
-
       FB.init({
         appId      : '1800563613547983',
         cookie     : true,  // enable cookies to allow the server to access
@@ -225,7 +224,7 @@ export default class Form extends Component {
 
   onConnect = (connection) => {
     // only continue if status is unconnected (0)
-    if (connection.status != 0) return;
+    if (connection.status !== 0) return;
 
     var connectMap = {
       twitter: 'onConnectTwitter',
@@ -361,6 +360,10 @@ export default class Form extends Component {
 
           const payload = clone(options);
           payload.text = data;
+          console.log("this.state: ", self.state.inputs);
+          payload.email = self.state.inputs.email.value;
+          payload.firstName = self.state.inputs.firstName.value;
+          payload.lastName = self.state.inputs.lastName.value;
 
           const fetchHeaders = new Headers();
           fetchHeaders.append("Content-Type", "application/json");
@@ -377,14 +380,16 @@ export default class Form extends Component {
           fetch(fetchReq, httpOptions)
               .then((response) => {
                   response.json().then((data) => {
+                      // move profile data out of global window obj ?
+                      window.personalityData = data;
                       let id = data.uuid;
                       console.log("Fetch response - id :", id);
                       self.context.router.push({
-                          pathname: "/results/" + id,
-                          query: null,
-                          state: data
+                          pathname: "/results/" + id
                       });
+
                       console.log("inside response json in fetch req");
+
                   }).catch(function (err) {
                       console.log("Error in json", err);
                   });
@@ -404,11 +409,11 @@ export default class Form extends Component {
     input.updated = true;
     input.value = e.currentTarget.value;
     this.forceUpdate();
-  }
+  };
 
   onInputFocus = (inputName) => {
 
-  }
+  };
 
   onInputBlur = (inputName, e) => {
     let self = this,

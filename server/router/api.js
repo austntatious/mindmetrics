@@ -237,28 +237,26 @@ function submitData(req, res) {
    //     });
    // }
    //
-   // let user = new User({
-   //     firstName: req.body.firstName,
-   //     lastName: req.body.lastName,
-   //     email: req.body.email,
-   //     metadata: {
-   //         browserInfo: req.headers["user-agent"],
-   //         ip: req.headers["x-forwarded-for"]
-   //     }
-   // });
-   // save doc
-    // format input
-    // send to IBM
-    // save to mongo (async)
-    //
+
+   let user = new User({
+       first_name: req.body.firstName,
+       last_name: req.body.lastName,
+       email: req.body.email,
+       metadata: {
+           browserInfo: req.headers["user-agent"],
+           ip: req.headers["x-forwarded-for"]
+       }
+   });
 
    profileFromText(req.body)
        .then(function(data) {
-           console.log("response from IBM: ", data);
-           data.uuid = Math.floor(Math.random() * 100000000);
-           res.json(data)
-               .then(console.log("SUCCESS"))
-               .catch(console.log("Error:", error));
+           return user.save().then(function(doc) {
+               console.log(doc);
+               data.uuid = doc._id;
+               data.userName = doc.first_name + " " + doc.last_name;
+               res.json(data);
+               console.log("Sent JSON response");
+           });
        })
        .catch(function(err){
            console.log("Error in profilefromText promise: ", err)
