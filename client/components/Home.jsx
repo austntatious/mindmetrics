@@ -43,7 +43,6 @@ class Home extends Component {
             <div className="section__wrap container">
               <SectionDescription title="What Your Words Say About You"
                                   text="Your writing is a sample of how you think. Studying the patterns we've found in the way certain people of certain personalities use words, we can use your writing to determine using data, what kind of personality you have exactly."
-                                  href="#"
                 />
             </div>
           </section>
@@ -54,7 +53,6 @@ class Home extends Component {
                                 title="Data Driven and Scientific"
                                 titleMobile="How it Works"
                                 text="Using data science and natural language processing, we're able to predict your personality based on the most popular personality model used in the psychology community, the Five Factor Personality model."
-                                href="#"
                                 ico="is-man-green"
               />
           </div>
@@ -65,8 +63,6 @@ class Home extends Component {
                                 title="Easy to Use"
                                 titleMobile="Easy to Use"
                                 text="Faster than any other personality analysis out there. Just choose where you want us to analyze, your twitter, Facebook, or copy and paste your blog. We'll have it analyzed in seconds."
-                                href="#"
-                                linkcolor="is-orange"
               />
           </div>
         </section>
@@ -75,8 +71,6 @@ class Home extends Component {
             <SectionDescription title="Detailed Personality Reports"
                                 titleMobile="Personality reports"
                                 text="Free reports include your personality profile, including your 5 major traits, values, and needs and text summary as well as a graph representation of who you are."
-                                href="#"
-                                linkcolor="is-orange"
                                 ico="is-ico-chart"
               />
             {this.context.mobile === 'small' ? null : <ProgressGroup />}

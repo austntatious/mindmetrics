@@ -23,9 +23,9 @@ export default class SectionDescription extends Component {
   }
 
   render() {
-    const {mod, title, titleMobile, ico, text, href, linkColor} = this.props;
-    const {open} = this.state;
-    const {mobile} = this.context;
+    const { mod, title, titleMobile, ico, text } = this.props;
+    const { open } = this.state;
+    const { mobile } = this.context;
 
     let cls = 'section-descr';
     if (mod) {
@@ -49,16 +49,6 @@ export default class SectionDescription extends Component {
             <p className="section-descr__text">
               {text}
             </p>
-            {
-              linkColor === 'is-orange' ?
-                <a href={href} className="section-descr__link is-orange">
-                  Try it out >
-                </a>
-                :
-                <a href={href} className="section-descr__link">
-                  Find our more >
-                </a>
-            }
           </div>}
 
         {mobile === 'small' && <Btn onClick={this.toggleOpen} mod={buttonMod} />}

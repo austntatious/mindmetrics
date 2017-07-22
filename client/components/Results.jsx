@@ -4,18 +4,8 @@ import { scaleOrdinal } from "d3-scale";
 require('../styles/app.less');
 
 import Layout from './Layout';
-import Header from './Header';
-import Footer from './Footer';
-import Nav from './Nav';
-import Social from './Social';
-import SectionHat from './SectionHat';
 import Title from './Title';
-import Logo from './Logo';
 import User from './User';
-import Action from './Action';
-import Hamburger from './Hamburger';
-import Copyright from './Copyright';
-import UserLikes from './UserLikes';
 import TellFriends from './TellFriends';
 import Traits from './Traits';
 import {Tabs, TabDescr} from './Tabs';
@@ -36,6 +26,7 @@ export default class StaticResults extends Component {
         activeTab: "personality",
         // personalityData: this.props.location.state
         personalityData: window.personalityData
+        // personalityData: testData
     };
 
     setActiveTab = (activeTab) => {

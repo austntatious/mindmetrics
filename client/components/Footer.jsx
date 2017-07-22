@@ -17,28 +17,8 @@ const navFoot = [
     href: '#'
   },
   {
-    id: 3,
-    text: 'Premium',
-    href: '#'
-  },
-  {
-    id: 4,
-    text: 'Free Analysis',
-    href: '#'
-  },
-  {
     id: 5,
     text: 'Blog',
-    href: '#'
-  },
-  {
-    id: 6,
-    text: 'Research',
-    href: '#'
-  },
-  {
-    id: 7,
-    text: 'Contact',
     href: '#'
   }
 ];
@@ -65,7 +45,7 @@ export default class Footer extends Component {
               </Copyright>
             </div>
             <div className="footer__right">
-              <Logo href="#" src="client/img/logo_footer.png" />
+              <Logo href="#" src="/client/img/logo_footer.png" />
             </div>
           </div>
         </div>

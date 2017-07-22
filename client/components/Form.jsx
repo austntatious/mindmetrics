@@ -116,12 +116,6 @@ export default class Form extends Component {
 
     // 0 is default, 1 is loading, 2 is loaded
     connections: {
-      facebook: {
-        name: 'facebook', 
-        title: 'Facebook',
-        icon: 'is-fb',
-        status: 0
-      },
       twitter: {
         name: 'twitter',
         title: 'Twitter',

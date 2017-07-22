@@ -7,6 +7,7 @@ export default class User extends Component {
 
     render() {
         const {ico, name, descr, emphasis, summary, likely, unlikely} = this.props;
+        const userIcon = ico ? ico : '/client/img/user_default_avatar.png';
 
         return (
             <div className="user">
@@ -14,7 +15,7 @@ export default class User extends Component {
                     <div className="user__left">
                         <div className="user__top">
                             <div className="user__ico">
-                                <img src={ico} alt="User photo"/>
+                                <img src={userIcon} alt="User photo"/>
                             </div>
                             <div className="user__details">
                                 <div className="user__name">

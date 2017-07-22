@@ -5,14 +5,13 @@ import Btn from './Btn';
 export default class Action extends Component {
 
     render() {
-        let href = this.props.href;
+        const { href } = this.props;
 
         return (
             <div className="action">
-                <Btn type="link" href="#" mod="is-small">
+                <Btn type="link" href={href} mod="is-small">
                     Take test
                 </Btn>
-                {/*<Btn type="link" href="#" mod="is-fb" />*/}
             </div>
         );
     }
