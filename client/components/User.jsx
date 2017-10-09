@@ -37,7 +37,7 @@ export default class User extends Component {
                                     {summary}
                                 </span>
                             </div>
-                            <UserLikes likelyList={likely} unlikelyList={unlikely} />
+                            {/*<UserLikes likelyList={likely} unlikelyList={unlikely} />*/}
                         </div>
                     </div>
                     <div className="user__right">

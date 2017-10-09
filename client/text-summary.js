@@ -114,11 +114,14 @@ var TextSummary = function () {
         console.log("f inside facetInfo: ", f);
         if(f.id === "Authority-challenging") {
             f.id = "Liberalism"
+        } else if (f.id === "Prone to worry") {
+            f.id = "Anxiety"
         }
 
         let data = self.facetsData[f.id.replace('_', '-').replace(' ', '-')],
             t,
             d;
+
         console.log("after data declaration. data: ", data);
         if (f.percentile > 0.5) {
             t = data.HighTerm.toLowerCase();
@@ -224,8 +227,7 @@ var TextSummary = function () {
     function assembleFacets(personalityTree) {
         var sentences = [],
             facetElements = [],
-            info,
-            i;
+            info;
 
         // Assemble the full list of facets and sort them based on how extreme
         // is the number.
@@ -248,16 +250,15 @@ var TextSummary = function () {
 
         // If all the facets correspond to the same feature, continue until a
         // different parent feature is found.
-        i = 2;
+        var i = 2;
         if (facetElements[0].parent === facetElements[1].parent) {
             while (facetElements[0].parent === facetElements[i].parent) {
-                i += 1;
+                i++;
             }
         }
 
         info = getFacetInfo(facetElements[i]);
         sentences.push(format(tphrase('And you are %s'), info.term) + ': ' + info.description + '.');
-
         return sentences;
     }
 
